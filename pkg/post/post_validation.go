@@ -1,9 +1,7 @@
-package service
+package post
 
 import (
 	e "app/pkg/errors"
-	m "app/pkg/model"
-	r "app/pkg/repo"
 	"fmt"
 	"strings"
 
@@ -11,24 +9,24 @@ import (
 )
 
 type PostValidator interface {
-	Add(post *m.Post) error
-	AddAll(posts *[]*m.Post) error
-	Edit(id int, newPost *m.Post) error
-	GetAll() (*[]m.Post, error)
-	GetOne(id int) (*m.Post, error)
+	Add(post *Post) error
+	AddAll(posts *[]*Post) error
+	Edit(id int, newPost *Post) error
+	GetAll() (*[]Post, error)
+	GetOne(id int) (*Post, error)
 	Remove(id int) error
 }
 
 type postValidator struct {
-	Repo r.PostRepo
+	Repo PostRepo
 }
 
-func NewPostValidator(repo r.PostRepo) PostValidator {
+func NewPostValidator(repo PostRepo) PostValidator {
 	return &postValidator{repo}
 }
 
 // Add
-func (v *postValidator) Add(post *m.Post) error {
+func (v *postValidator) Add(post *Post) error {
 	_, err := valid.ValidateStruct(post)
 	if err != nil {
 		return e.NewValidationError(e.ErrAddValidation, err.Error())
@@ -43,7 +41,7 @@ func (v *postValidator) Add(post *m.Post) error {
 }
 
 // AddAll
-func (v *postValidator) AddAll(posts *[]*m.Post) error {
+func (v *postValidator) AddAll(posts *[]*Post) error {
 	errs := []string{}
 	newPosts := *posts
 	for i := 0; i < len(newPosts); i++ {
@@ -68,7 +66,7 @@ func (v *postValidator) AddAll(posts *[]*m.Post) error {
 }
 
 // Edit
-func (v *postValidator) Edit(id int, newPost *m.Post) error {
+func (v *postValidator) Edit(id int, newPost *Post) error {
 	_, err := valid.ValidateStruct(newPost)
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())
@@ -83,12 +81,12 @@ func (v *postValidator) Edit(id int, newPost *m.Post) error {
 }
 
 // GetAll
-func (v *postValidator) GetAll() (*[]m.Post, error) {
+func (v *postValidator) GetAll() (*[]Post, error) {
 	return v.Repo.GetAll()
 }
 
 // GetOne
-func (v *postValidator) GetOne(id int) (*m.Post, error) {
+func (v *postValidator) GetOne(id int) (*Post, error) {
 	return v.Repo.GetOne(id)
 }
 

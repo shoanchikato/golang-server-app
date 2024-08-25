@@ -1,28 +1,27 @@
-package service
+package auth
 
 import (
 	e "app/pkg/errors"
-	m "app/pkg/model"
-	r "app/pkg/repo"
+	s "app/pkg/service"
 	"errors"
 )
 
 type AuthEncryption interface {
-	Login(credentials *m.Credentials) (bool, error)
-	ResetPassword(credentials *m.Credentials, newPassword string) error
+	Login(credentials Credentials) (bool, error)
+	ResetPassword(credentials Credentials, newPassword string) error
 }
 
 type authEncryption struct {
-	repo    r.AuthRepo
-	encrypt EncryptionService
+	repo    AuthRepo
+	encrypt s.EncryptionService
 }
 
-func NewAuthEncryption(repo r.AuthRepo, encrypt EncryptionService) AuthEncryption {
+func NewAuthEncryption(repo AuthRepo, encrypt s.EncryptionService) AuthEncryption {
 	return &authEncryption{repo, encrypt}
 }
 
 // Login
-func (a *authEncryption) Login(credentials *m.Credentials) (bool, error) {
+func (a *authEncryption) Login(credentials Credentials) (bool, error) {
 	authDetails, err := a.repo.GetByUsername(credentials.Username)
 	if err != nil {
 		return false, err
@@ -41,7 +40,7 @@ func (a *authEncryption) Login(credentials *m.Credentials) (bool, error) {
 }
 
 // ResetPassword
-func (a *authEncryption) ResetPassword(credentials *m.Credentials, newPassword string) error {
+func (a *authEncryption) ResetPassword(credentials Credentials, newPassword string) error {
 	isMatch, err := a.Login(credentials)
 	if err != nil {
 		return err

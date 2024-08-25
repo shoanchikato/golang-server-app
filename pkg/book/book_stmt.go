@@ -1,4 +1,4 @@
-package repo
+package book
 
 const (
 	ADD_BOOK_STMT             = `INSERT INTO books (name, year) VALUES ($1, $2);`

@@ -1,8 +1,7 @@
-package service
+package user
 
 import (
 	e "app/pkg/errors"
-	m "app/pkg/model"
 	"fmt"
 	"strings"
 
@@ -10,11 +9,11 @@ import (
 )
 
 type UserValidator interface {
-	Add(user *m.User) error
-	AddAll(users *[]*m.User) error
-	Edit(id int, newUser *m.User) error
-	GetAll() (*[]m.User, error)
-	GetOne(id int) (*m.User, error)
+	Add(user *User) error
+	AddAll(users *[]*User) error
+	Edit(id int, newUser *User) error
+	GetAll() (*[]User, error)
+	GetOne(id int) (*User, error)
 	Remove(id int) error
 }
 
@@ -27,7 +26,7 @@ func NewUserValidator(encrypt UserEncryption) UserValidator {
 }
 
 // Add
-func (v *userValidator) Add(user *m.User) error {
+func (v *userValidator) Add(user *User) error {
 	_, err := valid.ValidateStruct(user)
 	if err != nil {
 		return e.NewValidationError(e.ErrAddValidation, err.Error())
@@ -42,7 +41,7 @@ func (v *userValidator) Add(user *m.User) error {
 }
 
 // AddAll
-func (v *userValidator) AddAll(users *[]*m.User) error {
+func (v *userValidator) AddAll(users *[]*User) error {
 	errs := []string{}
 	newUsers := *users
 	for i := 0; i < len(newUsers); i++ {
@@ -67,7 +66,7 @@ func (v *userValidator) AddAll(users *[]*m.User) error {
 }
 
 // Edit
-func (v *userValidator) Edit(id int, newUser *m.User) error {
+func (v *userValidator) Edit(id int, newUser *User) error {
 	_, err := valid.ValidateStruct(newUser)
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())
@@ -82,12 +81,12 @@ func (v *userValidator) Edit(id int, newUser *m.User) error {
 }
 
 // GetAll
-func (v *userValidator) GetAll() (*[]m.User, error) {
+func (v *userValidator) GetAll() (*[]User, error) {
 	return v.encrypt.GetAll()
 }
 
 // GetOne
-func (v *userValidator) GetOne(id int) (*m.User, error) {
+func (v *userValidator) GetOne(id int) (*User, error) {
 	return v.encrypt.GetOne(id)
 }
 

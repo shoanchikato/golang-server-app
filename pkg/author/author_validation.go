@@ -1,9 +1,7 @@
-package service
+package author
 
 import (
 	e "app/pkg/errors"
-	m "app/pkg/model"
-	r "app/pkg/repo"
 	"fmt"
 	"strings"
 
@@ -11,24 +9,24 @@ import (
 )
 
 type AuthorValidator interface {
-	Add(author *m.Author) error
-	AddAll(authors *[]*m.Author) error
-	Edit(id int, newAuthor *m.Author) error
-	GetAll() (*[]m.Author, error)
-	GetOne(id int) (*m.Author, error)
+	Add(author *Author) error
+	AddAll(authors *[]*Author) error
+	Edit(id int, newAuthor *Author) error
+	GetAll() (*[]Author, error)
+	GetOne(id int) (*Author, error)
 	Remove(id int) error
 }
 
 type authorValidator struct {
-	Repo r.AuthorRepo
+	Repo AuthorRepo
 }
 
-func NewAuthorValidator(repo r.AuthorRepo) AuthorValidator {
+func NewAuthorValidator(repo AuthorRepo) AuthorValidator {
 	return &authorValidator{repo}
 }
 
 // Add
-func (v *authorValidator) Add(author *m.Author) error {
+func (v *authorValidator) Add(author *Author) error {
 	_, err := valid.ValidateStruct(author)
 	if err != nil {
 		return e.NewValidationError(e.ErrAddValidation, err.Error())
@@ -43,7 +41,7 @@ func (v *authorValidator) Add(author *m.Author) error {
 }
 
 // AddAll
-func (v *authorValidator) AddAll(authors *[]*m.Author) error {
+func (v *authorValidator) AddAll(authors *[]*Author) error {
 	errs := []string{}
 	newAuthors := *authors
 	for i := 0; i < len(newAuthors); i++ {
@@ -68,7 +66,7 @@ func (v *authorValidator) AddAll(authors *[]*m.Author) error {
 }
 
 // Edit
-func (v *authorValidator) Edit(id int, newAuthor *m.Author) error {
+func (v *authorValidator) Edit(id int, newAuthor *Author) error {
 	_, err := valid.ValidateStruct(newAuthor)
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())
@@ -83,12 +81,12 @@ func (v *authorValidator) Edit(id int, newAuthor *m.Author) error {
 }
 
 // GetAll
-func (v *authorValidator) GetAll() (*[]m.Author, error) {
+func (v *authorValidator) GetAll() (*[]Author, error) {
 	return v.Repo.GetAll()
 }
 
 // GetOne
-func (v *authorValidator) GetOne(id int) (*m.Author, error) {
+func (v *authorValidator) GetOne(id int) (*Author, error) {
 	return v.Repo.GetOne(id)
 }
 

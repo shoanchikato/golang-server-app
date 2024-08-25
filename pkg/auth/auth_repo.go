@@ -1,37 +1,36 @@
-package repo
+package auth
 
 import (
 	e "app/pkg/errors"
-	m "app/pkg/model"
-	s "app/pkg/repo/stmt"
+	r "app/pkg/repo"
 	"database/sql"
 	"errors"
 	"sync"
 )
 
 type AuthRepo interface {
-	GetByUsername(username string) (*m.Auth, error)
+	GetByUsername(username string) (*Auth, error)
 	ResetPassword(username, newPassword string) error
 }
 
 type authRepo struct {
 	db  *sql.DB
 	rw  *sync.RWMutex
-	dbU DBUtil
+	dbU r.DBUtil
 }
 
-func NewAuthRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil) AuthRepo {
+func NewAuthRepo(db *sql.DB, rw *sync.RWMutex, dbU r.DBUtil) AuthRepo {
 	return &authRepo{db, rw, dbU}
 }
 
 // GetByUsername
-func (a *authRepo) GetByUsername(username string) (*m.Auth, error) {
+func (a *authRepo) GetByUsername(username string) (*Auth, error) {
 	a.rw.RLock()
 	defer a.rw.RUnlock()
 
-	auth := m.Auth{}
+	auth := Auth{}
 
-	row := a.db.QueryRow(s.GET_AUTH_DETAILS_BY_USERNAME, username)
+	row := a.db.QueryRow(GET_AUTH_DETAILS_BY_USERNAME, username)
 	err := row.Scan(&auth.Username, &auth.Email, &auth.Password, &auth.UserID)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(username))
@@ -46,7 +45,7 @@ func (a *authRepo) GetByUsername(username string) (*m.Auth, error) {
 
 // ResetPassword
 func (a *authRepo) ResetPassword(username string, newPassword string) error {
-	_, err := a.dbU.Transaction(s.RESET_PASSWORD, newPassword, username)
+	_, err := a.dbU.Transaction(RESET_PASSWORD, newPassword, username)
 	if err != nil {
 		return err
 	}

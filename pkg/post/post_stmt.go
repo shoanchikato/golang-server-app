@@ -1,4 +1,4 @@
-package repo
+package post
 
 const (
 	CREATE_POST_TABLE_STMT = `

@@ -1,9 +1,8 @@
-package repo
+package user
 
 import (
 	e "app/pkg/errors"
-	m "app/pkg/model"
-	s "app/pkg/repo/stmt"
+	r "app/pkg/repo"
 	"database/sql"
 	"errors"
 	"log"
@@ -12,33 +11,33 @@ import (
 )
 
 type UserRepo interface {
-	Add(user *m.User) error
-	AddAll(user *[]*m.User) error
-	Edit(id int, user *m.User) error
-	GetAll() (*[]m.User, error)
-	GetOne(id int) (*m.User, error)
+	Add(user *User) error
+	AddAll(user *[]*User) error
+	Edit(id int, user *User) error
+	GetAll() (*[]User, error)
+	GetOne(id int) (*User, error)
 	Remove(id int) error
 }
 
 type userRepo struct {
 	db  *sql.DB
 	rw  *sync.RWMutex
-	dbU DBUtil
+	dbU r.DBUtil
 }
 
-func NewUserRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil) UserRepo {
-	_, err := db.Exec(s.CREATE_USER_TABLE_STMT)
+func NewUserRepo(db *sql.DB, rw *sync.RWMutex, dbU r.DBUtil) UserRepo {
+	_, err := db.Exec(CREATE_USER_TABLE_STMT)
 	if err != nil {
-		log.Fatalf("error creating post table: %v: %s\n", err, s.CREATE_USER_TABLE_STMT)
+		log.Fatalf("error creating post table: %v: %s\n", err, CREATE_USER_TABLE_STMT)
 	}
 
 	return &userRepo{db, rw, dbU}
 }
 
 // Add
-func (p *userRepo) Add(user *m.User) error {
+func (p *userRepo) Add(user *User) error {
 	id, err := p.dbU.Transaction(
-		s.ADD_USER_STMT,
+		ADD_USER_STMT,
 		user.FirstName,
 		user.LastName,
 		user.Username,
@@ -55,7 +54,7 @@ func (p *userRepo) Add(user *m.User) error {
 }
 
 // AddAll
-func (p *userRepo) AddAll(users *[]*m.User) error {
+func (p *userRepo) AddAll(users *[]*User) error {
 	newUsers := *users
 	for i := 0; i < len(newUsers); i++ {
 		user := newUsers[i]
@@ -69,9 +68,9 @@ func (p *userRepo) AddAll(users *[]*m.User) error {
 }
 
 // Edit
-func (p *userRepo) Edit(id int, user *m.User) error {
+func (p *userRepo) Edit(id int, user *User) error {
 	_, err := p.dbU.Transaction(
-		s.EDIT_USER_STMT,
+		EDIT_USER_STMT,
 		user.FirstName,
 		user.LastName,
 		user.Username,
@@ -86,14 +85,14 @@ func (p *userRepo) Edit(id int, user *m.User) error {
 }
 
 // GetAll
-func (p *userRepo) GetAll() (*[]m.User, error) {
+func (p *userRepo) GetAll() (*[]User, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
-	user := m.User{}
-	users := []m.User{}
+	user := User{}
+	users := []User{}
 
-	rows, err := p.db.Query(s.GET_ALL_USER_STMT)
+	rows, err := p.db.Query(GET_ALL_USER_STMT)
 	if err != nil {
 		return nil, errors.Join(e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
 	}
@@ -122,13 +121,13 @@ func (p *userRepo) GetAll() (*[]m.User, error) {
 }
 
 // GetOne
-func (p *userRepo) GetOne(id int) (*m.User, error) {
+func (p *userRepo) GetOne(id int) (*User, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
-	user := m.User{}
+	user := User{}
 
-	row := p.db.QueryRow(s.GET_ONE_USER_STMT, id)
+	row := p.db.QueryRow(GET_ONE_USER_STMT, id)
 	err := row.Scan(
 		&user.ID,
 		&user.FirstName,
@@ -154,7 +153,7 @@ func (p *userRepo) Remove(id int) error {
 		return err
 	}
 
-	_, err = p.dbU.Transaction(s.REMOVE_USER_STMT, id)
+	_, err = p.dbU.Transaction(REMOVE_USER_STMT, id)
 	if err != nil {
 		return errors.Join(e.ErrRepoRemove, err)
 	}

@@ -1,9 +1,13 @@
 package main
 
 import (
-	m "app/pkg/model"
+	a "app/pkg/auth"
+	au "app/pkg/author"
+	b "app/pkg/book"
+	p "app/pkg/post"
 	r "app/pkg/repo"
 	s "app/pkg/service"
+	u "app/pkg/user"
 	"database/sql"
 	"fmt"
 	"log"
@@ -23,15 +27,15 @@ func main() {
 	rw := &sync.RWMutex{}
 	dbU := r.NewDBUtil(db, rw)
 
-	authRepo := r.NewAuthRepo(db, rw, dbU)
-	authorRepo := r.NewAuthorRepo(db, rw, dbU)
-	bookRepo := r.NewBookRepo(db, rw, dbU)
-	postRepo := r.NewPostRepo(db, rw, dbU)
-	userRepo := r.NewUserRepo(db, rw, dbU)
+	authRepo := a.NewAuthRepo(db, rw, dbU)
+	authorRepo := au.NewAuthorRepo(db, rw, dbU)
+	bookRepo := b.NewBookRepo(db, rw, dbU)
+	postRepo := p.NewPostRepo(db, rw, dbU)
+	userRepo := u.NewUserRepo(db, rw, dbU)
 
 	encrypt := s.NewEncryptionService()
-	authEncrypt := s.NewAuthEncryption(authRepo, encrypt)
-	userEncrypt := s.NewUserEncryption(userRepo, encrypt)
+	authEncrypt := a.NewAuthEncryption(authRepo, encrypt)
+	userEncrypt := u.NewUserEncryption(userRepo, encrypt)
 
 	signingSecret := "my secret"
 	_ = s.NewJWTService(
@@ -40,11 +44,11 @@ func main() {
 		time.Duration(1*time.Minute),
 	)
 
-	_ = s.NewAuthValidator(authEncrypt)
-	_ = s.NewAuthorValidator(authorRepo)
-	_ = s.NewBookValidator(bookRepo)
-	_ = s.NewPostValidator(postRepo)
-	_ = s.NewUserValidator(userEncrypt)
+	_ = a.NewAuthValidator(authEncrypt)
+	_ = au.NewAuthorValidator(authorRepo)
+	_ = b.NewBookValidator(bookRepo)
+	_ = p.NewPostValidator(postRepo)
+	_ = u.NewUserValidator(userEncrypt)
 
 	// _, _, _, _ = Data()
 
@@ -58,36 +62,36 @@ func main() {
 }
 
 func Data() (
-	[]*m.Author,
-	[]*m.Book,
-	[]*m.Post,
-	[]*m.User,
+	[]*au.Author,
+	[]*b.Book,
+	[]*p.Post,
+	[]*u.User,
 ) {
-	posts := []*m.Post{
-		m.NewPost("one", "one body", 1),
-		m.NewPost("two", "two body", 1),
-		m.NewPost("three", "three body", 1),
-		m.NewPost("four", "four body", 1),
-		m.NewPost("five", "four", 1),
+	posts := []*p.Post{
+		p.NewPost("one", "one body", 1),
+		p.NewPost("two", "two body", 1),
+		p.NewPost("three", "three body", 1),
+		p.NewPost("four", "four body", 1),
+		p.NewPost("five", "four", 1),
 	}
 
-	authors := []*m.Author{
-		m.NewAuthor("John", "Doe"),
-		m.NewAuthor("Jane", "Doe"),
-		m.NewAuthor("James", "Doe"),
+	authors := []*au.Author{
+		au.NewAuthor("John", "Doe"),
+		au.NewAuthor("Jane", "Doe"),
+		au.NewAuthor("James", "Doe"),
 	}
 
-	books := []*m.Book{
-		m.NewBook("one book", 2010, 1),
-		m.NewBook("two book", 2018, 2),
-		m.NewBook("three book", 2004, 3),
-		m.NewBook("four book", 2014, 1),
+	books := []*b.Book{
+		b.NewBook("one book", 2010, 1),
+		b.NewBook("two book", 2018, 2),
+		b.NewBook("three book", 2004, 3),
+		b.NewBook("four book", 2014, 1),
 	}
 
-	users := []*m.User{
-		m.NewUser("John", "Doe", "john_doe", "john@doe.com", "password1"),
-		m.NewUser("Jenny", "Doe", "jenny_doe", "jenny@doe.com", "password2"),
-		m.NewUser("Jim", "Doe", "jim_doe", "jim@doe.com", "password3"),
+	users := []*u.User{
+		u.NewUser("John", "Doe", "john_doe", "john@doe.com", "password1"),
+		u.NewUser("Jenny", "Doe", "jenny_doe", "jenny@doe.com", "password2"),
+		u.NewUser("Jim", "Doe", "jim_doe", "jim@doe.com", "password3"),
 	}
 
 	return authors, books, posts, users

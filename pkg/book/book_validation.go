@@ -1,9 +1,7 @@
-package service
+package book
 
 import (
 	e "app/pkg/errors"
-	m "app/pkg/model"
-	r "app/pkg/repo"
 	"fmt"
 	"strings"
 
@@ -11,24 +9,24 @@ import (
 )
 
 type BookValidator interface {
-	Add(book *m.Book) error
-	AddAll(books *[]*m.Book) error
-	Edit(id int, newBook *m.Book) error
-	GetAll() (*[]m.Book, error)
-	GetOne(id int) (*m.Book, error)
+	Add(book *Book) error
+	AddAll(books *[]*Book) error
+	Edit(id int, newBook *Book) error
+	GetAll() (*[]Book, error)
+	GetOne(id int) (*Book, error)
 	Remove(id int) error
 }
 
 type bookValidator struct {
-	Repo r.BookRepo
+	Repo BookRepo
 }
 
-func NewBookValidator(repo r.BookRepo) BookValidator {
+func NewBookValidator(repo BookRepo) BookValidator {
 	return &bookValidator{repo}
 }
 
 // Add
-func (v *bookValidator) Add(book *m.Book) error {
+func (v *bookValidator) Add(book *Book) error {
 	_, err := valid.ValidateStruct(book)
 	if err != nil {
 		return e.NewValidationError(e.ErrAddValidation, err.Error())
@@ -43,7 +41,7 @@ func (v *bookValidator) Add(book *m.Book) error {
 }
 
 // AddAll
-func (v *bookValidator) AddAll(books *[]*m.Book) error {
+func (v *bookValidator) AddAll(books *[]*Book) error {
 	errs := []string{}
 	newBooks := *books
 	for i := 0; i < len(newBooks); i++ {
@@ -68,7 +66,7 @@ func (v *bookValidator) AddAll(books *[]*m.Book) error {
 }
 
 // Edit
-func (v *bookValidator) Edit(id int, newBook *m.Book) error {
+func (v *bookValidator) Edit(id int, newBook *Book) error {
 	_, err := valid.ValidateStruct(newBook)
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())
@@ -83,12 +81,12 @@ func (v *bookValidator) Edit(id int, newBook *m.Book) error {
 }
 
 // GetAll
-func (v *bookValidator) GetAll() (*[]m.Book, error) {
+func (v *bookValidator) GetAll() (*[]Book, error) {
 	return v.Repo.GetAll()
 }
 
 // GetOne
-func (v *bookValidator) GetOne(id int) (*m.Book, error) {
+func (v *bookValidator) GetOne(id int) (*Book, error) {
 	return v.Repo.GetOne(id)
 }
 

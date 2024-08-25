@@ -1,4 +1,4 @@
-package repo
+package author
 
 const (
 	CREATE_AUTHOR_TABLE_STMT = `

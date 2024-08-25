@@ -1,4 +1,4 @@
-package repo
+package user
 
 const (
 	CREATE_USER_TABLE_STMT = `

@@ -1,9 +1,8 @@
-package repo
+package book
 
 import (
 	e "app/pkg/errors"
-	m "app/pkg/model"
-	s "app/pkg/repo/stmt"
+	r "app/pkg/repo"
 	"database/sql"
 	"errors"
 	"strconv"
@@ -11,35 +10,35 @@ import (
 )
 
 type BookRepo interface {
-	Add(book *m.Book) error
-	AddAll(book *[]*m.Book) error
-	Edit(id int, book *m.Book) error
-	GetAll() (*[]m.Book, error)
-	GetOne(id int) (*m.Book, error)
+	Add(book *Book) error
+	AddAll(book *[]*Book) error
+	Edit(id int, book *Book) error
+	GetAll() (*[]Book, error)
+	GetOne(id int) (*Book, error)
 	Remove(id int) error
 }
 
 type bookRepo struct {
 	db  *sql.DB
 	rw  *sync.RWMutex
-	dbU DBUtil
+	dbU r.DBUtil
 }
 
-func NewBookRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil) BookRepo {
+func NewBookRepo(db *sql.DB, rw *sync.RWMutex, dbU r.DBUtil) BookRepo {
 
 	return &bookRepo{db, rw, dbU}
 }
 
 // Add
-func (p *bookRepo) Add(book *m.Book) error {
-	id, err := p.dbU.Transaction(s.ADD_BOOK_STMT, book.Name, book.Year)
+func (p *bookRepo) Add(book *Book) error {
+	id, err := p.dbU.Transaction(ADD_BOOK_STMT, book.Name, book.Year)
 	if err != nil {
 		return errors.Join(e.ErrRepoAdd, err)
 	}
 
 	book.ID = int(id)
 
-	_, err = p.dbU.Transaction(s.ADD_AUTHOR_BOOK_RLTN_STMT, book.AuthorID, book.ID)
+	_, err = p.dbU.Transaction(ADD_AUTHOR_BOOK_RLTN_STMT, book.AuthorID, book.ID)
 	if err != nil {
 		return errors.Join(e.ErrRepoAdd, err)
 	}
@@ -48,7 +47,7 @@ func (p *bookRepo) Add(book *m.Book) error {
 }
 
 // AddAll
-func (p *bookRepo) AddAll(books *[]*m.Book) error {
+func (p *bookRepo) AddAll(books *[]*Book) error {
 	newBooks := *books
 	for i := 0; i < len(newBooks); i++ {
 		book := newBooks[i]
@@ -62,8 +61,8 @@ func (p *bookRepo) AddAll(books *[]*m.Book) error {
 }
 
 // Edit
-func (p *bookRepo) Edit(id int, book *m.Book) error {
-	_, err := p.dbU.Transaction(s.EDIT_BOOK_STMT, book.Name, book.Year, id)
+func (p *bookRepo) Edit(id int, book *Book) error {
+	_, err := p.dbU.Transaction(EDIT_BOOK_STMT, book.Name, book.Year, id)
 	if err != nil {
 		return errors.Join(e.ErrRepoEdit, err)
 	}
@@ -72,14 +71,14 @@ func (p *bookRepo) Edit(id int, book *m.Book) error {
 }
 
 // GetAll
-func (p *bookRepo) GetAll() (*[]m.Book, error) {
+func (p *bookRepo) GetAll() (*[]Book, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
-	book := m.Book{}
-	books := []m.Book{}
+	book := Book{}
+	books := []Book{}
 
-	rows, err := p.db.Query(s.GET_ALL_BOOK_STMT)
+	rows, err := p.db.Query(GET_ALL_BOOK_STMT)
 	if err != nil {
 		return nil, errors.Join(e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
 	}
@@ -102,13 +101,13 @@ func (p *bookRepo) GetAll() (*[]m.Book, error) {
 }
 
 // GetOne
-func (p *bookRepo) GetOne(id int) (*m.Book, error) {
+func (p *bookRepo) GetOne(id int) (*Book, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
-	book := m.Book{}
+	book := Book{}
 
-	row := p.db.QueryRow(s.GET_ONE_BOOK_STMT, id)
+	row := p.db.QueryRow(GET_ONE_BOOK_STMT, id)
 	err := row.Scan(&book.ID, &book.Name, &book.Year)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
@@ -123,7 +122,7 @@ func (p *bookRepo) GetOne(id int) (*m.Book, error) {
 
 // Remove
 func (p *bookRepo) Remove(id int) error {
-	_, err := p.dbU.Transaction(s.REMOVE_BOOK_STMT, id)
+	_, err := p.dbU.Transaction(REMOVE_BOOK_STMT, id)
 	if err != nil {
 		return errors.Join(e.ErrRepoRemove, err)
 	}

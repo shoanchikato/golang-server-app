@@ -1,9 +1,9 @@
-package repo
+package author
 
 import (
+	b "app/pkg/book"
 	e "app/pkg/errors"
-	m "app/pkg/model"
-	s "app/pkg/repo/stmt"
+	r "app/pkg/repo"
 	"database/sql"
 	"errors"
 	"log"
@@ -12,33 +12,33 @@ import (
 )
 
 type AuthorRepo interface {
-	Add(author *m.Author) error
-	AddAll(author *[]*m.Author) error
-	Edit(id int, author *m.Author) error
-	GetAll() (*[]m.Author, error)
-	GetOne(id int) (*m.Author, error)
-	GetMore(id int) (*m.Author, error)
+	Add(author *Author) error
+	AddAll(author *[]*Author) error
+	Edit(id int, author *Author) error
+	GetAll() (*[]Author, error)
+	GetOne(id int) (*Author, error)
+	GetMore(id int) (*Author, error)
 	Remove(id int) error
 }
 
 type authorRepo struct {
 	db  *sql.DB
 	rw  *sync.RWMutex
-	dbU DBUtil
+	dbU r.DBUtil
 }
 
-func NewAuthorRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil) AuthorRepo {
-	_, err := db.Exec(s.CREATE_AUTHOR_TABLE_STMT)
+func NewAuthorRepo(db *sql.DB, rw *sync.RWMutex, dbU r.DBUtil) AuthorRepo {
+	_, err := db.Exec(CREATE_AUTHOR_TABLE_STMT)
 	if err != nil {
-		log.Fatalf("error creating author table: %v: %s\n", err, s.CREATE_AUTHOR_TABLE_STMT)
+		log.Fatalf("error creating author table: %v: %s\n", err, CREATE_AUTHOR_TABLE_STMT)
 	}
 
 	return &authorRepo{db, rw, dbU}
 }
 
 // Add
-func (p *authorRepo) Add(author *m.Author) error {
-	id, err := p.dbU.Transaction(s.ADD_AUTHOR_STMT, author.FirstName, author.LastName)
+func (p *authorRepo) Add(author *Author) error {
+	id, err := p.dbU.Transaction(ADD_AUTHOR_STMT, author.FirstName, author.LastName)
 	if err != nil {
 		return errors.Join(e.ErrRepoAdd, err)
 	}
@@ -49,7 +49,7 @@ func (p *authorRepo) Add(author *m.Author) error {
 }
 
 // AddAll
-func (p *authorRepo) AddAll(authors *[]*m.Author) error {
+func (p *authorRepo) AddAll(authors *[]*Author) error {
 	newAuthors := *authors
 	for i := 0; i < len(newAuthors); i++ {
 		author := newAuthors[i]
@@ -63,8 +63,8 @@ func (p *authorRepo) AddAll(authors *[]*m.Author) error {
 }
 
 // Edit
-func (p *authorRepo) Edit(id int, author *m.Author) error {
-	_, err := p.dbU.Transaction(s.EDIT_AUTHOR_STMT, author.FirstName, author.LastName, id)
+func (p *authorRepo) Edit(id int, author *Author) error {
+	_, err := p.dbU.Transaction(EDIT_AUTHOR_STMT, author.FirstName, author.LastName, id)
 	if err != nil {
 		return errors.Join(e.ErrRepoEdit, err)
 	}
@@ -73,14 +73,14 @@ func (p *authorRepo) Edit(id int, author *m.Author) error {
 }
 
 // GetAll
-func (p *authorRepo) GetAll() (*[]m.Author, error) {
+func (p *authorRepo) GetAll() (*[]Author, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
-	author := m.Author{}
-	authors := []m.Author{}
+	author := Author{}
+	authors := []Author{}
 
-	rows, err := p.db.Query(s.GET_ALL_AUTHOR_STMT)
+	rows, err := p.db.Query(GET_ALL_AUTHOR_STMT)
 	if err != nil {
 		return nil, errors.Join(e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
 	}
@@ -103,13 +103,13 @@ func (p *authorRepo) GetAll() (*[]m.Author, error) {
 }
 
 // GetOne
-func (p *authorRepo) GetOne(id int) (*m.Author, error) {
+func (p *authorRepo) GetOne(id int) (*Author, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
-	author := m.Author{}
+	author := Author{}
 
-	row := p.db.QueryRow(s.GET_ONE_AUTHOR_STMT, id)
+	row := p.db.QueryRow(GET_ONE_AUTHOR_STMT, id)
 	err := row.Scan(&author.ID, &author.FirstName, &author.LastName)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
@@ -122,7 +122,7 @@ func (p *authorRepo) GetOne(id int) (*m.Author, error) {
 	return &author, nil
 }
 
-func (p *authorRepo) GetMore(id int) (*m.Author, error) {
+func (p *authorRepo) GetMore(id int) (*Author, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
@@ -131,10 +131,10 @@ func (p *authorRepo) GetMore(id int) (*m.Author, error) {
 		return nil, errors.Join(e.ErrRepoGetMore, err)
 	}
 
-	book := m.Book{}
-	books := []m.Book{}
+	book := b.Book{}
+	books := []b.Book{}
 
-	rows, err := p.db.Query(s.GET_AUTHOR_BOOKS_STMT, id)
+	rows, err := p.db.Query(GET_AUTHOR_BOOKS_STMT, id)
 	if err != nil {
 		return nil, errors.Join(e.ErrRepoGetMore, e.ErrRepoPreparingStmt, err)
 	}
@@ -160,7 +160,7 @@ func (p *authorRepo) GetMore(id int) (*m.Author, error) {
 
 // Remove
 func (p *authorRepo) Remove(id int) error {
-	_, err := p.dbU.Transaction(s.REMOVE_AUTHOR_STMT, id)
+	_, err := p.dbU.Transaction(REMOVE_AUTHOR_STMT, id)
 	if err != nil {
 		return errors.Join(e.ErrRepoRemove, err)
 	}

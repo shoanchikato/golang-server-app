@@ -1,4 +1,4 @@
-package model
+package auth
 
 type Credentials struct {
 	Username string `json:"username" valid:"required~username is required"`

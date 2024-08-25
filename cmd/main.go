@@ -26,16 +26,7 @@ func main() {
 
 	rw := &sync.RWMutex{}
 	dbU := r.NewDBUtil(db, rw)
-
-	authRepo := a.NewAuthRepo(db, rw, dbU)
-	authorRepo := au.NewAuthorRepo(db, rw, dbU)
-	bookRepo := b.NewBookRepo(db, rw, dbU)
-	postRepo := p.NewPostRepo(db, rw, dbU)
-	userRepo := u.NewUserRepo(db, rw, dbU)
-
-	encrypt := s.NewEncryptionService()
-	authEncrypt := a.NewAuthEncryption(authRepo, encrypt)
-	userEncrypt := u.NewUserEncryption(userRepo, encrypt)
+	en := s.NewEncryptionService()
 
 	signingSecret := "my secret"
 	_ = s.NewJWTService(
@@ -44,11 +35,11 @@ func main() {
 		time.Duration(1*time.Minute),
 	)
 
-	_ = a.NewAuthValidator(authEncrypt)
-	_ = au.NewAuthorValidator(authorRepo)
-	_ = b.NewBookValidator(bookRepo)
-	_ = p.NewPostValidator(postRepo)
-	_ = u.NewUserValidator(userEncrypt)
+	_ = a.Di(db, rw, dbU, en)
+	_ = au.Di(db, rw, dbU)
+	_ = b.Di(db, rw, dbU)
+	_ = p.Di(db, rw, dbU)
+	_ = u.Di(db, rw, dbU, en)
 
 	// _, _, _, _ = Data()
 

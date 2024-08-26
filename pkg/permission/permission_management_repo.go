@@ -45,6 +45,11 @@ func NewPermissonManagementRepo(
 
 // AddPermissionToRole
 func (p *pMRepo) AddPermissionToRole(permission *Permission, roleID int) error {
+	permissions, _ := p.GetPermissionsByRoleID(roleID)
+	if permissions != nil {
+		return nil
+	}
+	
 	_, err := p.rr.GetOne(roleID)
 	if err != nil {
 		return err
@@ -81,6 +86,11 @@ func (p *pMRepo) AddPermissionsToRole(permissions *[]*Permission, roleID int) er
 
 // AddRoleToUser
 func (p *pMRepo) AddRoleToUser(roleID, userID int) error {
+	role, _ := p.GetRoleByUserID(userID)
+	if role != nil {
+		return nil
+	}
+
 	_, err := p.ur.GetOne(userID)
 	if err != nil {
 		return err
@@ -180,8 +190,8 @@ func (p *pMRepo) GetRoleByUserID(userID int) (*rr.Role, error) {
 	err := row.Scan(&role.ID, &role.Name)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(
-			e.ErrPermissionManagementDomain, 
-			e.ErrRepoExecutingStmt, 
+			e.ErrPermissionManagementDomain,
+			e.ErrRepoExecutingStmt,
 			e.NewErrRepoNotFound(strconv.Itoa(userID)),
 		)
 	}

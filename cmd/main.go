@@ -47,7 +47,7 @@ func main() {
 
 	// _, _, _, _ = Data()
 
-	err = srv.AddRoleToUser(100, 1)
+	err = srv.AddRoleToUser(1, 2)
 	if err != nil {
 		fmt.Println(err)
 		return

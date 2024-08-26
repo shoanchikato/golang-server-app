@@ -2,6 +2,7 @@ package permission
 
 import (
 	e "app/pkg/errors"
+	rr "app/pkg/role"
 	"fmt"
 	"strings"
 
@@ -14,8 +15,10 @@ type PermissionManagementValidator interface {
 	AddRoleToUser(roleID, userID int) error
 	GetPermissionsByRoleID(roleID int) (*[]Permission, error)
 	GetPermissonsByUserID(userID int) (*[]Permission, error)
+	GetRoleByUserID(userID int) (*rr.Role, error)
 	RemovePermissionFromRole(roleID, permissionID int) error
 	RemovePermissionsFromRole(roleID int, permissionIDs []int) error
+	RemoveRoleFromUser(roleID, userID int) error
 }
 
 type pMValidator struct {
@@ -81,6 +84,11 @@ func (p *pMValidator) GetPermissonsByUserID(userID int) (*[]Permission, error) {
 	return p.repo.GetPermissonsByUserID(userID)
 }
 
+// GetRoleByUserID
+func (p *pMValidator) GetRoleByUserID(userID int) (*rr.Role, error) {
+	return p.repo.GetRoleByUserID(userID)
+}
+
 // RemovePermissionFromRole
 func (p *pMValidator) RemovePermissionFromRole(roleID int, permissionID int) error {
 	return p.repo.RemovePermissionFromRole(roleID, permissionID)
@@ -89,4 +97,9 @@ func (p *pMValidator) RemovePermissionFromRole(roleID int, permissionID int) err
 // RemovePermissionsFromRole
 func (p *pMValidator) RemovePermissionsFromRole(roleID int, permissionIDs []int) error {
 	return p.repo.RemovePermissionsFromRole(roleID, permissionIDs)
+}
+
+// RemoveRoleFromUser
+func (p *pMValidator) RemoveRoleFromUser(roleID int, userID int) error {
+	return p.repo.RemoveRoleFromUser(roleID, userID)
 }

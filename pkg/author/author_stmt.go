@@ -22,8 +22,7 @@ const (
 		-- create indexes
 		CREATE INDEX IF NOT EXISTS idx_authors_books_author_id_book_id ON authors_books (author_id, book_id);
 	`
-	GET_AUTHOR_BOOKS_STMT = `
-		EXPLAIN QUERY PLAN
+	GET_BOOKS_BY_AUTHOR_ID_STMT = `
 		SELECT 
 			b.id,
 			b.name,
@@ -34,9 +33,9 @@ const (
 		JOIN 
 				authors_books ab ON b.id = ab.book_id
 		JOIN 
-				Authors a ON ab.author_id = a.id
+				authors a ON ab.author_id = a.id
 		WHERE 
-				a.id = 1;
+				a.id = $1;
 	`
 	ADD_AUTHOR_STMT     = `INSERT INTO authors (first_name, last_name) VALUES ($1, $2);`
 	EDIT_AUTHOR_STMT    = `UPDATE authors SET	first_name = $1, last_name = $2 WHERE id = $3;`

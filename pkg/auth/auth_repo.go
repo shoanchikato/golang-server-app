@@ -33,11 +33,11 @@ func (a *authRepo) GetByUsername(username string) (*Auth, error) {
 	row := a.db.QueryRow(GET_AUTH_DETAILS_BY_USERNAME, username)
 	err := row.Scan(&auth.Username, &auth.Email, &auth.Password, &auth.UserID)
 	if err == sql.ErrNoRows {
-		return nil, errors.Join(e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(username))
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(username))
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &auth, nil

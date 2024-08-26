@@ -12,10 +12,13 @@ func Di(
 	rw *sync.RWMutex,
 	dbU r.DBUtil,
 	en s.EncryptionService,
-) UserValidator {
+) (
+	UserValidator,
+	UserRepo,
+) {
 	repo := NewUserRepo(db, rw, dbU)
 	encrypt := NewUserEncryption(repo, en)
 	val := NewUserValidator(encrypt)
 
-	return val
+	return val, repo
 }

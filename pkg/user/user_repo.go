@@ -45,7 +45,7 @@ func (p *userRepo) Add(user *User) error {
 		user.Password,
 	)
 	if err != nil {
-		return errors.Join(e.ErrRepoAdd, err)
+		return errors.Join(e.ErrUserDomain, e.ErrRepoAdd, err)
 	}
 
 	user.ID = int(id)
@@ -78,7 +78,7 @@ func (p *userRepo) Edit(id int, user *User) error {
 		id,
 	)
 	if err != nil {
-		return errors.Join(e.ErrRepoEdit, err)
+		return errors.Join(e.ErrUserDomain, e.ErrRepoEdit, err)
 	}
 
 	return nil
@@ -94,7 +94,7 @@ func (p *userRepo) GetAll() (*[]User, error) {
 
 	rows, err := p.db.Query(GET_ALL_USER_STMT)
 	if err != nil {
-		return nil, errors.Join(e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrUserDomain, e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
@@ -107,14 +107,14 @@ func (p *userRepo) GetAll() (*[]User, error) {
 			&user.Email,
 		)
 		if err != nil {
-			return nil, errors.Join(e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrUserDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
 		}
 
 		users = append(users, user)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrUserDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &users, nil
@@ -136,11 +136,11 @@ func (p *userRepo) GetOne(id int) (*User, error) {
 		&user.Email,
 	)
 	if err == sql.ErrNoRows {
-		return nil, errors.Join(e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
+		return nil, errors.Join(e.ErrUserDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrUserDomain, e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &user, nil
@@ -155,7 +155,7 @@ func (p *userRepo) Remove(id int) error {
 
 	_, err = p.dbU.Transaction(REMOVE_USER_STMT, id)
 	if err != nil {
-		return errors.Join(e.ErrRepoRemove, err)
+		return errors.Join(e.ErrUserDomain, e.ErrRepoRemove, err)
 	}
 
 	return nil

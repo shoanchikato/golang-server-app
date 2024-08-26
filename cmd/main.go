@@ -4,8 +4,10 @@ import (
 	a "app/pkg/auth"
 	au "app/pkg/author"
 	b "app/pkg/book"
+	pe "app/pkg/permission"
 	p "app/pkg/post"
 	r "app/pkg/repo"
+	ro "app/pkg/role"
 	s "app/pkg/service"
 	u "app/pkg/user"
 	"database/sql"
@@ -39,11 +41,13 @@ func main() {
 	_ = au.Di(db, rw, dbU)
 	_ = b.Di(db, rw, dbU)
 	_ = p.Di(db, rw, dbU)
-	_ = u.Di(db, rw, dbU, en)
+	_, ur := u.Di(db, rw, dbU, en)
+	_, rr := ro.Di(db, rw, dbU)
+	_, srv := pe.Di(db, rw, dbU, ur, rr)
 
 	// _, _, _, _ = Data()
 
-	// err = jwt.GetAccessToken()
+	err = srv.AddRoleToUser(100, 1)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -83,6 +87,13 @@ func Data() (
 		u.NewUser("John", "Doe", "john_doe", "john@doe.com", "password1"),
 		u.NewUser("Jenny", "Doe", "jenny_doe", "jenny@doe.com", "password2"),
 		u.NewUser("Jim", "Doe", "jim_doe", "jim@doe.com", "password3"),
+	}
+
+	_ = []*pe.Permission{
+		pe.NewPermission("post: app"),
+		pe.NewPermission("post: add all"),
+		pe.NewPermission("post: edit"),
+		pe.NewPermission("post: remove"),
 	}
 
 	return authors, books, posts, users

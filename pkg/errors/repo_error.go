@@ -12,12 +12,6 @@ var (
 	ErrRepoCommitTx       = errors.New("repo: error committing transaction")
 	ErrRepoLastInsertedID = errors.New("repo: error getting last inserted id")
 
-	ErrRepoAdd      = errors.New("repo: add")
-	ErrRepoEdit     = errors.New("repo: edit")
-	ErrRepoGetAll   = errors.New("repo: get all")
-	ErrRepoGetOne   = errors.New("repo: get one")
-	ErrRepoGetMore  = errors.New("repo: get more")
-	ErrRepoRemove   = errors.New("repo: remove post")
 	ErrRepoNotFound = errors.New("repo: not found")
 )
 

@@ -2,6 +2,8 @@ package post
 
 import (
 	a "app/pkg/authorization"
+	e "app/pkg/errors"
+	"errors"
 )
 
 type PostAuthorization interface {
@@ -15,7 +17,7 @@ type PostAuthorization interface {
 
 type postAuthorization struct {
 	auth a.AuthorizationService
-	v  PostValidator
+	v    PostValidator
 }
 
 func NewPostAuthorization(v PostValidator, auth a.AuthorizationService) PostAuthorization {
@@ -26,7 +28,7 @@ func NewPostAuthorization(v PostValidator, auth a.AuthorizationService) PostAuth
 func (p *postAuthorization) Add(userID int, post *Post) error {
 	err := p.auth.CheckForAuthorization(userID, "post: add")
 	if err != nil {
-		return err
+		return errors.Join(e.ErrOnAdd, err)
 	}
 
 	return p.v.Add(post)
@@ -36,7 +38,7 @@ func (p *postAuthorization) Add(userID int, post *Post) error {
 func (p *postAuthorization) AddAll(userID int, posts *[]*Post) error {
 	err := p.auth.CheckForAuthorization(userID, "post: add all")
 	if err != nil {
-		return err
+		return errors.Join(e.ErrOnAddAll, err)
 	}
 
 	return p.v.AddAll(posts)
@@ -46,7 +48,7 @@ func (p *postAuthorization) AddAll(userID int, posts *[]*Post) error {
 func (p *postAuthorization) Edit(userID int, id int, newPost *Post) error {
 	err := p.auth.CheckForAuthorization(userID, "post: edit")
 	if err != nil {
-		return err
+		return errors.Join(e.ErrOnEdit, err)
 	}
 
 	return p.v.Edit(id, newPost)
@@ -56,7 +58,7 @@ func (p *postAuthorization) Edit(userID int, id int, newPost *Post) error {
 func (p *postAuthorization) GetAll(userID int) (*[]Post, error) {
 	err := p.auth.CheckForAuthorization(userID, "post: get all")
 	if err != nil {
-		return nil, err
+		return nil, errors.Join(e.ErrOnGetAll, err)
 	}
 
 	return p.v.GetAll()
@@ -66,7 +68,7 @@ func (p *postAuthorization) GetAll(userID int) (*[]Post, error) {
 func (p *postAuthorization) GetOne(userID int, id int) (*Post, error) {
 	err := p.auth.CheckForAuthorization(userID, "post: get one")
 	if err != nil {
-		return nil, err
+		return nil, errors.Join(e.ErrOnGetOne, err)
 	}
 
 	return p.v.GetOne(id)
@@ -76,7 +78,7 @@ func (p *postAuthorization) GetOne(userID int, id int) (*Post, error) {
 func (p *postAuthorization) Remove(userID int, id int) error {
 	err := p.auth.CheckForAuthorization(userID, "post: remove")
 	if err != nil {
-		return err
+		return errors.Join(e.ErrOnRemove, err)
 	}
 
 	return p.v.Remove(id)

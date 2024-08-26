@@ -37,7 +37,7 @@ func (a *authRepo) GetByUsername(username string) (*Auth, error) {
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &auth, nil

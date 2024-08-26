@@ -38,7 +38,7 @@ func NewPostRepo(db *sql.DB, rw *sync.RWMutex, dbU r.DBUtil) PostRepo {
 func (p *postRepo) Add(post *Post) error {
 	id, err := p.dbU.Transaction(ADD_POST_STMT, post.Title, post.Body, post.UserID)
 	if err != nil {
-		return errors.Join(e.ErrPostDomain, e.ErrRepoAdd, err)
+		return errors.Join(e.ErrPostDomain, e.ErrOnAdd, err)
 	}
 
 	post.ID = int(id)
@@ -64,7 +64,7 @@ func (p *postRepo) AddAll(posts *[]*Post) error {
 func (p *postRepo) Edit(id int, post *Post) error {
 	_, err := p.dbU.Transaction(EDIT_POST_STMT, post.Title, post.Body, post.UserID, id)
 	if err != nil {
-		return errors.Join(e.ErrPostDomain, e.ErrRepoEdit, err)
+		return errors.Join(e.ErrPostDomain, e.ErrOnEdit, err)
 	}
 
 	return nil
@@ -80,21 +80,21 @@ func (p *postRepo) GetAll() (*[]Post, error) {
 
 	rows, err := p.db.Query(GET_ALL_POST_STMT)
 	if err != nil {
-		return nil, errors.Join(e.ErrPostDomain, e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.Scan(&post.ID, &post.Title, &post.Body, &post.UserID)
 		if err != nil {
-			return nil, errors.Join(e.ErrPostDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
 
 		posts = append(posts, post)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrPostDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &posts, nil
@@ -114,7 +114,7 @@ func (p *postRepo) GetOne(id int) (*Post, error) {
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrPostDomain, e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &post, nil
@@ -124,7 +124,7 @@ func (p *postRepo) GetOne(id int) (*Post, error) {
 func (p *postRepo) Remove(id int) error {
 	_, err := p.dbU.Transaction(REMOVE_POST_STMT, id)
 	if err != nil {
-		return errors.Join(e.ErrPostDomain, e.ErrRepoRemove, err)
+		return errors.Join(e.ErrPostDomain, e.ErrOnRemove, err)
 	}
 
 	return nil

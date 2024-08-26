@@ -38,7 +38,7 @@ func NewPermissionRepo(db *sql.DB, rw *sync.RWMutex, dbU r.DBUtil) PermissionRep
 func (p *permissionRepo) Add(permission *Permission) error {
 	id, err := p.dbU.Transaction(ADD_PERMISSION_STMT, permission.Name)
 	if err != nil {
-		return errors.Join(e.ErrPermissionDomain, e.ErrRepoAdd, err)
+		return errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
 	}
 
 	permission.ID = int(id)
@@ -64,7 +64,7 @@ func (p *permissionRepo) AddAll(permissions *[]*Permission) error {
 func (p *permissionRepo) Edit(id int, permission *Permission) error {
 	_, err := p.dbU.Transaction(EDIT_PERMISSION_STMT, permission.Name, id)
 	if err != nil {
-		return errors.Join(e.ErrPermissionDomain, e.ErrRepoEdit, err)
+		return errors.Join(e.ErrPermissionDomain, e.ErrOnEdit, err)
 	}
 
 	return nil
@@ -80,21 +80,21 @@ func (p *permissionRepo) GetAll() (*[]Permission, error) {
 
 	rows, err := p.db.Query(GET_ALL_PERMISSION_STMT)
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionDomain, e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.Scan(&permission.ID, &permission.Name)
 		if err != nil {
-			return nil, errors.Join(e.ErrPermissionDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
 
 		permissions = append(permissions, permission)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &permissions, nil
@@ -114,7 +114,7 @@ func (p *permissionRepo) GetOne(id int) (*Permission, error) {
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionDomain, e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &permission, nil
@@ -128,7 +128,7 @@ func (p *permissionRepo) Remove(id int) error {
 	}
 	_, err = p.dbU.Transaction(REMOVE_PERMISSION_STMT, id)
 	if err != nil {
-		return errors.Join(e.ErrPermissionDomain, e.ErrRepoRemove, err)
+		return errors.Join(e.ErrPermissionDomain, e.ErrOnRemove, err)
 	}
 
 	return nil

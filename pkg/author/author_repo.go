@@ -40,7 +40,7 @@ func NewAuthorRepo(db *sql.DB, rw *sync.RWMutex, dbU r.DBUtil) AuthorRepo {
 func (p *authorRepo) Add(author *Author) error {
 	id, err := p.dbU.Transaction(ADD_AUTHOR_STMT, author.FirstName, author.LastName)
 	if err != nil {
-		return errors.Join(e.ErrAuthDomain, e.ErrRepoAdd, err)
+		return errors.Join(e.ErrAuthDomain, e.ErrOnAdd, err)
 	}
 
 	author.ID = int(id)
@@ -66,7 +66,7 @@ func (p *authorRepo) AddAll(authors *[]*Author) error {
 func (p *authorRepo) Edit(id int, author *Author) error {
 	_, err := p.dbU.Transaction(EDIT_AUTHOR_STMT, author.FirstName, author.LastName, id)
 	if err != nil {
-		return errors.Join(e.ErrAuthDomain, e.ErrRepoEdit, err)
+		return errors.Join(e.ErrAuthDomain, e.ErrOnEdit, err)
 	}
 
 	return nil
@@ -82,21 +82,21 @@ func (p *authorRepo) GetAll() (*[]Author, error) {
 
 	rows, err := p.db.Query(GET_ALL_AUTHOR_STMT)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.Scan(&author.ID, &author.FirstName, &author.LastName)
 		if err != nil {
-			return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
 
 		authors = append(authors, author)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &authors, nil
@@ -116,7 +116,7 @@ func (p *authorRepo) GetOne(id int) (*Author, error) {
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &author, nil
@@ -128,7 +128,7 @@ func (p *authorRepo) GetMore(id int) (*Author, error) {
 
 	author, err := p.GetOne(id)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoGetMore, err)
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, err)
 	}
 
 	book := b.Book{}
@@ -136,21 +136,21 @@ func (p *authorRepo) GetMore(id int) (*Author, error) {
 
 	rows, err := p.db.Query(GET_BOOKS_BY_AUTHOR_ID_STMT, id)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoGetMore, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.Scan(&book.ID, &book.Name, &book.Year, &book.AuthorID)
 		if err != nil {
-			return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoGetMore, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, e.ErrRepoExecutingStmt, err)
 		}
 
 		books = append(books, book)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoGetMore, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, e.ErrRepoExecutingStmt, err)
 	}
 
 	author.Books = &books
@@ -162,7 +162,7 @@ func (p *authorRepo) GetMore(id int) (*Author, error) {
 func (p *authorRepo) Remove(id int) error {
 	_, err := p.dbU.Transaction(REMOVE_AUTHOR_STMT, id)
 	if err != nil {
-		return errors.Join(e.ErrAuthDomain, e.ErrRepoRemove, err)
+		return errors.Join(e.ErrAuthDomain, e.ErrOnRemove, err)
 	}
 
 	return nil

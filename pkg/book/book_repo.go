@@ -33,14 +33,14 @@ func NewBookRepo(db *sql.DB, rw *sync.RWMutex, dbU r.DBUtil) BookRepo {
 func (p *bookRepo) Add(book *Book) error {
 	id, err := p.dbU.Transaction(ADD_BOOK_STMT, book.Name, book.Year)
 	if err != nil {
-		return errors.Join(e.ErrBookDomain, e.ErrRepoAdd, err)
+		return errors.Join(e.ErrBookDomain, e.ErrOnAdd, err)
 	}
 
 	book.ID = int(id)
 
 	_, err = p.dbU.Transaction(ADD_AUTHOR_BOOK_RLTN_STMT, book.AuthorID, book.ID)
 	if err != nil {
-		return errors.Join(e.ErrBookDomain, e.ErrRepoAdd, err)
+		return errors.Join(e.ErrBookDomain, e.ErrOnAdd, err)
 	}
 
 	return nil
@@ -64,7 +64,7 @@ func (p *bookRepo) AddAll(books *[]*Book) error {
 func (p *bookRepo) Edit(id int, book *Book) error {
 	_, err := p.dbU.Transaction(EDIT_BOOK_STMT, book.Name, book.Year, id)
 	if err != nil {
-		return errors.Join(e.ErrBookDomain, e.ErrRepoEdit, err)
+		return errors.Join(e.ErrBookDomain, e.ErrOnEdit, err)
 	}
 
 	return nil
@@ -80,21 +80,21 @@ func (p *bookRepo) GetAll() (*[]Book, error) {
 
 	rows, err := p.db.Query(GET_ALL_BOOK_STMT)
 	if err != nil {
-		return nil, errors.Join(e.ErrBookDomain, e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrBookDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.Scan(&book.ID, &book.Name, &book.Year)
 		if err != nil {
-			return nil, errors.Join(e.ErrBookDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrBookDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
 
 		books = append(books, book)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrBookDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrBookDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &books, nil
@@ -114,7 +114,7 @@ func (p *bookRepo) GetOne(id int) (*Book, error) {
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrBookDomain, e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrBookDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &book, nil
@@ -124,7 +124,7 @@ func (p *bookRepo) GetOne(id int) (*Book, error) {
 func (p *bookRepo) Remove(id int) error {
 	_, err := p.dbU.Transaction(REMOVE_BOOK_STMT, id)
 	if err != nil {
-		return errors.Join(e.ErrBookDomain, e.ErrRepoRemove, err)
+		return errors.Join(e.ErrBookDomain, e.ErrOnRemove, err)
 	}
 
 	return nil

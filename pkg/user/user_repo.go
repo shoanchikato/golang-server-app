@@ -45,7 +45,7 @@ func (p *userRepo) Add(user *User) error {
 		user.Password,
 	)
 	if err != nil {
-		return errors.Join(e.ErrUserDomain, e.ErrRepoAdd, err)
+		return errors.Join(e.ErrUserDomain, e.ErrOnAdd, err)
 	}
 
 	user.ID = int(id)
@@ -78,7 +78,7 @@ func (p *userRepo) Edit(id int, user *User) error {
 		id,
 	)
 	if err != nil {
-		return errors.Join(e.ErrUserDomain, e.ErrRepoEdit, err)
+		return errors.Join(e.ErrUserDomain, e.ErrOnEdit, err)
 	}
 
 	return nil
@@ -94,7 +94,7 @@ func (p *userRepo) GetAll() (*[]User, error) {
 
 	rows, err := p.db.Query(GET_ALL_USER_STMT)
 	if err != nil {
-		return nil, errors.Join(e.ErrUserDomain, e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrUserDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
@@ -107,14 +107,14 @@ func (p *userRepo) GetAll() (*[]User, error) {
 			&user.Email,
 		)
 		if err != nil {
-			return nil, errors.Join(e.ErrUserDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrUserDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
 
 		users = append(users, user)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrUserDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrUserDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &users, nil
@@ -140,7 +140,7 @@ func (p *userRepo) GetOne(id int) (*User, error) {
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrUserDomain, e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrUserDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &user, nil
@@ -155,7 +155,7 @@ func (p *userRepo) Remove(id int) error {
 
 	_, err = p.dbU.Transaction(REMOVE_USER_STMT, id)
 	if err != nil {
-		return errors.Join(e.ErrUserDomain, e.ErrRepoRemove, err)
+		return errors.Join(e.ErrUserDomain, e.ErrOnRemove, err)
 	}
 
 	return nil

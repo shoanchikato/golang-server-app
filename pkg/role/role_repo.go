@@ -33,7 +33,7 @@ func NewRoleRepo(db *sql.DB, rw *sync.RWMutex, dbU r.DBUtil) RoleRepo {
 func (p *roleRepo) Add(role *Role) error {
 	id, err := p.dbU.Transaction(ADD_ROLE_STMT, role.Name)
 	if err != nil {
-		return errors.Join(e.ErrRoleDomain, e.ErrRepoAdd, err)
+		return errors.Join(e.ErrRoleDomain, e.ErrOnAdd, err)
 	}
 
 	role.ID = int(id)
@@ -59,7 +59,7 @@ func (p *roleRepo) AddAll(roles *[]*Role) error {
 func (p *roleRepo) Edit(id int, role *Role) error {
 	_, err := p.dbU.Transaction(EDIT_ROLE_STMT, role.Name, id)
 	if err != nil {
-		return errors.Join(e.ErrRoleDomain, e.ErrRepoEdit, err)
+		return errors.Join(e.ErrRoleDomain, e.ErrOnEdit, err)
 	}
 
 	return nil
@@ -75,21 +75,21 @@ func (p *roleRepo) GetAll() (*[]Role, error) {
 
 	rows, err := p.db.Query(GET_ALL_ROLE_STMT)
 	if err != nil {
-		return nil, errors.Join(e.ErrRoleDomain, e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrRoleDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.Scan(&role.ID, &role.Name)
 		if err != nil {
-			return nil, errors.Join(e.ErrRoleDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrRoleDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
 
 		roles = append(roles, role)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrRoleDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrRoleDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &roles, nil
@@ -109,7 +109,7 @@ func (p *roleRepo) GetOne(id int) (*Role, error) {
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrRoleDomain, e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrRoleDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &role, nil
@@ -124,7 +124,7 @@ func (p *roleRepo) Remove(id int) error {
 
 	_, err = p.dbU.Transaction(REMOVE_ROLE_STMT, id)
 	if err != nil {
-		return errors.Join(e.ErrRoleDomain, e.ErrRepoRemove, err)
+		return errors.Join(e.ErrRoleDomain, e.ErrOnRemove, err)
 	}
 
 	return nil

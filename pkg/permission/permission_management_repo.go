@@ -67,7 +67,7 @@ func (p *pMRepo) AddPermissionToRole(permissionID, roleID int) error {
 
 	_, err = p.dbU.Transaction(ADD_PERMISSION_TO_ROLE_STMT, permissionID, roleID)
 	if err != nil {
-		return errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoAdd, err)
+		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnAdd, err)
 	}
 
 	return nil
@@ -105,7 +105,7 @@ func (p *pMRepo) AddRoleToUser(roleID, userID int) error {
 
 	_, err = p.dbU.Transaction(ADD_ROLE_TO_USER_STMT, roleID, userID)
 	if err != nil {
-		return errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoAdd, err)
+		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnAdd, err)
 	}
 
 	return nil
@@ -126,21 +126,21 @@ func (p *pMRepo) GetPermissionsByRoleID(roleID int) (*[]Permission, error) {
 
 	rows, err := p.db.Query(GET_PERMISSIONS_BY_ROLE_ID_STMT, roleID)
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.Scan(&permission.ID, &permission.Name)
 		if err != nil {
-			return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
 
 		permissions = append(permissions, permission)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &permissions, nil
@@ -161,21 +161,21 @@ func (p *pMRepo) GetPermissonsByUserID(userID int) (*[]Permission, error) {
 
 	rows, err := p.db.Query(GET_PERMISSIONS_BY_USER_ID, userID)
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoGetAll, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.Scan(&permission.ID, &permission.Name)
 		if err != nil {
-			return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
 
 		permissions = append(permissions, permission)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoGetAll, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &permissions, nil
@@ -199,7 +199,7 @@ func (p *pMRepo) GetRoleByUserID(userID int) (*rr.Role, error) {
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &role, nil
@@ -224,7 +224,7 @@ func (p *pMRepo) RemovePermissionFromRole(roleID int, permissionID int) error {
 
 	_, err = p.dbU.Transaction(REMOVE_PERMISSION_FROM_ROLE_STMT, roleID, permissionID)
 	if err != nil {
-		return errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoRemove, err)
+		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnRemove, err)
 	}
 
 	return nil
@@ -262,7 +262,7 @@ func (p *pMRepo) RemoveRoleFromUser(roleID int, userID int) error {
 
 	_, err = p.dbU.Transaction(REMOVE_ROLE_FROM_USER_STMT, roleID, userID)
 	if err != nil {
-		return errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoRemove, err)
+		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnRemove, err)
 	}
 
 	return nil

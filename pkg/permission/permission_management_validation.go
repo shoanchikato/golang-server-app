@@ -1,17 +1,12 @@
 package permission
 
 import (
-	e "app/pkg/errors"
 	rr "app/pkg/role"
-	"fmt"
-	"strings"
-
-	valid "github.com/asaskevich/govalidator"
 )
 
 type PermissionManagementValidator interface {
-	AddPermissionToRole(permission *Permission, roleID int) error
-	AddPermissionsToRole(permissions *[]*Permission, roleID int) error
+	AddPermissionToRole(permissionID, roleID int) error
+	AddPermissionsToRole(permissionIDs []int, roleID int) error
 	AddRoleToUser(roleID, userID int) error
 	GetPermissionsByRoleID(roleID int) (*[]Permission, error)
 	GetPermissonsByUserID(userID int) (*[]Permission, error)
@@ -30,43 +25,13 @@ func NewPermissionManagementValidator(repo PermissionManagementRepo) PermissionM
 }
 
 // AddPermissionToRole
-func (p *pMValidator) AddPermissionToRole(permission *Permission, roleID int) error {
-	_, err := valid.ValidateStruct(permission)
-	if err != nil {
-		return e.NewValidationError(e.ErrAddValidation, err.Error())
-	}
-
-	err = p.repo.AddPermissionToRole(permission, roleID)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (p *pMValidator) AddPermissionToRole(permissionID, roleID int) error {
+	return p.repo.AddPermissionToRole(permissionID, roleID)
 }
 
 // AddPermissionsToRole
-func (p *pMValidator) AddPermissionsToRole(permissions *[]*Permission, roleID int) error {
-	errs := []string{}
-	newPermissions := *permissions
-	for i := 0; i < len(newPermissions); i++ {
-		_, err := valid.ValidateStruct(newPermissions[i])
-		if err != nil {
-			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
-			errs = append(errs, errStr)
-		}
-	}
-
-	if len(errs) > 0 {
-		newErrors := strings.Join(errs, "")
-		return e.NewValidationError(e.ErrAddAllValidation, newErrors)
-	}
-
-	err := p.repo.AddPermissionsToRole(permissions, roleID)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (p *pMValidator) AddPermissionsToRole(permissionIDs []int, roleID int) error {
+	return p.repo.AddPermissionsToRole(permissionIDs, roleID)
 }
 
 // AddRoleToUser

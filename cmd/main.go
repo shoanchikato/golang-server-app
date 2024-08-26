@@ -3,16 +3,19 @@ package main
 import (
 	a "app/pkg/auth"
 	au "app/pkg/author"
+	aa "app/pkg/authorization"
 	b "app/pkg/book"
 	pe "app/pkg/permission"
 	p "app/pkg/post"
 	r "app/pkg/repo"
-	ro "app/pkg/role"
+	rr "app/pkg/role"
 	s "app/pkg/service"
 	u "app/pkg/user"
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
+	"strconv"
 	"sync"
 	"time"
 
@@ -26,10 +29,6 @@ func main() {
 	}
 	defer db.Close()
 
-	rw := &sync.RWMutex{}
-	dbU := r.NewDBUtil(db, rw)
-	en := s.NewEncryptionService()
-
 	signingSecret := "my secret"
 	_ = s.NewJWTService(
 		&signingSecret,
@@ -37,23 +36,54 @@ func main() {
 		time.Duration(1*time.Minute),
 	)
 
-	_ = a.Di(db, rw, dbU, en)
-	_ = au.Di(db, rw, dbU)
-	_ = b.Di(db, rw, dbU)
-	_ = p.Di(db, rw, dbU)
-	_, ur := u.Di(db, rw, dbU, en)
-	_, rr := ro.Di(db, rw, dbU)
-	_, srv := pe.Di(db, rw, dbU, ur, rr)
+	rw := &sync.RWMutex{}
+	dbU := r.NewDBUtil(db, rw)
+	en := s.NewEncryptionService()
 
-	// _, _, _, _ = Data()
+	// Repos
+	uRepo := u.NewUserRepo(db, rw, dbU)
+	aRepo := a.NewAuthRepo(db, rw, dbU)
+	rRepo := rr.NewRoleRepo(db, rw, dbU)
+	peRepo := pe.NewPermissionRepo(db, rw, dbU)
+	auRepo := au.NewAuthorRepo(db, rw, dbU)
+	bRepo := b.NewBookRepo(db, rw, dbU)
+	pRepo := p.NewPostRepo(db, rw, dbU)
+	pmRepo := pe.NewPermissionManagementRepo(db, rw, dbU, uRepo, rRepo, peRepo)
 
-	err = srv.AddRoleToUser(1, 1)
+	// Services
+	aEncrypt := a.NewAuthEncryption(aRepo, en)
+	uEncrypt := u.NewUserEncryption(uRepo, en)
+	auth := aa.NewAuthorizationService(pmRepo)
+
+	// Validators
+	_ = u.NewUserValidator(uEncrypt)
+	_ = a.NewAuthValidator(aEncrypt)
+	_ = rr.NewRoleValidator(rRepo)
+	_ = pe.NewPermissionValidator(peRepo)
+	_ = au.NewAuthorValidator(auRepo)
+	_ = b.NewBookValidator(bRepo)
+	pVal := p.NewPostValidator(pRepo)
+	_ = pe.NewPermissionManagementValidator(pmRepo)
+
+	// Authorization
+	srv := p.NewPostAuthorization(pVal, auth)
+
+	// _, _, posts, _ := Data()
+
+	values := os.Args
+	value, err := strconv.Atoi(values[1])
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Printf("%v\n", err)
+	posts, err := srv.GetAll(value)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Printf("%v\n%v\n", value, posts)
 }
 
 func Data() (
@@ -67,7 +97,7 @@ func Data() (
 		p.NewPost("two", "two body", 1),
 		p.NewPost("three", "three body", 1),
 		p.NewPost("four", "four body", 1),
-		p.NewPost("five", "four", 1),
+		p.NewPost("five", "five body", 1),
 	}
 
 	authors := []*au.Author{

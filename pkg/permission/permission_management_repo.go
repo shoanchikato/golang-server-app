@@ -12,8 +12,8 @@ import (
 )
 
 type PermissionManagementRepo interface {
-	AddPermissionToRole(permission *Permission, roleID int) error
-	AddPermissionsToRole(permissions *[]*Permission, roleID int) error
+	AddPermissionToRole(permissionID, roleID int) error
+	AddPermissionsToRole(permissionIDs []int, roleID int) error
 	AddRoleToUser(roleID, userID int) error
 	GetPermissionsByRoleID(roleID int) (*[]Permission, error)
 	GetPermissonsByUserID(userID int) (*[]Permission, error)
@@ -32,7 +32,7 @@ type pMRepo struct {
 	pr  PermissionRepo
 }
 
-func NewPermissonManagementRepo(
+func NewPermissionManagementRepo(
 	db *sql.DB,
 	rw *sync.RWMutex,
 	dbU r.DBUtil,
@@ -44,38 +44,40 @@ func NewPermissonManagementRepo(
 }
 
 // AddPermissionToRole
-func (p *pMRepo) AddPermissionToRole(permission *Permission, roleID int) error {
+func (p *pMRepo) AddPermissionToRole(permissionID, roleID int) error {
 	permissions, _ := p.GetPermissionsByRoleID(roleID)
 	if permissions != nil {
-		return nil
+		pp := *permissions
+		for i := 0; i < len(pp); i++ {
+			if permissionID == pp[i].ID {
+				return nil
+			}
+		}
 	}
-	
+
 	_, err := p.rr.GetOne(roleID)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.pr.GetOne(permission.ID)
+	_, err = p.pr.GetOne(permissionID)
 	if err != nil {
 		return err
 	}
 
-	id, err := p.dbU.Transaction(ADD_PERMISSION_TO_ROLE_STMT, permission.ID, roleID)
+	_, err = p.dbU.Transaction(ADD_PERMISSION_TO_ROLE_STMT, permissionID, roleID)
 	if err != nil {
 		return errors.Join(e.ErrPermissionManagementDomain, e.ErrRepoAdd, err)
 	}
-
-	permission.ID = int(id)
 
 	return nil
 }
 
 // AddPermissionsToRole
-func (p *pMRepo) AddPermissionsToRole(permissions *[]*Permission, roleID int) error {
-	newPermissions := *permissions
-	for i := 0; i < len(newPermissions); i++ {
-		permission := newPermissions[i]
-		err := p.AddPermissionToRole(permission, roleID)
+func (p *pMRepo) AddPermissionsToRole(permissionIDs []int, roleID int) error {
+	for i := 0; i < len(permissionIDs); i++ {
+		permissionID := permissionIDs[i]
+		err := p.AddPermissionToRole(permissionID, roleID)
 		if err != nil {
 			return err
 		}

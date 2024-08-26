@@ -72,10 +72,13 @@ const (
 	ADD_ROLE_TO_USER_STMT            = `INSERT INTO users_roles (role_id, user_id) VALUES ($1, $2);`
 	REMOVE_PERMISSION_FROM_ROLE_STMT = `DELETE FROM roles_permissions WHERE role_id = $1 AND permission_id = $2;`
 
-	ADD_PERMISSION_STMT        = `INSERT INTO permissions (name) VALUES ($1);`
-	EDIT_PERMISSION_STMT       = `UPDATE permissions SET	name = $1 WHERE id = $2;`
-	GET_ALL_PERMISSION_STMT    = `SELECT * FROM permissions;`
-	GET_ONE_PERMISSION_STMT    = `SELECT * FROM permissions WHERE id = $1;`
-	REMOVE_PERMISSION_STMT     = `DELETE FROM permissions WHERE id = $1;`
+	ADD_PERMISSION_STMT     = `INSERT INTO permissions (name) VALUES ($1);`
+	EDIT_PERMISSION_STMT    = `UPDATE permissions SET	name = $1 WHERE id = $2;`
+	GET_ALL_PERMISSION_STMT = `SELECT * FROM permissions;`
+	GET_ONE_PERMISSION_STMT = `SELECT * FROM permissions WHERE id = $1;`
+	REMOVE_PERMISSION_STMT  = `
+		DELETE FROM permissions WHERE id = $1;
+		DELETE FROM roles_permissions WHERE permission_id = $1;
+	`
 	REMOVE_ROLE_FROM_USER_STMT = `DELETE FROM users_roles WHERE role_id = $1 AND user_id = $2`
 )

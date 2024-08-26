@@ -26,9 +26,9 @@ func NewPostAuthorization(v PostValidator, auth a.AuthorizationService) PostAuth
 
 // Add
 func (p *postAuthorization) Add(userID int, post *Post) error {
-	err := p.auth.CheckForAuthorization(userID, "post: add")
+	err := p.auth.CheckForAuthorization(userID, PostAdd)
 	if err != nil {
-		return errors.Join(e.ErrOnAdd, err)
+		return errors.Join(e.ErrPostDomain, e.ErrOnAdd, err)
 	}
 
 	return p.v.Add(post)
@@ -36,9 +36,9 @@ func (p *postAuthorization) Add(userID int, post *Post) error {
 
 // AddAll
 func (p *postAuthorization) AddAll(userID int, posts *[]*Post) error {
-	err := p.auth.CheckForAuthorization(userID, "post: add all")
+	err := p.auth.CheckForAuthorization(userID, PostAddAll)
 	if err != nil {
-		return errors.Join(e.ErrOnAddAll, err)
+		return errors.Join(e.ErrPostDomain, e.ErrOnAddAll, err)
 	}
 
 	return p.v.AddAll(posts)
@@ -46,9 +46,9 @@ func (p *postAuthorization) AddAll(userID int, posts *[]*Post) error {
 
 // Edit
 func (p *postAuthorization) Edit(userID int, id int, newPost *Post) error {
-	err := p.auth.CheckForAuthorization(userID, "post: edit")
+	err := p.auth.CheckForAuthorization(userID, PostEdit)
 	if err != nil {
-		return errors.Join(e.ErrOnEdit, err)
+		return errors.Join(e.ErrPostDomain, e.ErrOnEdit, err)
 	}
 
 	return p.v.Edit(id, newPost)
@@ -56,9 +56,9 @@ func (p *postAuthorization) Edit(userID int, id int, newPost *Post) error {
 
 // GetAll
 func (p *postAuthorization) GetAll(userID int) (*[]Post, error) {
-	err := p.auth.CheckForAuthorization(userID, "post: get all")
+	err := p.auth.CheckForAuthorization(userID, PostGetAll)
 	if err != nil {
-		return nil, errors.Join(e.ErrOnGetAll, err)
+		return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetAll, err)
 	}
 
 	return p.v.GetAll()
@@ -66,9 +66,9 @@ func (p *postAuthorization) GetAll(userID int) (*[]Post, error) {
 
 // GetOne
 func (p *postAuthorization) GetOne(userID int, id int) (*Post, error) {
-	err := p.auth.CheckForAuthorization(userID, "post: get one")
+	err := p.auth.CheckForAuthorization(userID, PostGetOne)
 	if err != nil {
-		return nil, errors.Join(e.ErrOnGetOne, err)
+		return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetOne, err)
 	}
 
 	return p.v.GetOne(id)
@@ -76,9 +76,9 @@ func (p *postAuthorization) GetOne(userID int, id int) (*Post, error) {
 
 // Remove
 func (p *postAuthorization) Remove(userID int, id int) error {
-	err := p.auth.CheckForAuthorization(userID, "post: remove")
+	err := p.auth.CheckForAuthorization(userID, PostRemove)
 	if err != nil {
-		return errors.Join(e.ErrOnRemove, err)
+		return errors.Join(e.ErrPostDomain, e.ErrOnRemove, err)
 	}
 
 	return p.v.Remove(id)

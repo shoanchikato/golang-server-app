@@ -7,7 +7,7 @@ import (
 )
 
 type AuthorizationService interface {
-	CheckForAuthorization(userID int, permission string) error
+	CheckForAuthorization(userID int, permission AuthPermission) error
 }
 
 type authorizationService struct {
@@ -18,10 +18,10 @@ func NewAuthorizationService(repo p.PermissionManagementRepo) AuthorizationServi
 	return &authorizationService{repo}
 }
 
-func (a *authorizationService) hasPermission(permission string, permissions *[]p.Permission) bool {
+func (a *authorizationService) hasPermission(permission AuthPermission, permissions *[]p.Permission) bool {
 	pp := *permissions
 	for i := 0; i < len(pp); i++ {
-		if permission == pp[i].Name {
+		if string(permission) == pp[i].Name {
 			return true
 		}
 	}
@@ -38,7 +38,7 @@ func (a *authorizationService) getPermissions(userID int) (*[]p.Permission, erro
 	return permissions, nil
 }
 
-func (a *authorizationService) CheckForAuthorization(userID int, permission string) error {
+func (a *authorizationService) CheckForAuthorization(userID int, permission AuthPermission) error {
 	permissions, err := a.getPermissions(userID)
 	if err != nil {
 		return errors.Join(e.ErrNotAuthorized, err)

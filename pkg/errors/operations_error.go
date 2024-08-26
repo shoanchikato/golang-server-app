@@ -4,7 +4,7 @@ import "errors"
 
 var (
 	ErrOnAdd     = errors.New("add: ")
-	ErrOnAddAll     = errors.New("add app: ")
+	ErrOnAddAll  = errors.New("add app: ")
 	ErrOnEdit    = errors.New("edit: ")
 	ErrOnGetAll  = errors.New("get all: ")
 	ErrOnGetOne  = errors.New("get one: ")

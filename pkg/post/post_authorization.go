@@ -26,7 +26,7 @@ func NewPostAuthorization(auth a.AuthorizationService, v PostValidator) PostAuth
 
 // Add
 func (p *postAuthorization) Add(userID int, post *Post) error {
-	err := p.auth.CheckForAuthorization(userID, PostAdd)
+	err := p.auth.CheckForAuthorization(userID, PostAdd.Name)
 	if err != nil {
 		return errors.Join(e.ErrPostDomain, e.ErrOnAdd, err)
 	}
@@ -36,7 +36,7 @@ func (p *postAuthorization) Add(userID int, post *Post) error {
 
 // AddAll
 func (p *postAuthorization) AddAll(userID int, posts *[]*Post) error {
-	err := p.auth.CheckForAuthorization(userID, PostAddAll)
+	err := p.auth.CheckForAuthorization(userID, PostAddAll.Name)
 	if err != nil {
 		return errors.Join(e.ErrPostDomain, e.ErrOnAddAll, err)
 	}
@@ -46,7 +46,7 @@ func (p *postAuthorization) AddAll(userID int, posts *[]*Post) error {
 
 // Edit
 func (p *postAuthorization) Edit(userID int, id int, newPost *Post) error {
-	err := p.auth.CheckForAuthorization(userID, PostEdit)
+	err := p.auth.CheckForAuthorization(userID, PostEdit.Name)
 	if err != nil {
 		return errors.Join(e.ErrPostDomain, e.ErrOnEdit, err)
 	}
@@ -56,7 +56,7 @@ func (p *postAuthorization) Edit(userID int, id int, newPost *Post) error {
 
 // GetAll
 func (p *postAuthorization) GetAll(userID int) (*[]Post, error) {
-	err := p.auth.CheckForAuthorization(userID, PostGetAll)
+	err := p.auth.CheckForAuthorization(userID, PostGetAll.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetAll, err)
 	}
@@ -66,7 +66,7 @@ func (p *postAuthorization) GetAll(userID int) (*[]Post, error) {
 
 // GetOne
 func (p *postAuthorization) GetOne(userID int, id int) (*Post, error) {
-	err := p.auth.CheckForAuthorization(userID, PostGetOne)
+	err := p.auth.CheckForAuthorization(userID, PostGetOne.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetOne, err)
 	}
@@ -76,7 +76,7 @@ func (p *postAuthorization) GetOne(userID int, id int) (*Post, error) {
 
 // Remove
 func (p *postAuthorization) Remove(userID int, id int) error {
-	err := p.auth.CheckForAuthorization(userID, PostRemove)
+	err := p.auth.CheckForAuthorization(userID, PostRemove.Name)
 	if err != nil {
 		return errors.Join(e.ErrPostDomain, e.ErrOnRemove, err)
 	}

@@ -68,16 +68,15 @@ func main() {
 	_ = b.NewBookAuthorization(auth, bVal)
 
 	// _, _, _, _, _ = Data()
-	pp := []*pe.Permission{
-		pe.NewPermission("fsd", "lk", "fsd"), pe.NewPermission("", "", ""),
-	}
-	err = srv.AddAll(&pp)
+	
+
+	pp, err := srv.GetAll()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(err)
+	fmt.Println(pp)
 }
 
 func Data() (
@@ -115,21 +114,21 @@ func Data() (
 	}
 
 	postPermissions := []*pe.Permission{
-		pe.NewPermission(string(p.PostAdd), "post", "add"),
-		pe.NewPermission(string(p.PostAddAll), "post", "add all"),
-		pe.NewPermission(string(p.PostEdit), "post", "edit"),
-		pe.NewPermission(string(p.PostGetOne), "post", "get one"),
-		pe.NewPermission(string(p.PostGetAll), "post", "get all"),
-		pe.NewPermission(string(p.PostRemove), "post", "remove"),
+		p.PostAdd,
+		p.PostAddAll,
+		p.PostEdit,
+		p.PostGetOne,
+		p.PostGetAll,
+		p.PostRemove,
 	}
 
 	_ = []*pe.Permission{
-		pe.NewPermission(string(b.BookAdd), "book", "add"),
-		pe.NewPermission(string(b.BookAddAll), "book", "add all"),
-		pe.NewPermission(string(b.BookEdit), "book", "edit"),
-		pe.NewPermission(string(b.BookGetOne), "book", "get one"),
-		pe.NewPermission(string(b.BookGetAll), "book", "get all"),
-		pe.NewPermission(string(b.BookRemove), "book", "remove"),
+		b.BookAdd,
+		b.BookAddAll,
+		b.BookEdit,
+		b.BookGetOne,
+		b.BookGetAll,
+		b.BookRemove,
 	}
 
 	return authors, books, posts, users, postPermissions

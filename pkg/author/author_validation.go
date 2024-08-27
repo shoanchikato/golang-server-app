@@ -52,9 +52,11 @@ func (v *authorValidator) AddAll(authors *[]*Author) error {
 		}
 	}
 
-	if errs[0] != "" {
-		newErrors := strings.Join(errs, "")
-		return e.NewValidationError(e.ErrAddAllValidation, newErrors)
+	for i := len(newAuthors); i > 0; i-- {
+		if errs[i] != "" {
+			newErrors := strings.Join(errs, "")
+			return e.NewValidationError(e.ErrAddAllValidation, newErrors)
+		}
 	}
 
 	err := v.Repo.AddAll(authors)

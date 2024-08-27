@@ -52,9 +52,11 @@ func (v *postValidator) AddAll(posts *[]*Post) error {
 		}
 	}
 
-	if errs[0] != "" {
-		newErrors := strings.Join(errs, "")
-		return e.NewValidationError(e.ErrAddAllValidation, newErrors)
+	for i := len(newPosts)-1; i > 0; i-- {
+		if errs[i] != "" {
+			newErrors := strings.Join(errs, "")
+			return e.NewValidationError(e.ErrAddAllValidation, newErrors)
+		}
 	}
 
 	err := v.Repo.AddAll(posts)

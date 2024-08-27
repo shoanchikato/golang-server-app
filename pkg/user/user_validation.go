@@ -52,9 +52,11 @@ func (v *userValidator) AddAll(users *[]*User) error {
 		}
 	}
 
-	if errs[0] != "" {
-		newErrors := strings.Join(errs, "")
-		return e.NewValidationError(e.ErrAddAllValidation, newErrors)
+	for i := len(newUsers)-1; i > 0; i-- {
+		if errs[i] != "" {
+			newErrors := strings.Join(errs, "")
+			return e.NewValidationError(e.ErrAddAllValidation, newErrors)
+		}
 	}
 
 	err := v.encrypt.AddAll(users)

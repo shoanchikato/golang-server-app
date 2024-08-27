@@ -1,12 +1,12 @@
 package book
 
-import a "app/pkg/authorization"
+import p "app/pkg/permission"
 
 var (
-	BookAdd    a.AuthPermission = "book: add"
-	BookAddAll a.AuthPermission = "book: add all"
-	BookGetOne a.AuthPermission = "book: get one"
-	BookGetAll a.AuthPermission = "book: get all"
-	BookEdit   a.AuthPermission = "book: edit"
-	BookRemove a.AuthPermission = "book: remove"
+	BookAdd    = p.NewPermission("book: add", "book", "add")
+	BookAddAll = p.NewPermission("book: add all", "book", "get all")
+	BookGetOne = p.NewPermission("book: get one", "book", "one")
+	BookGetAll = p.NewPermission("book: get all", "book", "get all")
+	BookEdit   = p.NewPermission("book: edit", "book", "edit")
+	BookRemove = p.NewPermission("book: remove", "book", "remove")
 )

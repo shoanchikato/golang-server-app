@@ -69,7 +69,7 @@ func (p *userRepo) AddAll(users *[]*User) error {
 
 // Edit
 func (p *userRepo) Edit(id int, user *User) error {
-	_, err := p.dbU.Transaction(
+	idx, err := p.dbU.Transaction(
 		EDIT_USER_STMT,
 		user.FirstName,
 		user.LastName,
@@ -80,6 +80,8 @@ func (p *userRepo) Edit(id int, user *User) error {
 	if err != nil {
 		return errors.Join(e.ErrUserDomain, e.ErrOnEdit, err)
 	}
+
+	user.ID = int(idx)
 
 	return nil
 }

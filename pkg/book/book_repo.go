@@ -62,10 +62,12 @@ func (p *bookRepo) AddAll(books *[]*Book) error {
 
 // Edit
 func (p *bookRepo) Edit(id int, book *Book) error {
-	_, err := p.dbU.Transaction(EDIT_BOOK_STMT, book.Name, book.Year, id)
+	idx, err := p.dbU.Transaction(EDIT_BOOK_STMT, book.Name, book.Year, id)
 	if err != nil {
 		return errors.Join(e.ErrBookDomain, e.ErrOnEdit, err)
 	}
+
+	book.ID = int(idx)
 
 	return nil
 }

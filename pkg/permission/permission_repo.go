@@ -36,7 +36,7 @@ func NewPermissionRepo(db *sql.DB, rw *sync.RWMutex, dbU r.DBUtil) PermissionRep
 
 // Add
 func (p *permissionRepo) Add(permission *Permission) error {
-	id, err := p.dbU.Transaction(ADD_PERMISSION_STMT, permission.Name)
+	id, err := p.dbU.Transaction(ADD_PERMISSION_STMT, permission.Name, permission.Entity, permission.Operation)
 	if err != nil {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
 	}
@@ -62,10 +62,12 @@ func (p *permissionRepo) AddAll(permissions *[]*Permission) error {
 
 // Edit
 func (p *permissionRepo) Edit(id int, permission *Permission) error {
-	_, err := p.dbU.Transaction(EDIT_PERMISSION_STMT, permission.Name, id)
+	idx, err := p.dbU.Transaction(EDIT_PERMISSION_STMT, permission.Name, permission.Entity, permission.Operation, id)
 	if err != nil {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnEdit, err)
 	}
+
+	permission.ID = int(idx)
 
 	return nil
 }
@@ -85,7 +87,7 @@ func (p *permissionRepo) GetAll() (*[]Permission, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&permission.ID, &permission.Name)
+		err = rows.Scan(&permission.ID, &permission.Name, &permission.Entity, &permission.Operation)
 		if err != nil {
 			return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
@@ -108,7 +110,7 @@ func (p *permissionRepo) GetOne(id int) (*Permission, error) {
 	permission := Permission{}
 
 	row := p.db.QueryRow(GET_ONE_PERMISSION_STMT, id)
-	err := row.Scan(&permission.ID, &permission.Name)
+	err := row.Scan(&permission.ID, &permission.Name, &permission.Entity, &permission.Operation)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrPermissionDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
 	}

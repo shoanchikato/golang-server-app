@@ -57,7 +57,7 @@ func main() {
 	_ = u.NewUserValidator(uEncrypt)
 	_ = a.NewAuthValidator(aEncrypt)
 	_ = rr.NewRoleValidator(rRepo)
-	_ = pe.NewPermissionValidator(peRepo)
+	srv := pe.NewPermissionValidator(peRepo)
 	_ = au.NewAuthorValidator(auRepo)
 	bVal := b.NewBookValidator(bRepo)
 	pVal := p.NewPostValidator(pRepo)
@@ -65,17 +65,19 @@ func main() {
 
 	// Authorization
 	_ = p.NewPostAuthorization(auth, pVal)
-	bs := b.NewBookAuthorization(auth, bVal)
+	_ = b.NewBookAuthorization(auth, bVal)
 
-	// _, _, _, _, _ := Data()
-
-	books, err := bs.GetAll(1)
+	// _, _, _, _, _ = Data()
+	pp := []*pe.Permission{
+		pe.NewPermission("fsd", "lk", "fsd"), pe.NewPermission("", "", ""),
+	}
+	err = srv.AddAll(&pp)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(books)
+	fmt.Println(err)
 }
 
 func Data() (
@@ -112,7 +114,7 @@ func Data() (
 		u.NewUser("Jim", "Doe", "jim_doe", "jim@doe.com", "password3"),
 	}
 
-	_ = []*pe.Permission{
+	postPermissions := []*pe.Permission{
 		pe.NewPermission(string(p.PostAdd), "post", "add"),
 		pe.NewPermission(string(p.PostAddAll), "post", "add all"),
 		pe.NewPermission(string(p.PostEdit), "post", "edit"),
@@ -121,7 +123,7 @@ func Data() (
 		pe.NewPermission(string(p.PostRemove), "post", "remove"),
 	}
 
-	bookPermissions := []*pe.Permission{
+	_ = []*pe.Permission{
 		pe.NewPermission(string(b.BookAdd), "book", "add"),
 		pe.NewPermission(string(b.BookAddAll), "book", "add all"),
 		pe.NewPermission(string(b.BookEdit), "book", "edit"),
@@ -130,5 +132,5 @@ func Data() (
 		pe.NewPermission(string(b.BookRemove), "book", "remove"),
 	}
 
-	return authors, books, posts, users, bookPermissions
+	return authors, books, posts, users, postPermissions
 }

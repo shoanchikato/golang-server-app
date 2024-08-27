@@ -57,10 +57,12 @@ func (p *roleRepo) AddAll(roles *[]*Role) error {
 
 // Edit
 func (p *roleRepo) Edit(id int, role *Role) error {
-	_, err := p.dbU.Transaction(EDIT_ROLE_STMT, role.Name, id)
+	idx, err := p.dbU.Transaction(EDIT_ROLE_STMT, role.Name, id)
 	if err != nil {
 		return errors.Join(e.ErrRoleDomain, e.ErrOnEdit, err)
 	}
+
+	role.ID = int(idx)
 
 	return nil
 }

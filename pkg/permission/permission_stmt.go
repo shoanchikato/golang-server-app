@@ -75,7 +75,7 @@ const (
 	REMOVE_PERMISSION_FROM_ROLE_STMT = `DELETE FROM roles_permissions WHERE role_id = $1 AND permission_id = $2;`
 
 	ADD_PERMISSION_STMT     = `INSERT INTO permissions (name, entity, operation) VALUES ($1, $2, $3);`
-	EDIT_PERMISSION_STMT    = `UPDATE permissions SET	name = $1 name = $2 name = $3 WHERE id = $4;`
+	EDIT_PERMISSION_STMT    = `UPDATE permissions SET	name = $1, entity = $2, operation = $3 WHERE id = $4;`
 	GET_ALL_PERMISSION_STMT = `SELECT * FROM permissions;`
 	GET_ONE_PERMISSION_STMT = `SELECT * FROM permissions WHERE id = $1;`
 	REMOVE_PERMISSION_STMT  = `

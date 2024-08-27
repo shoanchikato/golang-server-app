@@ -42,8 +42,8 @@ func (v *postValidator) Add(post *Post) error {
 
 // AddAll
 func (v *postValidator) AddAll(posts *[]*Post) error {
-	errs := []string{}
 	newPosts := *posts
+	errs := make([]string, len(newPosts))
 	for i := 0; i < len(newPosts); i++ {
 		_, err := valid.ValidateStruct(newPosts[i])
 		if err != nil {

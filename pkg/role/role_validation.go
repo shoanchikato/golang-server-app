@@ -42,8 +42,8 @@ func (r *roleValidator) Add(role *Role) error {
 
 // AddAll
 func (r *roleValidator) AddAll(roles *[]*Role) error {
-	errs := []string{}
 	newRoles := *roles
+	errs := make([]string, len(newRoles))
 	for i := 0; i < len(newRoles); i++ {
 		_, err := valid.ValidateStruct(newRoles[i])
 		if err != nil {

@@ -42,8 +42,8 @@ func (v *authorValidator) Add(author *Author) error {
 
 // AddAll
 func (v *authorValidator) AddAll(authors *[]*Author) error {
-	errs := []string{}
 	newAuthors := *authors
+	errs := make([]string, len(newAuthors))
 	for i := 0; i < len(newAuthors); i++ {
 		_, err := valid.ValidateStruct(newAuthors[i])
 		if err != nil {

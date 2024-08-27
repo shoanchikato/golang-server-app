@@ -42,8 +42,8 @@ func (v *userValidator) Add(user *User) error {
 
 // AddAll
 func (v *userValidator) AddAll(users *[]*User) error {
-	errs := []string{}
 	newUsers := *users
+	errs := make([]string, len(newUsers))
 	for i := 0; i < len(newUsers); i++ {
 		_, err := valid.ValidateStruct(newUsers[i])
 		if err != nil {

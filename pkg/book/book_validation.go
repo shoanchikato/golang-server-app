@@ -42,8 +42,8 @@ func (v *bookValidator) Add(book *Book) error {
 
 // AddAll
 func (v *bookValidator) AddAll(books *[]*Book) error {
-	errs := []string{}
 	newBooks := *books
+	errs := make([]string, len(newBooks))
 	for i := 0; i < len(newBooks); i++ {
 		_, err := valid.ValidateStruct(newBooks[i])
 		if err != nil {

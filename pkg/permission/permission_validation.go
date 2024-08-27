@@ -42,8 +42,8 @@ func (v *permissionValidator) Add(permission *Permission) error {
 
 // AddAll
 func (v *permissionValidator) AddAll(permissions *[]*Permission) error {
-	errs := []string{}
 	newPermissions := *permissions
+	errs := make([]string, len(newPermissions))
 	for i := 0; i < len(newPermissions); i++ {
 		_, err := valid.ValidateStruct(newPermissions[i])
 		if err != nil {

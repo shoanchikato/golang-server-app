@@ -48,7 +48,7 @@ func (v *permissionValidator) AddAll(permissions *[]*Permission) error {
 		_, err := valid.ValidateStruct(newPermissions[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
-			errs = append(errs, errStr)
+			errs[i] = errStr
 		}
 	}
 

@@ -48,7 +48,7 @@ func (v *postValidator) AddAll(posts *[]*Post) error {
 		_, err := valid.ValidateStruct(newPosts[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
-			errs = append(errs, errStr)
+			errs[i] = errStr
 		}
 	}
 

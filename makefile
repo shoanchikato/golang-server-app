@@ -1,3 +1,6 @@
+run-r: release
+	./app
+
 run:
 	go run cmd/main.go
 

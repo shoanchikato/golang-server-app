@@ -66,7 +66,8 @@ func main() {
 	_ = pe.NewPermissionManagementValidator(pmRepo)
 
 	// Authorization
-	srv := p.NewPostAuthorization(pVal, auth)
+	_ = p.NewPostAuthorization(pVal, auth)
+	srv := b.NewBookAuthorization(auth, bRepo)
 
 	// _, _, posts, _ := Data()
 

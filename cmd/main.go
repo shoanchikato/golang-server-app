@@ -64,7 +64,7 @@ func main() {
 	_ = pe.NewPermissionManagementValidator(pmRepo)
 
 	// Authorization
-	_ = p.NewPostAuthorization(pVal, auth)
+	_ = p.NewPostAuthorization(auth, pVal)
 	bs := b.NewBookAuthorization(auth, bVal)
 
 	// _, _, _, _, _ := Data()
@@ -113,21 +113,21 @@ func Data() (
 	}
 
 	_ = []*pe.Permission{
-		pe.NewPermission(string(p.PostAdd)),
-		pe.NewPermission(string(p.PostAddAll)),
-		pe.NewPermission(string(p.PostEdit)),
-		pe.NewPermission(string(p.PostGetOne)),
-		pe.NewPermission(string(p.PostGetAll)),
-		pe.NewPermission(string(p.PostRemove)),
+		pe.NewPermission(string(p.PostAdd), "post", "add"),
+		pe.NewPermission(string(p.PostAddAll), "post", "add all"),
+		pe.NewPermission(string(p.PostEdit), "post", "edit"),
+		pe.NewPermission(string(p.PostGetOne), "post", "get one"),
+		pe.NewPermission(string(p.PostGetAll), "post", "get all"),
+		pe.NewPermission(string(p.PostRemove), "post", "remove"),
 	}
 
 	bookPermissions := []*pe.Permission{
-		pe.NewPermission(string(b.BookAdd)),
-		pe.NewPermission(string(b.BookAddAll)),
-		pe.NewPermission(string(b.BookEdit)),
-		pe.NewPermission(string(b.BookGetOne)),
-		pe.NewPermission(string(b.BookGetAll)),
-		pe.NewPermission(string(b.BookRemove)),
+		pe.NewPermission(string(b.BookAdd), "book", "add"),
+		pe.NewPermission(string(b.BookAddAll), "book", "add all"),
+		pe.NewPermission(string(b.BookEdit), "book", "edit"),
+		pe.NewPermission(string(b.BookGetOne), "book", "get one"),
+		pe.NewPermission(string(b.BookGetAll), "book", "get all"),
+		pe.NewPermission(string(b.BookRemove), "book", "remove"),
 	}
 
 	return authors, books, posts, users, bookPermissions

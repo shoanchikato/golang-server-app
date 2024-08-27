@@ -4,7 +4,9 @@ const (
 	CREATE_PERMISSION_TABLE_STMT = `
 		CREATE TABLE IF NOT EXISTS permissions (
 			id INTEGER PRIMARY KEY,
-			name TEXT
+			name TEXT,
+			entity TEXT,
+			operation TEXT
 		);
 		CREATE TABLE IF NOT EXISTS roles (
 			id INTEGER PRIMARY KEY,
@@ -72,8 +74,8 @@ const (
 	ADD_ROLE_TO_USER_STMT            = `INSERT INTO users_roles (role_id, user_id) VALUES ($1, $2);`
 	REMOVE_PERMISSION_FROM_ROLE_STMT = `DELETE FROM roles_permissions WHERE role_id = $1 AND permission_id = $2;`
 
-	ADD_PERMISSION_STMT     = `INSERT INTO permissions (name) VALUES ($1);`
-	EDIT_PERMISSION_STMT    = `UPDATE permissions SET	name = $1 WHERE id = $2;`
+	ADD_PERMISSION_STMT     = `INSERT INTO permissions (name, entity, operation) VALUES ($1, $2, $3);`
+	EDIT_PERMISSION_STMT    = `UPDATE permissions SET	name = $1 name = $2 name = $3 WHERE id = $4;`
 	GET_ALL_PERMISSION_STMT = `SELECT * FROM permissions;`
 	GET_ONE_PERMISSION_STMT = `SELECT * FROM permissions WHERE id = $1;`
 	REMOVE_PERMISSION_STMT  = `

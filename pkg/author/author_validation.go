@@ -52,7 +52,7 @@ func (v *authorValidator) AddAll(authors *[]*Author) error {
 		}
 	}
 
-	if len(errs) > 0 {
+	if errs[0] != "" {
 		newErrors := strings.Join(errs, "")
 		return e.NewValidationError(e.ErrAddAllValidation, newErrors)
 	}

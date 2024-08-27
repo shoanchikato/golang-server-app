@@ -14,8 +14,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
-	"strconv"
 	"sync"
 	"time"
 
@@ -61,30 +59,23 @@ func main() {
 	_ = rr.NewRoleValidator(rRepo)
 	_ = pe.NewPermissionValidator(peRepo)
 	_ = au.NewAuthorValidator(auRepo)
-	_ = b.NewBookValidator(bRepo)
+	bVal := b.NewBookValidator(bRepo)
 	pVal := p.NewPostValidator(pRepo)
 	_ = pe.NewPermissionManagementValidator(pmRepo)
 
 	// Authorization
 	_ = p.NewPostAuthorization(pVal, auth)
-	srv := b.NewBookAuthorization(auth, bRepo)
+	bs := b.NewBookAuthorization(auth, bVal)
 
-	// _, _, posts, _ := Data()
+	// _, _, _, _, _ := Data()
 
-	values := os.Args
-	value, err := strconv.Atoi(values[1])
+	books, err := bs.GetAll(1)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	posts, err := srv.GetAll(value)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Printf("%v\n%v\n", value, posts)
+	fmt.Println(books)
 }
 
 func Data() (
@@ -92,6 +83,7 @@ func Data() (
 	[]*b.Book,
 	[]*p.Post,
 	[]*u.User,
+	[]*pe.Permission,
 ) {
 	posts := []*p.Post{
 		p.NewPost("one", "one body", 1),
@@ -121,11 +113,22 @@ func Data() (
 	}
 
 	_ = []*pe.Permission{
-		pe.NewPermission("post: app"),
-		pe.NewPermission("post: add all"),
-		pe.NewPermission("post: edit"),
-		pe.NewPermission("post: remove"),
+		pe.NewPermission(string(p.PostAdd)),
+		pe.NewPermission(string(p.PostAddAll)),
+		pe.NewPermission(string(p.PostEdit)),
+		pe.NewPermission(string(p.PostGetOne)),
+		pe.NewPermission(string(p.PostGetAll)),
+		pe.NewPermission(string(p.PostRemove)),
 	}
 
-	return authors, books, posts, users
+	bookPermissions := []*pe.Permission{
+		pe.NewPermission(string(b.BookAdd)),
+		pe.NewPermission(string(b.BookAddAll)),
+		pe.NewPermission(string(b.BookEdit)),
+		pe.NewPermission(string(b.BookGetOne)),
+		pe.NewPermission(string(b.BookGetAll)),
+		pe.NewPermission(string(b.BookRemove)),
+	}
+
+	return authors, books, posts, users, bookPermissions
 }

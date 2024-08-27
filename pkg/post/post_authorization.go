@@ -20,7 +20,7 @@ type postAuthorization struct {
 	v    PostValidator
 }
 
-func NewPostAuthorization(v PostValidator, auth a.AuthorizationService) PostAuthorization {
+func NewPostAuthorization(auth a.AuthorizationService, v PostValidator) PostAuthorization {
 	return &postAuthorization{auth, v}
 }
 

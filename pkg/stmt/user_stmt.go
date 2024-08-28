@@ -49,7 +49,9 @@ const (
 		JOIN 
 			users_auth ua ON u.id = ua.user_id
 		JOIN 
-			auth a ON ua.auth_id = a.id;
+			auth a ON ua.auth_id = a.id
+		WHERE 
+			u.id > $1 LIMIT $2;
 	`
 	GET_ONE_USER_STMT = `
 		SELECT 

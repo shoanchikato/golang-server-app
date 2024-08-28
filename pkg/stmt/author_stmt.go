@@ -39,7 +39,7 @@ const (
 	`
 	ADD_AUTHOR_STMT     = `INSERT INTO authors (first_name, last_name) VALUES ($1, $2);`
 	EDIT_AUTHOR_STMT    = `UPDATE authors SET	first_name = $1, last_name = $2 WHERE id = $3;`
-	GET_ALL_AUTHOR_STMT = `SELECT * FROM authors;`
+	GET_ALL_AUTHOR_STMT = `SELECT * FROM authors WHERE id > $1 LIMIT $2;`
 	GET_ONE_AUTHOR_STMT = `SELECT * FROM authors WHERE id = $1;`
 	REMOVE_AUTHOR_STMT  = `DELETE FROM authors WHERE id = $1;`
 )

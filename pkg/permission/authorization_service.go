@@ -1,8 +1,7 @@
-package authorization
+package permission
 
 import (
 	e "app/pkg/errors"
-	p "app/pkg/permission"
 	"errors"
 )
 
@@ -11,14 +10,14 @@ type AuthorizationService interface {
 }
 
 type authorizationService struct {
-	repo p.PermissionManagementRepo
+	repo PermissionManagementRepo
 }
 
-func NewAuthorizationService(repo p.PermissionManagementRepo) AuthorizationService {
+func NewAuthorizationService(repo PermissionManagementRepo) AuthorizationService {
 	return &authorizationService{repo}
 }
 
-func (a *authorizationService) hasPermission(permission string, permissions *[]p.Permission) bool {
+func (a *authorizationService) hasPermission(permission string, permissions *[]Permission) bool {
 	pp := *permissions
 	for i := 0; i < len(pp); i++ {
 		if string(permission) == pp[i].Name {
@@ -29,7 +28,7 @@ func (a *authorizationService) hasPermission(permission string, permissions *[]p
 	return false
 }
 
-func (a *authorizationService) getPermissions(userID int) (*[]p.Permission, error) {
+func (a *authorizationService) getPermissions(userID int) (*[]Permission, error) {
 	permissions, err := a.repo.GetPermissonsByUserID(userID)
 	if err != nil {
 		return nil, err

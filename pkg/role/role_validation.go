@@ -52,7 +52,7 @@ func (r *roleValidator) AddAll(roles *[]*Role) error {
 		}
 	}
 
-	for i := len(newRoles)-1; i > 0; i-- {
+	for i := len(newRoles) - 1; i > 0; i-- {
 		if errs[i] != "" {
 			newErrors := strings.Join(errs, "")
 			return e.NewValidationError(e.ErrAddAllValidation, newErrors)

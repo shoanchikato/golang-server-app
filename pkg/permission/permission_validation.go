@@ -52,7 +52,7 @@ func (v *permissionValidator) AddAll(permissions *[]*Permission) error {
 		}
 	}
 
-	for i := len(newPermissions)-1; i > 0; i-- {
+	for i := len(newPermissions) - 1; i > 0; i-- {
 		if errs[i] != "" {
 			newErrors := strings.Join(errs, "")
 			return e.NewValidationError(e.ErrAddAllValidation, newErrors)

@@ -3,7 +3,6 @@ package main
 import (
 	a "app/pkg/auth"
 	au "app/pkg/author"
-	aa "app/pkg/authorization"
 	b "app/pkg/book"
 	pe "app/pkg/permission"
 	p "app/pkg/post"
@@ -51,7 +50,7 @@ func main() {
 	// Services
 	aEncrypt := a.NewAuthEncryption(aRepo, en)
 	uEncrypt := u.NewUserEncryption(uRepo, en)
-	auth := aa.NewAuthorizationService(pmRepo)
+	auth := pe.NewAuthorizationService(pmRepo)
 
 	// Validators
 	_ = u.NewUserValidator(uEncrypt)
@@ -68,7 +67,6 @@ func main() {
 	_ = b.NewBookAuthorization(auth, bVal)
 
 	// _, _, _, _, _ = Data()
-	
 
 	pp, err := srv.GetAll()
 	if err != nil {

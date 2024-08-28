@@ -1,8 +1,8 @@
 package post
 
 import (
-	a "app/pkg/authorization"
 	e "app/pkg/errors"
+	p "app/pkg/permission"
 	"errors"
 )
 
@@ -16,11 +16,11 @@ type PostAuthorization interface {
 }
 
 type postAuthorization struct {
-	auth a.AuthorizationService
+	auth p.AuthorizationService
 	v    PostValidator
 }
 
-func NewPostAuthorization(auth a.AuthorizationService, v PostValidator) PostAuthorization {
+func NewPostAuthorization(auth p.AuthorizationService, v PostValidator) PostAuthorization {
 	return &postAuthorization{auth, v}
 }
 

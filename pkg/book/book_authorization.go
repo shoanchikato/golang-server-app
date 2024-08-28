@@ -1,8 +1,8 @@
 package book
 
 import (
-	a "app/pkg/authorization"
 	e "app/pkg/errors"
+	p "app/pkg/permission"
 	"errors"
 )
 
@@ -16,11 +16,11 @@ type BookAuthorization interface {
 }
 
 type bookAuthorization struct {
-	auth a.AuthorizationService
+	auth p.AuthorizationService
 	v    BookValidator
 }
 
-func NewBookAuthorization(auth a.AuthorizationService, v BookValidator) BookAuthorization {
+func NewBookAuthorization(auth p.AuthorizationService, v BookValidator) BookAuthorization {
 	return &bookAuthorization{auth, v}
 }
 

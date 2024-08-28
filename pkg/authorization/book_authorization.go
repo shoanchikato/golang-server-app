@@ -10,12 +10,12 @@ import (
 )
 
 type BookAuthorization interface {
-	Add(userID int, book *m.Book) error
-	AddAll(userID int, books *[]*m.Book) error
-	Edit(userID int, id int, newBook *m.Book) error
-	GetAll(userID int) (*[]m.Book, error)
-	GetOne(userID int, id int) (*m.Book, error)
-	Remove(userID int, id int) error
+	Add(userId int, book *m.Book) error
+	AddAll(userId int, books *[]*m.Book) error
+	Edit(userId int, id int, newBook *m.Book) error
+	GetAll(userId int) (*[]m.Book, error)
+	GetOne(userId int, id int) (*m.Book, error)
+	Remove(userId int, id int) error
 }
 
 type bookAuthorization struct {
@@ -28,8 +28,8 @@ func NewBookAuthorization(auth s.AuthorizationService, v v.BookValidator) BookAu
 }
 
 // Add
-func (b *bookAuthorization) Add(userID int, book *m.Book) error {
-	err := b.auth.CheckForAuthorization(userID, p.BookAdd.Name)
+func (b *bookAuthorization) Add(userId int, book *m.Book) error {
+	err := b.auth.CheckForAuthorization(userId, p.BookAdd.Name)
 	if err != nil {
 		return errors.Join(e.ErrBookDomain, e.ErrOnAdd, err)
 	}
@@ -38,8 +38,8 @@ func (b *bookAuthorization) Add(userID int, book *m.Book) error {
 }
 
 // AddAll
-func (b *bookAuthorization) AddAll(userID int, books *[]*m.Book) error {
-	err := b.auth.CheckForAuthorization(userID, p.BookAddAll.Name)
+func (b *bookAuthorization) AddAll(userId int, books *[]*m.Book) error {
+	err := b.auth.CheckForAuthorization(userId, p.BookAddAll.Name)
 	if err != nil {
 		return errors.Join(e.ErrBookDomain, e.ErrOnAddAll, err)
 	}
@@ -48,8 +48,8 @@ func (b *bookAuthorization) AddAll(userID int, books *[]*m.Book) error {
 }
 
 // Edit
-func (b *bookAuthorization) Edit(userID int, id int, newBook *m.Book) error {
-	err := b.auth.CheckForAuthorization(userID, p.BookEdit.Name)
+func (b *bookAuthorization) Edit(userId int, id int, newBook *m.Book) error {
+	err := b.auth.CheckForAuthorization(userId, p.BookEdit.Name)
 	if err != nil {
 		return errors.Join(e.ErrBookDomain, e.ErrOnEdit, err)
 	}
@@ -58,8 +58,8 @@ func (b *bookAuthorization) Edit(userID int, id int, newBook *m.Book) error {
 }
 
 // GetAll
-func (b *bookAuthorization) GetAll(userID int) (*[]m.Book, error) {
-	err := b.auth.CheckForAuthorization(userID, p.BookGetAll.Name)
+func (b *bookAuthorization) GetAll(userId int) (*[]m.Book, error) {
+	err := b.auth.CheckForAuthorization(userId, p.BookGetAll.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrBookDomain, e.ErrOnGetAll, err)
 	}
@@ -68,8 +68,8 @@ func (b *bookAuthorization) GetAll(userID int) (*[]m.Book, error) {
 }
 
 // GetOne
-func (b *bookAuthorization) GetOne(userID int, id int) (*m.Book, error) {
-	err := b.auth.CheckForAuthorization(userID, p.BookGetOne.Name)
+func (b *bookAuthorization) GetOne(userId int, id int) (*m.Book, error) {
+	err := b.auth.CheckForAuthorization(userId, p.BookGetOne.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrBookDomain, e.ErrOnGetOne, err)
 	}
@@ -78,8 +78,8 @@ func (b *bookAuthorization) GetOne(userID int, id int) (*m.Book, error) {
 }
 
 // Remove
-func (b *bookAuthorization) Remove(userID int, id int) error {
-	err := b.auth.CheckForAuthorization(userID, p.BookRemove.Name)
+func (b *bookAuthorization) Remove(userId int, id int) error {
+	err := b.auth.CheckForAuthorization(userId, p.BookRemove.Name)
 	if err != nil {
 		return errors.Join(e.ErrBookDomain, e.ErrOnRemove, err)
 	}

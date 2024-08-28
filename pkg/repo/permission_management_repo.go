@@ -2,8 +2,8 @@ package repo
 
 import (
 	e "app/pkg/errors"
-	st "app/pkg/stmt"
 	m "app/pkg/model"
+	st "app/pkg/stmt"
 	"database/sql"
 	"errors"
 	"strconv"
@@ -11,15 +11,15 @@ import (
 )
 
 type PermissionManagementRepo interface {
-	AddPermissionToRole(permissionID, roleID int) error
-	AddPermissionsToRole(permissionIDs []int, roleID int) error
-	AddRoleToUser(roleID, userID int) error
-	GetPermissionsByRoleID(roleID int) (*[]m.Permission, error)
-	GetPermissonsByUserID(userID int) (*[]m.Permission, error)
-	GetRoleByUserID(userID int) (*m.Role, error)
-	RemovePermissionFromRole(roleID, permissionID int) error
-	RemovePermissionsFromRole(roleID int, permissionIDs []int) error
-	RemoveRoleFromUser(roleID int, permissionID int) error
+	AddPermissionToRole(permissionId, roleId int) error
+	AddPermissionsToRole(permissionIds []int, roleId int) error
+	AddRoleToUser(roleId, userId int) error
+	GetPermissionsByRoleId(roleId int) (*[]m.Permission, error)
+	GetPermissonsByUserId(userId int) (*[]m.Permission, error)
+	GetRoleByUserId(userId int) (*m.Role, error)
+	RemovePermissionFromRole(roleId, permissionId int) error
+	RemovePermissionsFromRole(roleId int, permissionIds []int) error
+	RemoveRoleFromUser(roleId int, permissionId int) error
 }
 
 type pMRepo struct {
@@ -43,28 +43,28 @@ func NewPermissionManagementRepo(
 }
 
 // AddPermissionToRole
-func (p *pMRepo) AddPermissionToRole(permissionID, roleID int) error {
-	permissions, _ := p.GetPermissionsByRoleID(roleID)
+func (p *pMRepo) AddPermissionToRole(permissionId, roleId int) error {
+	permissions, _ := p.GetPermissionsByRoleId(roleId)
 	if permissions != nil {
 		pp := *permissions
 		for i := 0; i < len(pp); i++ {
-			if permissionID == pp[i].ID {
+			if permissionId == pp[i].Id {
 				return nil
 			}
 		}
 	}
 
-	_, err := p.rr.GetOne(roleID)
+	_, err := p.rr.GetOne(roleId)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.pr.GetOne(permissionID)
+	_, err = p.pr.GetOne(permissionId)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.dbU.Transaction(st.ADD_PERMISSION_TO_ROLE_STMT, permissionID, roleID)
+	_, err = p.dbU.Transaction(st.ADD_PERMISSION_TO_ROLE_STMT, permissionId, roleId)
 	if err != nil {
 		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnAdd, err)
 	}
@@ -73,10 +73,10 @@ func (p *pMRepo) AddPermissionToRole(permissionID, roleID int) error {
 }
 
 // AddPermissionsToRole
-func (p *pMRepo) AddPermissionsToRole(permissionIDs []int, roleID int) error {
-	for i := 0; i < len(permissionIDs); i++ {
-		permissionID := permissionIDs[i]
-		err := p.AddPermissionToRole(permissionID, roleID)
+func (p *pMRepo) AddPermissionsToRole(permissionIds []int, roleId int) error {
+	for i := 0; i < len(permissionIds); i++ {
+		permissionId := permissionIds[i]
+		err := p.AddPermissionToRole(permissionId, roleId)
 		if err != nil {
 			return err
 		}
@@ -86,23 +86,23 @@ func (p *pMRepo) AddPermissionsToRole(permissionIDs []int, roleID int) error {
 }
 
 // AddRoleToUser
-func (p *pMRepo) AddRoleToUser(roleID, userID int) error {
-	role, _ := p.GetRoleByUserID(userID)
+func (p *pMRepo) AddRoleToUser(roleId, userId int) error {
+	role, _ := p.GetRoleByUserId(userId)
 	if role != nil {
 		return nil
 	}
 
-	_, err := p.ur.GetOne(userID)
+	_, err := p.ur.GetOne(userId)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.rr.GetOne(roleID)
+	_, err = p.rr.GetOne(roleId)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.dbU.Transaction(st.ADD_ROLE_TO_USER_STMT, roleID, userID)
+	_, err = p.dbU.Transaction(st.ADD_ROLE_TO_USER_STMT, roleId, userId)
 	if err != nil {
 		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnAdd, err)
 	}
@@ -110,12 +110,12 @@ func (p *pMRepo) AddRoleToUser(roleID, userID int) error {
 	return nil
 }
 
-// GetPermissionsByRoleID
-func (p *pMRepo) GetPermissionsByRoleID(roleID int) (*[]m.Permission, error) {
+// GetPermissionsByRoleId
+func (p *pMRepo) GetPermissionsByRoleId(roleId int) (*[]m.Permission, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
-	_, err := p.rr.GetOne(roleID)
+	_, err := p.rr.GetOne(roleId)
 	if err != nil {
 		return nil, err
 	}
@@ -123,14 +123,14 @@ func (p *pMRepo) GetPermissionsByRoleID(roleID int) (*[]m.Permission, error) {
 	permission := m.Permission{}
 	permissions := []m.Permission{}
 
-	rows, err := p.db.Query(st.GET_PERMISSIONS_BY_ROLE_ID_STMT, roleID)
+	rows, err := p.db.Query(st.GET_PERMISSIONS_BY_ROLE_Id_STMT, roleId)
 	if err != nil {
 		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&permission.ID, &permission.Name)
+		err = rows.Scan(&permission.Id, &permission.Name)
 		if err != nil {
 			return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
@@ -145,12 +145,12 @@ func (p *pMRepo) GetPermissionsByRoleID(roleID int) (*[]m.Permission, error) {
 	return &permissions, nil
 }
 
-// GetPermissonsByUserID
-func (p *pMRepo) GetPermissonsByUserID(userID int) (*[]m.Permission, error) {
+// GetPermissonsByUserId
+func (p *pMRepo) GetPermissonsByUserId(userId int) (*[]m.Permission, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
-	_, err := p.ur.GetOne(userID)
+	_, err := p.ur.GetOne(userId)
 	if err != nil {
 		return nil, err
 	}
@@ -158,14 +158,14 @@ func (p *pMRepo) GetPermissonsByUserID(userID int) (*[]m.Permission, error) {
 	permission := m.Permission{}
 	permissions := []m.Permission{}
 
-	rows, err := p.db.Query(st.GET_PERMISSIONS_BY_USER_ID, userID)
+	rows, err := p.db.Query(st.GET_PERMISSIONS_BY_USER_Id, userId)
 	if err != nil {
 		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&permission.ID, &permission.Name)
+		err = rows.Scan(&permission.Id, &permission.Name)
 		if err != nil {
 			return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
@@ -180,20 +180,20 @@ func (p *pMRepo) GetPermissonsByUserID(userID int) (*[]m.Permission, error) {
 	return &permissions, nil
 }
 
-// GetRoleByUserID
-func (p *pMRepo) GetRoleByUserID(userID int) (*m.Role, error) {
+// GetRoleByUserId
+func (p *pMRepo) GetRoleByUserId(userId int) (*m.Role, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
 	role := m.Role{}
 
-	row := p.db.QueryRow(st.GET_ROLE_BY_USER_ID_STMT, userID)
-	err := row.Scan(&role.ID, &role.Name)
+	row := p.db.QueryRow(st.GET_ROLE_BY_USER_Id_STMT, userId)
+	err := row.Scan(&role.Id, &role.Name)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(
 			e.ErrPermissionManagementDomain,
 			e.ErrRepoExecutingStmt,
-			e.NewErrRepoNotFound(strconv.Itoa(userID)),
+			e.NewErrRepoNotFound(strconv.Itoa(userId)),
 		)
 	}
 
@@ -205,23 +205,23 @@ func (p *pMRepo) GetRoleByUserID(userID int) (*m.Role, error) {
 }
 
 // RemovePermissionFromRole
-func (p *pMRepo) RemovePermissionFromRole(roleID int, permissionID int) error {
-	_, err := p.pr.GetOne(permissionID)
+func (p *pMRepo) RemovePermissionFromRole(roleId int, permissionId int) error {
+	_, err := p.pr.GetOne(permissionId)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.rr.GetOne(roleID)
+	_, err = p.rr.GetOne(roleId)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.GetPermissionsByRoleID(roleID)
+	_, err = p.GetPermissionsByRoleId(roleId)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.dbU.Transaction(st.REMOVE_PERMISSION_FROM_ROLE_STMT, roleID, permissionID)
+	_, err = p.dbU.Transaction(st.REMOVE_PERMISSION_FROM_ROLE_STMT, roleId, permissionId)
 	if err != nil {
 		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnRemove, err)
 	}
@@ -230,10 +230,10 @@ func (p *pMRepo) RemovePermissionFromRole(roleID int, permissionID int) error {
 }
 
 // RemovePermissionsFromRole
-func (p *pMRepo) RemovePermissionsFromRole(roleID int, permissions []int) error {
+func (p *pMRepo) RemovePermissionsFromRole(roleId int, permissions []int) error {
 	for i := 0; i < len(permissions); i++ {
-		permissionID := permissions[i]
-		err := p.RemovePermissionFromRole(roleID, permissionID)
+		permissionId := permissions[i]
+		err := p.RemovePermissionFromRole(roleId, permissionId)
 		if err != nil {
 			return err
 		}
@@ -243,23 +243,23 @@ func (p *pMRepo) RemovePermissionsFromRole(roleID int, permissions []int) error 
 }
 
 // RemoveRoleFromUser
-func (p *pMRepo) RemoveRoleFromUser(roleID int, userID int) error {
-	_, err := p.ur.GetOne(userID)
+func (p *pMRepo) RemoveRoleFromUser(roleId int, userId int) error {
+	_, err := p.ur.GetOne(userId)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.rr.GetOne(roleID)
+	_, err = p.rr.GetOne(roleId)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.GetRoleByUserID(userID)
+	_, err = p.GetRoleByUserId(userId)
 	if err != nil {
 		return err
 	}
 
-	_, err = p.dbU.Transaction(st.REMOVE_ROLE_FROM_USER_STMT, roleID, userID)
+	_, err = p.dbU.Transaction(st.REMOVE_ROLE_FROM_USER_STMT, roleId, userId)
 	if err != nil {
 		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnRemove, err)
 	}

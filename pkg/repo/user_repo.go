@@ -49,7 +49,7 @@ func (p *userRepo) Add(user *m.User) error {
 		return errors.Join(e.ErrUserDomain, e.ErrOnAdd, err)
 	}
 
-	user.ID = int(id)
+	user.Id = int(id)
 
 	return nil
 }
@@ -82,7 +82,7 @@ func (p *userRepo) Edit(id int, user *m.User) error {
 		return errors.Join(e.ErrUserDomain, e.ErrOnEdit, err)
 	}
 
-	user.ID = int(idx)
+	user.Id = int(idx)
 
 	return nil
 }
@@ -103,7 +103,7 @@ func (p *userRepo) GetAll() (*[]m.User, error) {
 
 	for rows.Next() {
 		err = rows.Scan(
-			&user.ID,
+			&user.Id,
 			&user.FirstName,
 			&user.LastName,
 			&user.Username,
@@ -132,7 +132,7 @@ func (p *userRepo) GetOne(id int) (*m.User, error) {
 
 	row := p.db.QueryRow(st.GET_ONE_USER_STMT, id)
 	err := row.Scan(
-		&user.ID,
+		&user.Id,
 		&user.FirstName,
 		&user.LastName,
 		&user.Username,

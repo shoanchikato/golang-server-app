@@ -32,7 +32,7 @@ func (a *authRepo) GetByUsername(username string) (*m.Auth, error) {
 	auth := m.Auth{}
 
 	row := a.db.QueryRow(st.GET_AUTH_DETAILS_BY_USERNAME, username)
-	err := row.Scan(&auth.Username, &auth.Email, &auth.Password, &auth.UserID)
+	err := row.Scan(&auth.Username, &auth.Email, &auth.Password, &auth.UserId)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(username))
 	}

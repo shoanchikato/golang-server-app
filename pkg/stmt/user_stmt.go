@@ -28,9 +28,9 @@ const (
 	ADD_USER_STMT = `
 		INSERT INTO users (first_name, last_name) VALUES ($1, $2);
 
-		INSERT INTO auth (username, email, password, user_id) VALUES ($3, $4, $5, LAST_INSERT_ROWID());
+		INSERT INTO auth (username, email, password, user_id) VALUES ($3, $4, $5, LAST_INSERT_ROWId());
 
-		INSERT INTO users_auth (user_id, auth_id) VALUES (LAST_INSERT_ROWID(), (SELECT LAST_INSERT_ROWID() FROM auth));
+		INSERT INTO users_auth (user_id, auth_id) VALUES (LAST_INSERT_ROWId(), (SELECT LAST_INSERT_ROWId() FROM auth));
 	`
 	EDIT_USER_STMT = `
 		UPDATE users SET first_name = $1 last_name = $2 WHERE id = $5;

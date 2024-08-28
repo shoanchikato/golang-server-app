@@ -42,7 +42,7 @@ func (p *permissionRepo) Add(permission *m.Permission) error {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
 	}
 
-	permission.ID = int(id)
+	permission.Id = int(id)
 
 	return nil
 }
@@ -68,7 +68,7 @@ func (p *permissionRepo) Edit(id int, permission *m.Permission) error {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnEdit, err)
 	}
 
-	permission.ID = int(idx)
+	permission.Id = int(idx)
 
 	return nil
 }
@@ -88,7 +88,7 @@ func (p *permissionRepo) GetAll() (*[]m.Permission, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&permission.ID, &permission.Name, &permission.Entity, &permission.Operation)
+		err = rows.Scan(&permission.Id, &permission.Name, &permission.Entity, &permission.Operation)
 		if err != nil {
 			return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
@@ -111,7 +111,7 @@ func (p *permissionRepo) GetOne(id int) (*m.Permission, error) {
 	permission := m.Permission{}
 
 	row := p.db.QueryRow(st.GET_ONE_PERMISSION_STMT, id)
-	err := row.Scan(&permission.ID, &permission.Name, &permission.Entity, &permission.Operation)
+	err := row.Scan(&permission.Id, &permission.Name, &permission.Entity, &permission.Operation)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrPermissionDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
 	}

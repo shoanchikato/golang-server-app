@@ -5,7 +5,7 @@ import (
 )
 
 type Author struct {
-	ID        int     `json:"id"`
+	Id        int     `json:"id"`
 	FirstName string  `json:"first_name" valid:"required~first_name is required"`
 	LastName  string  `json:"last_name" valid:"required~last_name is required"`
 	Books     *[]Book `json:"books,omitempty"`
@@ -14,7 +14,7 @@ type Author struct {
 func (a Author) String() string {
 	return fmt.Sprintf(
 		"{%d, %s, %s, %v}",
-		a.ID, a.FirstName, a.LastName, a.Books,
+		a.Id, a.FirstName, a.LastName, a.Books,
 	)
 }
 

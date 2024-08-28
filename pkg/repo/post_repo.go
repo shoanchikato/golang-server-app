@@ -37,12 +37,12 @@ func NewPostRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil) PostRepo {
 
 // Add
 func (p *postRepo) Add(post *m.Post) error {
-	id, err := p.dbU.Transaction(st.ADD_POST_STMT, post.Title, post.Body, post.UserID)
+	id, err := p.dbU.Transaction(st.ADD_POST_STMT, post.Title, post.Body, post.UserId)
 	if err != nil {
 		return errors.Join(e.ErrPostDomain, e.ErrOnAdd, err)
 	}
 
-	post.ID = int(id)
+	post.Id = int(id)
 
 	return nil
 }
@@ -63,12 +63,12 @@ func (p *postRepo) AddAll(posts *[]*m.Post) error {
 
 // Edit
 func (p *postRepo) Edit(id int, post *m.Post) error {
-	idx, err := p.dbU.Transaction(st.EDIT_POST_STMT, post.Title, post.Body, post.UserID, id)
+	idx, err := p.dbU.Transaction(st.EDIT_POST_STMT, post.Title, post.Body, post.UserId, id)
 	if err != nil {
 		return errors.Join(e.ErrPostDomain, e.ErrOnEdit, err)
 	}
 
-	post.ID = int(idx)
+	post.Id = int(idx)
 
 	return nil
 }
@@ -88,7 +88,7 @@ func (p *postRepo) GetAll() (*[]m.Post, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&post.ID, &post.Title, &post.Body, &post.UserID)
+		err = rows.Scan(&post.Id, &post.Title, &post.Body, &post.UserId)
 		if err != nil {
 			return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
@@ -111,7 +111,7 @@ func (p *postRepo) GetOne(id int) (*m.Post, error) {
 	post := m.Post{}
 
 	row := p.db.QueryRow(st.GET_ONE_POST_STMT, id)
-	err := row.Scan(&post.ID, &post.Title, &post.Body, &post.UserID)
+	err := row.Scan(&post.Id, &post.Title, &post.Body, &post.UserId)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrPostDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
 	}

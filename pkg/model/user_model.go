@@ -3,7 +3,7 @@ package model
 import "fmt"
 
 type User struct {
-	ID        int    `json:"id,omitempty"`
+	Id        int    `json:"id,omitempty"`
 	FirstName string `json:"first_name" valid:"required~first_name is required"`
 	LastName  string `json:"last_name" valid:"required~last_name is required"`
 	Username  string `json:"username" valid:"required~username is required"`
@@ -18,6 +18,6 @@ func NewUser(firstName, lastName, username, email, password string) *User {
 func (u User) String() string {
 	return fmt.Sprintf(
 		"{%d, %s, %s, %s, %s}",
-		u.ID, u.FirstName, u.LastName, u.Username, u.Email,
+		u.Id, u.FirstName, u.LastName, u.Username, u.Email,
 	)
 }

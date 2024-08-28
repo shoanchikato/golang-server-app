@@ -1,7 +1,7 @@
 package model
 
 type Permission struct {
-	ID        int
+	Id        int
 	Name      string `json:"name" valid:"required~name is required"`
 	Entity    string `json:"entity" valid:"required~entity is required"`
 	Operation string `json:"operation" valid:"required~operation is required"`

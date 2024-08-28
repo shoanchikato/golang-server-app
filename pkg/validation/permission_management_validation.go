@@ -1,20 +1,20 @@
 package validation
 
 import (
-	r "app/pkg/repo"
 	m "app/pkg/model"
+	r "app/pkg/repo"
 )
 
 type PermissionManagementValidator interface {
-	AddPermissionToRole(permissionID, roleID int) error
-	AddPermissionsToRole(permissionIDs []int, roleID int) error
-	AddRoleToUser(roleID, userID int) error
-	GetPermissionsByRoleID(roleID int) (*[]m.Permission, error)
-	GetPermissonsByUserID(userID int) (*[]m.Permission, error)
-	GetRoleByUserID(userID int) (*m.Role, error)
-	RemovePermissionFromRole(roleID, permissionID int) error
-	RemovePermissionsFromRole(roleID int, permissionIDs []int) error
-	RemoveRoleFromUser(roleID, userID int) error
+	AddPermissionToRole(permissionId, roleId int) error
+	AddPermissionsToRole(permissionIds []int, roleId int) error
+	AddRoleToUser(roleId, userId int) error
+	GetPermissionsByRoleId(roleId int) (*[]m.Permission, error)
+	GetPermissonsByUserId(userId int) (*[]m.Permission, error)
+	GetRoleByUserId(userId int) (*m.Role, error)
+	RemovePermissionFromRole(roleId, permissionId int) error
+	RemovePermissionsFromRole(roleId int, permissionIds []int) error
+	RemoveRoleFromUser(roleId, userId int) error
 }
 
 type pMValidator struct {
@@ -26,46 +26,46 @@ func NewPermissionManagementValidator(repo r.PermissionManagementRepo) Permissio
 }
 
 // AddPermissionToRole
-func (p *pMValidator) AddPermissionToRole(permissionID, roleID int) error {
-	return p.repo.AddPermissionToRole(permissionID, roleID)
+func (p *pMValidator) AddPermissionToRole(permissionId, roleId int) error {
+	return p.repo.AddPermissionToRole(permissionId, roleId)
 }
 
 // AddPermissionsToRole
-func (p *pMValidator) AddPermissionsToRole(permissionIDs []int, roleID int) error {
-	return p.repo.AddPermissionsToRole(permissionIDs, roleID)
+func (p *pMValidator) AddPermissionsToRole(permissionIds []int, roleId int) error {
+	return p.repo.AddPermissionsToRole(permissionIds, roleId)
 }
 
 // AddRoleToUser
-func (p *pMValidator) AddRoleToUser(roleID int, userID int) error {
-	return p.repo.AddRoleToUser(roleID, userID)
+func (p *pMValidator) AddRoleToUser(roleId int, userId int) error {
+	return p.repo.AddRoleToUser(roleId, userId)
 }
 
-// GetPermissionsByRoleID
-func (p *pMValidator) GetPermissionsByRoleID(roleID int) (*[]m.Permission, error) {
-	return p.repo.GetPermissionsByRoleID(roleID)
+// GetPermissionsByRoleId
+func (p *pMValidator) GetPermissionsByRoleId(roleId int) (*[]m.Permission, error) {
+	return p.repo.GetPermissionsByRoleId(roleId)
 }
 
-// GetPermissonsByUserID
-func (p *pMValidator) GetPermissonsByUserID(userID int) (*[]m.Permission, error) {
-	return p.repo.GetPermissonsByUserID(userID)
+// GetPermissonsByUserId
+func (p *pMValidator) GetPermissonsByUserId(userId int) (*[]m.Permission, error) {
+	return p.repo.GetPermissonsByUserId(userId)
 }
 
-// GetRoleByUserID
-func (p *pMValidator) GetRoleByUserID(userID int) (*m.Role, error) {
-	return p.repo.GetRoleByUserID(userID)
+// GetRoleByUserId
+func (p *pMValidator) GetRoleByUserId(userId int) (*m.Role, error) {
+	return p.repo.GetRoleByUserId(userId)
 }
 
 // RemovePermissionFromRole
-func (p *pMValidator) RemovePermissionFromRole(roleID int, permissionID int) error {
-	return p.repo.RemovePermissionFromRole(roleID, permissionID)
+func (p *pMValidator) RemovePermissionFromRole(roleId int, permissionId int) error {
+	return p.repo.RemovePermissionFromRole(roleId, permissionId)
 }
 
 // RemovePermissionsFromRole
-func (p *pMValidator) RemovePermissionsFromRole(roleID int, permissionIDs []int) error {
-	return p.repo.RemovePermissionsFromRole(roleID, permissionIDs)
+func (p *pMValidator) RemovePermissionsFromRole(roleId int, permissionIds []int) error {
+	return p.repo.RemovePermissionsFromRole(roleId, permissionIds)
 }
 
 // RemoveRoleFromUser
-func (p *pMValidator) RemoveRoleFromUser(roleID int, userID int) error {
-	return p.repo.RemoveRoleFromUser(roleID, userID)
+func (p *pMValidator) RemoveRoleFromUser(roleId int, userId int) error {
+	return p.repo.RemoveRoleFromUser(roleId, userId)
 }

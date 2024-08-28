@@ -43,7 +43,7 @@ func (p *authorRepo) Add(author *m.Author) error {
 		return errors.Join(e.ErrAuthDomain, e.ErrOnAdd, err)
 	}
 
-	author.ID = int(id)
+	author.Id = int(id)
 
 	return nil
 }
@@ -69,7 +69,7 @@ func (p *authorRepo) Edit(id int, author *m.Author) error {
 		return errors.Join(e.ErrAuthDomain, e.ErrOnEdit, err)
 	}
 
-	author.ID = int(idx)
+	author.Id = int(idx)
 
 	return nil
 }
@@ -89,7 +89,7 @@ func (p *authorRepo) GetAll() (*[]m.Author, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&author.ID, &author.FirstName, &author.LastName)
+		err = rows.Scan(&author.Id, &author.FirstName, &author.LastName)
 		if err != nil {
 			return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
@@ -112,7 +112,7 @@ func (p *authorRepo) GetOne(id int) (*m.Author, error) {
 	author := m.Author{}
 
 	row := p.db.QueryRow(st.GET_ONE_AUTHOR_STMT, id)
-	err := row.Scan(&author.ID, &author.FirstName, &author.LastName)
+	err := row.Scan(&author.Id, &author.FirstName, &author.LastName)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
 	}
@@ -136,14 +136,14 @@ func (p *authorRepo) GetMore(id int) (*m.Author, error) {
 	book := m.Book{}
 	books := []m.Book{}
 
-	rows, err := p.db.Query(st.GET_BOOKS_BY_AUTHOR_ID_STMT, id)
+	rows, err := p.db.Query(st.GET_BOOKS_BY_AUTHOR_Id_STMT, id)
 	if err != nil {
 		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&book.ID, &book.Name, &book.Year, &book.AuthorID)
+		err = rows.Scan(&book.Id, &book.Name, &book.Year, &book.AuthorId)
 		if err != nil {
 			return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, e.ErrRepoExecutingStmt, err)
 		}

@@ -37,7 +37,7 @@ func (p *roleRepo) Add(role *m.Role) error {
 		return errors.Join(e.ErrRoleDomain, e.ErrOnAdd, err)
 	}
 
-	role.ID = int(id)
+	role.Id = int(id)
 
 	return nil
 }
@@ -63,7 +63,7 @@ func (p *roleRepo) Edit(id int, role *m.Role) error {
 		return errors.Join(e.ErrRoleDomain, e.ErrOnEdit, err)
 	}
 
-	role.ID = int(idx)
+	role.Id = int(idx)
 
 	return nil
 }
@@ -83,7 +83,7 @@ func (p *roleRepo) GetAll() (*[]m.Role, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&role.ID, &role.Name)
+		err = rows.Scan(&role.Id, &role.Name)
 		if err != nil {
 			return nil, errors.Join(e.ErrRoleDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
@@ -106,7 +106,7 @@ func (p *roleRepo) GetOne(id int) (*m.Role, error) {
 	role := m.Role{}
 
 	row := p.db.QueryRow(st.GET_ONE_ROLE_STMT, id)
-	err := row.Scan(&role.ID, &role.Name)
+	err := row.Scan(&role.Id, &role.Name)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrRoleDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
 	}

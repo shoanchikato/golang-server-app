@@ -1,7 +1,7 @@
 package model
 
 type Auth struct {
-	UserID   int
+	UserId   int
 	Username string
 	Password string
 	Email    string

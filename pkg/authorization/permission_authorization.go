@@ -10,12 +10,12 @@ import (
 )
 
 type PermissionAuthorization interface {
-	Add(userID int, permission *m.Permission) error
-	AddAll(userID int, permissions *[]*m.Permission) error
-	Edit(userID int, id int, newPermission *m.Permission) error
-	GetAll(userID int) (*[]m.Permission, error)
-	GetOne(userID int, id int) (*m.Permission, error)
-	Remove(userID int, id int) error
+	Add(userId int, permission *m.Permission) error
+	AddAll(userId int, permissions *[]*m.Permission) error
+	Edit(userId int, id int, newPermission *m.Permission) error
+	GetAll(userId int) (*[]m.Permission, error)
+	GetOne(userId int, id int) (*m.Permission, error)
+	Remove(userId int, id int) error
 }
 
 type permissionAuthorization struct {
@@ -31,8 +31,8 @@ func NewPermissionAuthorization(
 }
 
 // Add
-func (p *permissionAuthorization) Add(userID int, permission *m.Permission) error {
-	err := p.auth.CheckForAuthorization(userID, pe.PermissionAdd.Name)
+func (p *permissionAuthorization) Add(userId int, permission *m.Permission) error {
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
 		return errors.Join(e.ErrBookDomain, e.ErrOnAdd, err)
 	}
@@ -41,8 +41,8 @@ func (p *permissionAuthorization) Add(userID int, permission *m.Permission) erro
 }
 
 // AddAll
-func (p *permissionAuthorization) AddAll(userID int, permissions *[]*m.Permission) error {
-	err := p.auth.CheckForAuthorization(userID, pe.PermissionAdd.Name)
+func (p *permissionAuthorization) AddAll(userId int, permissions *[]*m.Permission) error {
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
 	}
@@ -51,8 +51,8 @@ func (p *permissionAuthorization) AddAll(userID int, permissions *[]*m.Permissio
 }
 
 // Edit
-func (p *permissionAuthorization) Edit(userID int, id int, newPermission *m.Permission) error {
-	err := p.auth.CheckForAuthorization(userID, pe.PermissionAdd.Name)
+func (p *permissionAuthorization) Edit(userId int, id int, newPermission *m.Permission) error {
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
 	}
@@ -61,8 +61,8 @@ func (p *permissionAuthorization) Edit(userID int, id int, newPermission *m.Perm
 }
 
 // GetAll
-func (p *permissionAuthorization) GetAll(userID int) (*[]m.Permission, error) {
-	err := p.auth.CheckForAuthorization(userID, pe.PermissionAdd.Name)
+func (p *permissionAuthorization) GetAll(userId int) (*[]m.Permission, error) {
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
 	}
@@ -71,8 +71,8 @@ func (p *permissionAuthorization) GetAll(userID int) (*[]m.Permission, error) {
 }
 
 // GetOne
-func (p *permissionAuthorization) GetOne(userID int, id int) (*m.Permission, error) {
-	err := p.auth.CheckForAuthorization(userID, pe.PermissionAdd.Name)
+func (p *permissionAuthorization) GetOne(userId int, id int) (*m.Permission, error) {
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
 	}
@@ -81,8 +81,8 @@ func (p *permissionAuthorization) GetOne(userID int, id int) (*m.Permission, err
 }
 
 // Remove
-func (p *permissionAuthorization) Remove(userID int, id int) error {
-	err := p.auth.CheckForAuthorization(userID, pe.PermissionAdd.Name)
+func (p *permissionAuthorization) Remove(userId int, id int) error {
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
 	}

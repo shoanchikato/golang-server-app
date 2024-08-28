@@ -37,9 +37,9 @@ func (p *bookRepo) Add(book *m.Book) error {
 		return errors.Join(e.ErrBookDomain, e.ErrOnAdd, err)
 	}
 
-	book.ID = int(id)
+	book.Id = int(id)
 
-	_, err = p.dbU.Transaction(st.ADD_AUTHOR_BOOK_RLTN_STMT, book.AuthorID, book.ID)
+	_, err = p.dbU.Transaction(st.ADD_AUTHOR_BOOK_RLTN_STMT, book.AuthorId, book.Id)
 	if err != nil {
 		return errors.Join(e.ErrBookDomain, e.ErrOnAdd, err)
 	}
@@ -68,7 +68,7 @@ func (p *bookRepo) Edit(id int, book *m.Book) error {
 		return errors.Join(e.ErrBookDomain, e.ErrOnEdit, err)
 	}
 
-	book.ID = int(idx)
+	book.Id = int(idx)
 
 	return nil
 }
@@ -88,7 +88,7 @@ func (p *bookRepo) GetAll() (*[]m.Book, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&book.ID, &book.Name, &book.Year)
+		err = rows.Scan(&book.Id, &book.Name, &book.Year)
 		if err != nil {
 			return nil, errors.Join(e.ErrBookDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
@@ -111,7 +111,7 @@ func (p *bookRepo) GetOne(id int) (*m.Book, error) {
 	book := m.Book{}
 
 	row := p.db.QueryRow(st.GET_ONE_BOOK_STMT, id)
-	err := row.Scan(&book.ID, &book.Name, &book.Year)
+	err := row.Scan(&book.Id, &book.Name, &book.Year)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrBookDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
 	}

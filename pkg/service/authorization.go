@@ -2,13 +2,13 @@ package service
 
 import (
 	e "app/pkg/errors"
-	r "app/pkg/repo"
 	m "app/pkg/model"
+	r "app/pkg/repo"
 	"errors"
 )
 
 type AuthorizationService interface {
-	CheckForAuthorization(userID int, permission string) error
+	CheckForAuthorization(userId int, permission string) error
 }
 
 type authorizationService struct {
@@ -30,8 +30,8 @@ func (a *authorizationService) hasPermission(permission string, permissions *[]m
 	return false
 }
 
-func (a *authorizationService) getPermissions(userID int) (*[]m.Permission, error) {
-	permissions, err := a.repo.GetPermissonsByUserID(userID)
+func (a *authorizationService) getPermissions(userId int) (*[]m.Permission, error) {
+	permissions, err := a.repo.GetPermissonsByUserId(userId)
 	if err != nil {
 		return nil, err
 	}
@@ -39,8 +39,8 @@ func (a *authorizationService) getPermissions(userID int) (*[]m.Permission, erro
 	return permissions, nil
 }
 
-func (a *authorizationService) CheckForAuthorization(userID int, permission string) error {
-	permissions, err := a.getPermissions(userID)
+func (a *authorizationService) CheckForAuthorization(userId int, permission string) error {
+	permissions, err := a.getPermissions(userId)
 	if err != nil {
 		return errors.Join(e.ErrNotAuthorized, err)
 	}

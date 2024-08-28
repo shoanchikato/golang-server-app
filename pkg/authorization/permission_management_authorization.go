@@ -7,15 +7,15 @@ import (
 )
 
 type PermissionManagementAuthorization interface {
-	AddPermissionToRole(adminID int, permissionID, roleID int) error
-	AddPermissionsToRole(adminID int, permissionIDs []int, roleID int) error
-	AddRoleToUser(adminID int, roleID, userID int) error
-	GetPermissionsByRoleID(adminID int, roleID int) (*[]m.Permission, error)
-	GetPermissonsByUserID(adminID int, userID int) (*[]m.Permission, error)
-	GetRoleByUserID(adminID int, userID int) (*m.Role, error)
-	RemovePermissionFromRole(adminID int, roleID, permissionID int) error
-	RemovePermissionsFromRole(adminID int, roleID int, permissionIDs []int) error
-	RemoveRoleFromUser(adminID int, roleID, userID int) error
+	AddPermissionToRole(adminId int, permissionId, roleId int) error
+	AddPermissionsToRole(adminId int, permissionIds []int, roleId int) error
+	AddRoleToUser(adminId int, roleId, userId int) error
+	GetPermissionsByRoleId(adminId int, roleId int) (*[]m.Permission, error)
+	GetPermissonsByUserId(adminId int, userId int) (*[]m.Permission, error)
+	GetRoleByUserId(adminId int, userId int) (*m.Role, error)
+	RemovePermissionFromRole(adminId int, roleId, permissionId int) error
+	RemovePermissionsFromRole(adminId int, roleId int, permissionIds []int) error
+	RemoveRoleFromUser(adminId int, roleId, userId int) error
 }
 
 type permissionManagementAuthorization struct {
@@ -32,78 +32,78 @@ func NewPermissionManagementAuthorization(
 
 // AddPermissionToRole
 func (p *permissionManagementAuthorization) AddPermissionToRole(
-	adminID int,
-	permissionID int,
-	roleID int,
+	adminId int,
+	permissionId int,
+	roleId int,
 ) error {
 	panic("unimplemented")
 }
 
 // AddPermissionsToRole
 func (p *permissionManagementAuthorization) AddPermissionsToRole(
-	adminID int,
-	permissionIDs []int,
-	roleID int,
+	adminId int,
+	permissionIds []int,
+	roleId int,
 ) error {
 	panic("unimplemented")
 }
 
 // AddRoleToUser
 func (p *permissionManagementAuthorization) AddRoleToUser(
-	adminID int,
-	roleID int,
-	userID int,
+	adminId int,
+	roleId int,
+	userId int,
 ) error {
 	panic("unimplemented")
 }
 
-// GetPermissionsByRoleID
-func (p *permissionManagementAuthorization) GetPermissionsByRoleID(
-	adminID int,
-	roleID int,
+// GetPermissionsByRoleId
+func (p *permissionManagementAuthorization) GetPermissionsByRoleId(
+	adminId int,
+	roleId int,
 ) (*[]m.Permission, error) {
 	panic("unimplemented")
 }
 
-// GetPermissonsByUserID
-func (p *permissionManagementAuthorization) GetPermissonsByUserID(
-	adminID int,
-	userID int,
+// GetPermissonsByUserId
+func (p *permissionManagementAuthorization) GetPermissonsByUserId(
+	adminId int,
+	userId int,
 ) (*[]m.Permission, error) {
 	panic("unimplemented")
 }
 
-// GetRoleByUserID
-func (p *permissionManagementAuthorization) GetRoleByUserID(
-	adminID int,
-	userID int,
+// GetRoleByUserId
+func (p *permissionManagementAuthorization) GetRoleByUserId(
+	adminId int,
+	userId int,
 ) (*m.Role, error) {
 	panic("unimplemented")
 }
 
 // RemovePermissionFromRole
 func (p *permissionManagementAuthorization) RemovePermissionFromRole(
-	adminID int,
-	roleID int,
-	permissionID int,
+	adminId int,
+	roleId int,
+	permissionId int,
 ) error {
 	panic("unimplemented")
 }
 
 // RemovePermissionsFromRole
 func (p *permissionManagementAuthorization) RemovePermissionsFromRole(
-	adminID int,
-	roleID int,
-	permissionIDs []int,
+	adminId int,
+	roleId int,
+	permissionIds []int,
 ) error {
 	panic("unimplemented")
 }
 
 // RemoveRoleFromUser
 func (p *permissionManagementAuthorization) RemoveRoleFromUser(
-	adminID int,
-	roleID int,
-	userID int,
+	adminId int,
+	roleId int,
+	userId int,
 ) error {
 	panic("unimplemented")
 }

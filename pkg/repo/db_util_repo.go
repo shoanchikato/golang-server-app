@@ -44,7 +44,7 @@ func (d *dbUtil) Transaction(statement string, args ...any) (int64, error) {
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		return id, errors.Join(e.ErrRepoLastInsertedID, err)
+		return id, errors.Join(e.ErrRepoLastInsertedId, err)
 	}
 
 	return id, nil

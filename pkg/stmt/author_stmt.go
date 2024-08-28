@@ -22,7 +22,7 @@ const (
 		-- create indexes
 		CREATE INDEX IF NOT EXISTS idx_authors_books_author_id_book_id ON authors_books (author_id, book_id);
 	`
-	GET_BOOKS_BY_AUTHOR_ID_STMT = `
+	GET_BOOKS_BY_AUTHOR_Id_STMT = `
 		SELECT 
 			b.id,
 			b.name,

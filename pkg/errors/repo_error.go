@@ -10,7 +10,7 @@ var (
 	ErrRepoPreparingStmt  = errors.New("repo: error preparing a statement")
 	ErrRepoExecutingStmt  = errors.New("repo: error executing statement")
 	ErrRepoCommitTx       = errors.New("repo: error committing transaction")
-	ErrRepoLastInsertedID = errors.New("repo: error getting last inserted id")
+	ErrRepoLastInsertedId = errors.New("repo: error getting last inserted id")
 
 	ErrRepoNotFound = errors.New("repo: not found")
 )

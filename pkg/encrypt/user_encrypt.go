@@ -1,9 +1,9 @@
 package encrypt
 
 import (
-	s "app/pkg/service"
 	m "app/pkg/model"
 	r "app/pkg/repo"
+	s "app/pkg/service"
 )
 
 type UserEncryption interface {

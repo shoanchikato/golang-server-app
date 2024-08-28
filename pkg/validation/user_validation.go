@@ -1,9 +1,9 @@
 package validation
 
 import (
+	en "app/pkg/encrypt"
 	e "app/pkg/errors"
 	m "app/pkg/model"
-	en "app/pkg/encrypt"
 	"fmt"
 	"strings"
 

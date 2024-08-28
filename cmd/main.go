@@ -14,11 +14,11 @@ import (
 	"sync"
 	"time"
 
-	_ "modernc.org/sqlite"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	db, err := sql.Open("sqlite", "small.db")
+	db, err := sql.Open("sqlite3", "small.db")
 	if err != nil {
 		log.Fatal(err)
 	}

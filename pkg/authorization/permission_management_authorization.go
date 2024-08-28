@@ -12,13 +12,10 @@ import (
 type PermissionManagementAuthorization interface {
 	AddPermissionToRole(adminId int, permissionId, roleId int) error
 	AddPermissionsToRole(adminId int, permissionIds []int, roleId int) error
-	AddRoleToUser(adminId int, roleId, userId int) error
 	GetPermissionsByRoleId(adminId int, roleId int) (*[]m.Permission, error)
 	GetPermissonsByUserId(adminId int, userId int) (*[]m.Permission, error)
-	GetRoleByUserId(adminId int, userId int) (*m.Role, error)
 	RemovePermissionFromRole(adminId int, roleId, permissionId int) error
 	RemovePermissionsFromRole(adminId int, roleId int, permissionIds []int) error
-	RemoveRoleFromUser(adminId int, roleId, userId int) error
 }
 
 type permissionManagementAuthorization struct {
@@ -61,20 +58,6 @@ func (pe *permissionManagementAuthorization) AddPermissionsToRole(
 	return pe.validator.AddPermissionsToRole(permissionIds, roleId)
 }
 
-// AddRoleToUser
-func (pe *permissionManagementAuthorization) AddRoleToUser(
-	adminId int,
-	roleId int,
-	userId int,
-) error {
-	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementAddPermissionsToRole.Name)
-	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddRoleToUser, err)
-	}
-
-	return pe.validator.AddRoleToUser(roleId, userId)
-}
-
 // GetPermissionsByRoleId
 func (pe *permissionManagementAuthorization) GetPermissionsByRoleId(
 	adminId int,
@@ -99,19 +82,6 @@ func (pe *permissionManagementAuthorization) GetPermissonsByUserId(
 	}
 
 	return pe.validator.GetPermissonsByUserId(userId)
-}
-
-// GetRoleByUserId
-func (pe *permissionManagementAuthorization) GetRoleByUserId(
-	adminId int,
-	userId int,
-) (*m.Role, error) {
-	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementGetRoleByUserId.Name)
-	if err != nil {
-		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetRoleByUserId, err)
-	}
-
-	return pe.validator.GetRoleByUserId(userId)
 }
 
 // RemovePermissionFromRole
@@ -140,18 +110,4 @@ func (pe *permissionManagementAuthorization) RemovePermissionsFromRole(
 	}
 
 	return pe.validator.RemovePermissionsFromRole(roleId, permissionIds)
-}
-
-// RemoveRoleFromUser
-func (pe *permissionManagementAuthorization) RemoveRoleFromUser(
-	adminId int,
-	roleId int,
-	userId int,
-) error {
-	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementRemoveRoleFromUser.Name)
-	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnRemoveRoleFromUser, err)
-	}
-
-	return pe.validator.RemoveRoleFromUser(roleId, userId)
 }

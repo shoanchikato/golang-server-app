@@ -11,7 +11,7 @@ var (
 	ErrOnGetMore = errors.New("get more: ")
 	ErrOnRemove  = errors.New("remove post: ")
 
-	ErrOnLogin = errors.New("login: ")
+	ErrOnLogin         = errors.New("login: ")
 	ErrOnResetPassword = errors.New("reset password: ")
 
 	ErrOnAddPermissionToRole       = errors.New("add permission to role: ")

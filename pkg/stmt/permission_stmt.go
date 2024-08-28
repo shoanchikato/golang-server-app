@@ -36,6 +36,6 @@ const (
 	GET_ONE_PERMISSION_STMT = `SELECT * FROM permissions WHERE id = $1;`
 	REMOVE_PERMISSION_STMT  = `
 		DELETE FROM permissions WHERE id = $1;
-		DELETE FROM roles_permissions WHERE permission_id = $1;
+		DELETE FROM roles_permissions WHERE permission_id = $2;
 	`
 )

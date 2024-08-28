@@ -71,7 +71,7 @@ func main() {
 
 	// _, _, _, _, _ = Data()
 
-	pp := []*m.Permission{
+	_ = []*m.Permission{
 		pe.UserAdd,
 		pe.UserAddAll,
 		pe.UserGetOne,
@@ -80,7 +80,7 @@ func main() {
 		pe.UserRemove,
 	}
 
-	err = peVal.AddAll(&pp)
+	pp, err := peVal.GetAll()
 	if err != nil {
 		fmt.Println(err)
 		return

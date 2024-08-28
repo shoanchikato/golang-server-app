@@ -129,7 +129,7 @@ func (p *permissionRepo) Remove(id int) error {
 	if err != nil {
 		return err
 	}
-	_, err = p.dbU.Transaction(st.REMOVE_PERMISSION_STMT, id)
+	_, err = p.dbU.Transaction(st.REMOVE_PERMISSION_STMT, id, id)
 	if err != nil {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnRemove, err)
 	}

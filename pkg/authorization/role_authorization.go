@@ -10,25 +10,25 @@ import (
 )
 
 type Role interface {
-	Add(userId int, role *m.Author) error
-	AddAll(userId int, roles *[]*m.Author) error
-	Edit(userId int, id int, newAuthor *m.Author) error
-	GetAll(userId int) (*[]m.Author, error)
-	GetOne(userId int, id int) (*m.Author, error)
+	Add(userId int, role *m.Role) error
+	AddAll(userId int, roles *[]*m.Role) error
+	Edit(userId int, id int, newAuthor *m.Role) error
+	GetAll(userId int) (*[]m.Role, error)
+	GetOne(userId int, id int) (*m.Role, error)
 	Remove(userId int, id int) error
 }
 
 type roleAuthorization struct {
 	auth      s.AuthorizationService
-	validator v.AuthorValidator
+	validator v.RoleValidator
 }
 
-func NewRole(auth s.AuthorizationService, validator v.AuthorValidator) Role {
+func NewRoleAuthorization(auth s.AuthorizationService, validator v.RoleValidator) Role {
 	return &roleAuthorization{auth, validator}
 }
 
 // Add
-func (r *roleAuthorization) Add(userId int, role *m.Author) error {
+func (r *roleAuthorization) Add(userId int, role *m.Role) error {
 	err := r.auth.CheckForAuthorization(userId, p.RoleAdd.Name)
 	if err != nil {
 		return errors.Join(e.ErrAuthorDomain, e.ErrOnAdd, err)
@@ -38,7 +38,7 @@ func (r *roleAuthorization) Add(userId int, role *m.Author) error {
 }
 
 // AddAll
-func (r *roleAuthorization) AddAll(userId int, roles *[]*m.Author) error {
+func (r *roleAuthorization) AddAll(userId int, roles *[]*m.Role) error {
 	err := r.auth.CheckForAuthorization(userId, p.RoleAddAll.Name)
 	if err != nil {
 		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddAll, err)
@@ -48,7 +48,7 @@ func (r *roleAuthorization) AddAll(userId int, roles *[]*m.Author) error {
 }
 
 // Edit
-func (r *roleAuthorization) Edit(userId int, id int, newAuthor *m.Author) error {
+func (r *roleAuthorization) Edit(userId int, id int, newAuthor *m.Role) error {
 	err := r.auth.CheckForAuthorization(userId, p.RoleEdit.Name)
 	if err != nil {
 		return errors.Join(e.ErrAuthorDomain, e.ErrOnEdit, err)
@@ -58,7 +58,7 @@ func (r *roleAuthorization) Edit(userId int, id int, newAuthor *m.Author) error 
 }
 
 // GetAll
-func (r *roleAuthorization) GetAll(userId int) (*[]m.Author, error) {
+func (r *roleAuthorization) GetAll(userId int) (*[]m.Role, error) {
 	err := r.auth.CheckForAuthorization(userId, p.RoleGetAll.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetAll, err)
@@ -68,7 +68,7 @@ func (r *roleAuthorization) GetAll(userId int) (*[]m.Author, error) {
 }
 
 // GetOne
-func (r *roleAuthorization) GetOne(userId int, id int) (*m.Author, error) {
+func (r *roleAuthorization) GetOne(userId int, id int) (*m.Role, error) {
 	err := r.auth.CheckForAuthorization(userId, p.RoleGetOne.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetOne, err)

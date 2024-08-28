@@ -1,4 +1,4 @@
-run-r: release
+run-r: build
 	./app
 
 run:

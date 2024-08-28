@@ -30,7 +30,7 @@ func NewAuthAuthorization(
 func (a authAuthorization) Login(userId int, credentials *m.Credentials) (bool, error) {
 	err := a.auth.CheckForAuthorization(userId, p.AuthLogin.Name)
 	if err != nil {
-		return false, errors.Join(e.ErrAuthDomain, e.ErrOnAdd, err)
+		return false, errors.Join(e.ErrAuthDomain, e.ErrOnLogin, err)
 	}
 
 	return a.validator.Login(credentials)
@@ -40,7 +40,7 @@ func (a authAuthorization) Login(userId int, credentials *m.Credentials) (bool, 
 func (a authAuthorization) ResetPassword(userId int, credentials *m.Credentials, newPassword string) error {
 	err := a.auth.CheckForAuthorization(userId, p.AuthResetPassword.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthDomain, e.ErrOnAdd, err)
+		return errors.Join(e.ErrAuthDomain, e.ErrOnResetPassword, err)
 	}
 
 	return a.validator.ResetPassword(credentials, newPassword)

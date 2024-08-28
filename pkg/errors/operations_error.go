@@ -10,4 +10,17 @@ var (
 	ErrOnGetOne  = errors.New("get one: ")
 	ErrOnGetMore = errors.New("get more: ")
 	ErrOnRemove  = errors.New("remove post: ")
+
+	ErrOnLogin = errors.New("login: ")
+	ErrOnResetPassword = errors.New("reset password: ")
+
+	ErrOnAddPermissionToRole       = errors.New("add permission to role: ")
+	ErrOnAddPermissionsToRole      = errors.New("add permissions to role: ")
+	ErrOnAddRoleToUser             = errors.New("add role to user: ")
+	ErrOnGetPermissionsByRoleId    = errors.New("get permissions by role id: ")
+	ErrOnGetPermissonsByUserId     = errors.New("get permissons by user id: ")
+	ErrOnGetRoleByUserId           = errors.New("get role by user id: ")
+	ErrOnRemovePermissionFromRole  = errors.New("remove permission from role: ")
+	ErrOnRemovePermissionsFromRole = errors.New("remove permissions from role: ")
+	ErrOnRemoveRoleFromUser        = errors.New("remove role from user: ")
 )

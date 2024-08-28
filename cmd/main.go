@@ -51,10 +51,10 @@ func main() {
 
 	// Validators
 	_ = v.NewUserValidator(uEncrypt)
-	_ = v.NewAuthValidator(aEncrypt)
-	_ = v.NewRoleValidator(rRepo)
+	aVal := v.NewAuthValidator(aEncrypt)
+	rVal := v.NewRoleValidator(rRepo)
 	peVal := v.NewPermissionValidator(peRepo)
-	_ = v.NewAuthorValidator(auRepo)
+	auVal := v.NewAuthorValidator(auRepo)
 	bVal := v.NewBookValidator(bRepo)
 	pVal := v.NewPostValidator(pRepo)
 	pmVal := v.NewPermissionManagementValidator(pmRepo)
@@ -65,10 +65,22 @@ func main() {
 	_ = a.NewBookAuthorization(auth, bVal)
 	_ = a.NewPermissionAuthorization(auth, peVal)
 	_ = a.NewPermissionManagementAuthorization(auth, pmVal)
+	_ = a.NewAuthAuthorization(auth, aVal)
+	_ = a.NewAuthorAuthorization(auth, auVal)
+	_ = a.NewRoleAuthorization(auth, rVal)
 
 	// _, _, _, _, _ = Data()
 
-	pp, err := peVal.GetAll()
+	pp := []*m.Permission{
+		pe.UserAdd,
+		pe.UserAddAll,
+		pe.UserGetOne,
+		pe.UserGetAll,
+		pe.UserEdit,
+		pe.UserRemove,
+	}
+
+	err = peVal.AddAll(&pp)
 	if err != nil {
 		fmt.Println(err)
 		return

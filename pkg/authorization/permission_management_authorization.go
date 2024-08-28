@@ -1,9 +1,12 @@
 package authorization
 
 import (
+	e "app/pkg/errors"
 	m "app/pkg/model"
+	p "app/pkg/permission"
 	s "app/pkg/service"
 	v "app/pkg/validation"
+	"errors"
 )
 
 type PermissionManagementAuthorization interface {
@@ -31,79 +34,124 @@ func NewPermissionManagementAuthorization(
 }
 
 // AddPermissionToRole
-func (p *permissionManagementAuthorization) AddPermissionToRole(
+func (pe *permissionManagementAuthorization) AddPermissionToRole(
 	adminId int,
 	permissionId int,
 	roleId int,
 ) error {
-	panic("unimplemented")
+	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementAddPermissionToRole.Name)
+	if err != nil {
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddAll, err)
+	}
+
+	return pe.validator.AddPermissionToRole(permissionId, roleId)
 }
 
 // AddPermissionsToRole
-func (p *permissionManagementAuthorization) AddPermissionsToRole(
+func (pe *permissionManagementAuthorization) AddPermissionsToRole(
 	adminId int,
 	permissionIds []int,
 	roleId int,
 ) error {
-	panic("unimplemented")
+	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementAddPermissionsToRole.Name)
+	if err != nil {
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddPermissionToRole, err)
+	}
+
+	return pe.validator.AddPermissionsToRole(permissionIds, roleId)
 }
 
 // AddRoleToUser
-func (p *permissionManagementAuthorization) AddRoleToUser(
+func (pe *permissionManagementAuthorization) AddRoleToUser(
 	adminId int,
 	roleId int,
 	userId int,
 ) error {
-	panic("unimplemented")
+	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementAddPermissionsToRole.Name)
+	if err != nil {
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddRoleToUser, err)
+	}
+
+	return pe.validator.AddRoleToUser(roleId, userId)
 }
 
 // GetPermissionsByRoleId
-func (p *permissionManagementAuthorization) GetPermissionsByRoleId(
+func (pe *permissionManagementAuthorization) GetPermissionsByRoleId(
 	adminId int,
 	roleId int,
 ) (*[]m.Permission, error) {
-	panic("unimplemented")
+	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementGetPermissionsByRoleId.Name)
+	if err != nil {
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetPermissionsByRoleId, err)
+	}
+
+	return pe.validator.GetPermissionsByRoleId(roleId)
 }
 
 // GetPermissonsByUserId
-func (p *permissionManagementAuthorization) GetPermissonsByUserId(
+func (pe *permissionManagementAuthorization) GetPermissonsByUserId(
 	adminId int,
 	userId int,
 ) (*[]m.Permission, error) {
-	panic("unimplemented")
+	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementGetPermissonsByUserId.Name)
+	if err != nil {
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetPermissonsByUserId, err)
+	}
+
+	return pe.validator.GetPermissonsByUserId(userId)
 }
 
 // GetRoleByUserId
-func (p *permissionManagementAuthorization) GetRoleByUserId(
+func (pe *permissionManagementAuthorization) GetRoleByUserId(
 	adminId int,
 	userId int,
 ) (*m.Role, error) {
-	panic("unimplemented")
+	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementGetRoleByUserId.Name)
+	if err != nil {
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetRoleByUserId, err)
+	}
+
+	return pe.validator.GetRoleByUserId(userId)
 }
 
 // RemovePermissionFromRole
-func (p *permissionManagementAuthorization) RemovePermissionFromRole(
+func (pe *permissionManagementAuthorization) RemovePermissionFromRole(
 	adminId int,
 	roleId int,
 	permissionId int,
 ) error {
-	panic("unimplemented")
+	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementRemovePermissionFromRole.Name)
+	if err != nil {
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnRemovePermissionFromRole, err)
+	}
+
+	return pe.validator.RemovePermissionFromRole(roleId, permissionId)
 }
 
 // RemovePermissionsFromRole
-func (p *permissionManagementAuthorization) RemovePermissionsFromRole(
+func (pe *permissionManagementAuthorization) RemovePermissionsFromRole(
 	adminId int,
 	roleId int,
 	permissionIds []int,
 ) error {
-	panic("unimplemented")
+	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementRemovePermissionsFromRole.Name)
+	if err != nil {
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnRemovePermissionsFromRole, err)
+	}
+
+	return pe.validator.RemovePermissionsFromRole(roleId, permissionIds)
 }
 
 // RemoveRoleFromUser
-func (p *permissionManagementAuthorization) RemoveRoleFromUser(
+func (pe *permissionManagementAuthorization) RemoveRoleFromUser(
 	adminId int,
 	roleId int,
 	userId int,
 ) error {
-	panic("unimplemented")
+	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementRemoveRoleFromUser.Name)
+	if err != nil {
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnRemoveRoleFromUser, err)
+	}
+
+	return pe.validator.RemoveRoleFromUser(roleId, userId)
 }

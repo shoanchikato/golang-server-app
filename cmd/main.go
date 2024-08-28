@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("sqlite3", "small.db")
+	db, err := sql.Open("sqlite3", "small.db?_journal_mode=WAL")
 	if err != nil {
 		log.Fatal(err)
 	}

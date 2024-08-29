@@ -1,6 +1,7 @@
 package repo
 
 import (
+	c "app/pkg/constants"
 	e "app/pkg/errors"
 	"database/sql"
 	"errors"
@@ -23,12 +24,12 @@ func NewDBUtil(db *sql.DB, rw *sync.RWMutex) DBUtil {
 
 // CheckLimit
 func (d *dbUtil) CheckLimit(limit *int) {
-	if *limit > UPPER_LIMIT {
-		*limit = UPPER_LIMIT
+	if *limit > c.REPO_UPPER_LIMIT {
+		*limit = c.REPO_UPPER_LIMIT
 	}
 
-	if *limit < LOWER_LIMIT {
-		*limit = LOWER_LIMIT
+	if *limit < c.REPO_LOWER_LIMIT {
+		*limit = c.REPO_LOWER_LIMIT
 	}
 }
 

@@ -30,12 +30,12 @@ const (
 		CREATE INDEX IF NOT EXISTS idx_users_roles_user_id_role_id ON users_roles (user_id, role_id);
 	`
 
-	ADD_PERMISSION_STMT     = `INSERT INTO permissions (name, entity, operation) VALUES ($1, $2, $3);`
-	EDIT_PERMISSION_STMT    = `UPDATE permissions SET	name = $1, entity = $2, operation = $3 WHERE id = $4;`
-	GET_ALL_PERMISSION_STMT = `SELECT * FROM permissions WHERE id > $1 LIMIT $2;`
+	ADD_PERMISSION_STMT           = `INSERT INTO permissions (name, entity, operation) VALUES ($1, $2, $3);`
+	EDIT_PERMISSION_STMT          = `UPDATE permissions SET	name = $1, entity = $2, operation = $3 WHERE id = $4;`
+	GET_ALL_PERMISSION_STMT       = `SELECT * FROM permissions WHERE id > $1 LIMIT $2;`
 	GET_BY_ENTITY_PERMISSION_STMT = `SELECT * FROM permissions WHERE entity = $1;`
-	GET_ONE_PERMISSION_STMT = `SELECT * FROM permissions WHERE id = $1;`
-	REMOVE_PERMISSION_STMT  = `
+	GET_ONE_PERMISSION_STMT       = `SELECT * FROM permissions WHERE id = $1;`
+	REMOVE_PERMISSION_STMT        = `
 		DELETE FROM permissions WHERE id = $1;
 		DELETE FROM roles_permissions WHERE permission_id = $2;
 	`

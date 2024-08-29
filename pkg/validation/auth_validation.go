@@ -1,6 +1,7 @@
 package validation
 
 import (
+	c "app/pkg/constants"
 	en "app/pkg/encrypt"
 	e "app/pkg/errors"
 	m "app/pkg/model"
@@ -10,7 +11,7 @@ import (
 
 type AuthValidator interface {
 	Login(credentials *m.Credentials) (userId *int, err error)
-	ResetPassword(credentials *m.Credentials, newPassword string) error
+	ResetPassword(username, newPassword string) error
 }
 
 type authValidator struct {
@@ -32,11 +33,13 @@ func (a *authValidator) Login(credentials *m.Credentials) (userId *int, err erro
 }
 
 // ResetPassword implements AuthValidator.
-func (a *authValidator) ResetPassword(credentials *m.Credentials, newPassword string) error {
-	_, err := valid.ValidateStruct(credentials)
-	if err != nil {
-		return e.NewValidationError(e.ErrResetPasswordValidation, err.Error())
+func (a *authValidator) ResetPassword(username, newPassword string) error {
+	if len(username) < c.USERNAME_LENGTH {
+		return e.NewValidationError(e.ErrResetPasswordValidation, e.ErrUsernameLength.Error())
 	}
 
-	return a.service.ResetPassword(*credentials, newPassword)
+	if len(newPassword) < c.PASSWORD_LENGTH {
+		return e.NewValidationError(e.ErrResetPasswordValidation, e.ErrPasswordLength.Error())
+	}
+	return a.service.ResetPassword(username, newPassword)
 }

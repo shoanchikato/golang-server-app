@@ -10,7 +10,7 @@ import (
 
 type AuthEncryption interface {
 	Login(credentials m.Credentials) (userId *int, err error)
-	ResetPassword(credentials m.Credentials, newPassword string) error
+	ResetPassword(username, newPassword string) error
 }
 
 type authEncryption struct {
@@ -42,22 +42,13 @@ func (a *authEncryption) Login(credentials m.Credentials) (userId *int, err erro
 }
 
 // ResetPassword
-func (a *authEncryption) ResetPassword(credentials m.Credentials, newPassword string) error {
-	userId, err := a.Login(credentials)
+func (a *authEncryption) ResetPassword(username, newPassword string) error {
+	err := a.encrypt.HashPassword(&newPassword)
 	if err != nil {
 		return err
 	}
 
-	if userId == nil {
-		return e.ErrIncorrectCredentials
-	}
-
-	err = a.encrypt.HashPassword(&newPassword)
-	if err != nil {
-		return err
-	}
-
-	err = a.repo.ResetPassword(credentials.Username, newPassword)
+	err = a.repo.ResetPassword(username, newPassword)
 	if err != nil {
 		return err
 	}

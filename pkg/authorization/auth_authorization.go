@@ -1,17 +1,14 @@
 package authorization
 
 import (
-	e "app/pkg/errors"
 	m "app/pkg/model"
-	p "app/pkg/permission"
 	s "app/pkg/service"
 	v "app/pkg/validation"
-	"errors"
 )
 
 type AuthAuthorization interface {
 	Login(credentials *m.Credentials) (userId *int, err error)
-	ResetPassword(userId int, credentials *m.Credentials, newPassword string) error
+	ResetPassword(username, newPassword string) error
 }
 
 type authAuthorization struct {
@@ -32,11 +29,6 @@ func (a authAuthorization) Login(credentials *m.Credentials) (userId *int, err e
 }
 
 // ResetPassword
-func (a authAuthorization) ResetPassword(userId int, credentials *m.Credentials, newPassword string) error {
-	err := a.auth.CheckForAuthorization(userId, p.AuthResetPassword.Name)
-	if err != nil {
-		return errors.Join(e.ErrAuthDomain, e.ErrOnResetPassword, err)
-	}
-
-	return a.validator.ResetPassword(credentials, newPassword)
+func (a authAuthorization) ResetPassword(username, newPassword string) error {
+	return a.validator.ResetPassword(username, newPassword)
 }

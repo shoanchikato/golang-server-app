@@ -13,7 +13,7 @@ type Author struct {
 
 func (a Author) String() string {
 	return fmt.Sprintf(
-		"{%d, %s, %s, %v}",
+		`{%d, "%s", "%s", %v}`,
 		a.Id, a.FirstName, a.LastName, a.Books,
 	)
 }

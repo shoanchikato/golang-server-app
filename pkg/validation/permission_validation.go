@@ -14,7 +14,7 @@ type PermissionValidator interface {
 	Add(permission *m.Permission) error
 	AddAll(permissions *[]*m.Permission) error
 	Edit(id int, newPermission *m.Permission) error
-	GetAll() (*[]m.Permission, error)
+	GetAll(lastId, limit int) (*[]m.Permission, error)
 	GetOne(id int) (*m.Permission, error)
 	Remove(id int) error
 }
@@ -85,8 +85,8 @@ func (v *permissionValidator) Edit(id int, newPermission *m.Permission) error {
 }
 
 // GetAll
-func (v *permissionValidator) GetAll() (*[]m.Permission, error) {
-	return v.repo.GetAll()
+func (v *permissionValidator) GetAll(lastId, limit int) (*[]m.Permission, error) {
+	return v.repo.GetAll(lastId, limit)
 }
 
 // GetOne

@@ -1,7 +1,7 @@
 package model
 
 type Role struct {
-	Id   int
+	Id   int    `json:"id,omitempty"`
 	Name string `json:"name" valid:"required~name is required"`
 }
 

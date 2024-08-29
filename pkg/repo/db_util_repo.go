@@ -9,6 +9,7 @@ import (
 
 type DBUtil interface {
 	Transaction(statement string, args ...any) (int64, error)
+	CheckLimit(limit *int)
 }
 
 type dbUtil struct {
@@ -20,6 +21,18 @@ func NewDBUtil(db *sql.DB, rw *sync.RWMutex) DBUtil {
 	return &dbUtil{db, rw}
 }
 
+// CheckLimit
+func (d *dbUtil) CheckLimit(limit *int) {
+	if *limit > UPPER_LIMIT {
+		*limit = UPPER_LIMIT
+	}
+
+	if *limit < LOWER_LIMIT {
+		*limit = LOWER_LIMIT
+	}
+}
+
+// Transaction
 func (d *dbUtil) Transaction(statement string, args ...any) (int64, error) {
 	d.rw.Lock()
 	defer d.rw.Unlock()

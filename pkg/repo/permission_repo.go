@@ -15,7 +15,7 @@ type PermissionRepo interface {
 	Add(permission *m.Permission) error
 	AddAll(permissions *[]*m.Permission) error
 	Edit(id int, permission *m.Permission) error
-	GetAll() (*[]m.Permission, error)
+	GetAll(lastId, limit int) (*[]m.Permission, error)
 	GetOne(id int) (*m.Permission, error)
 	Remove(id int) error
 }
@@ -74,18 +74,20 @@ func (p *permissionRepo) Edit(id int, permission *m.Permission) error {
 }
 
 // GetAll
-func (p *permissionRepo) GetAll() (*[]m.Permission, error) {
+func (p *permissionRepo) GetAll(lastId, limit int) (*[]m.Permission, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
-	permission := m.Permission{}
-	permissions := []m.Permission{}
+	p.dbU.CheckLimit(&limit)
 
-	rows, err := p.db.Query(st.GET_ALL_PERMISSION_STMT)
+	rows, err := p.db.Query(st.GET_ALL_PERMISSION_STMT, lastId, limit)
 	if err != nil {
 		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
+
+	permission := m.Permission{}
+	permissions := []m.Permission{}
 
 	for rows.Next() {
 		err = rows.Scan(&permission.Id, &permission.Name, &permission.Entity, &permission.Operation)

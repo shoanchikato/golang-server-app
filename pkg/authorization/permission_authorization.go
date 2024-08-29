@@ -13,7 +13,7 @@ type PermissionAuthorization interface {
 	Add(userId int, permission *m.Permission) error
 	AddAll(userId int, permissions *[]*m.Permission) error
 	Edit(userId int, id int, newPermission *m.Permission) error
-	GetAll(userId int) (*[]m.Permission, error)
+	GetAll(userId, lastId, limit int) (*[]m.Permission, error)
 	GetOne(userId int, id int) (*m.Permission, error)
 	Remove(userId int, id int) error
 }
@@ -61,13 +61,13 @@ func (p *permissionAuthorization) Edit(userId int, id int, newPermission *m.Perm
 }
 
 // GetAll
-func (p *permissionAuthorization) GetAll(userId int) (*[]m.Permission, error) {
+func (p *permissionAuthorization) GetAll(userId, lastId, limit int) (*[]m.Permission, error) {
 	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
 	}
 
-	return p.validator.GetAll()
+	return p.validator.GetAll(lastId, limit)
 }
 
 // GetOne

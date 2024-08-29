@@ -80,13 +80,13 @@ func main() {
 		pe.UserRemove,
 	}
 
-	pp, err := peVal.GetAll()
+	pp, err := peVal.GetAll(-110, 25)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(pp)
+	fmt.Printf("%v\n", pp)
 }
 
 func Data() (

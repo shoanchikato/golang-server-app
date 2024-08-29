@@ -69,24 +69,15 @@ func main() {
 	_ = a.NewAuthorAuthorization(auth, auVal)
 	_ = a.NewRoleAuthorization(auth, rVal)
 
-	// _, _, _, _, _ = Data()
+	_, _, _, _, _ = Data()
 
-	_ = []*m.Permission{
-		pe.UserAdd,
-		pe.UserAddAll,
-		pe.UserGetOne,
-		pe.UserGetAll,
-		pe.UserEdit,
-		pe.UserRemove,
-	}
-
-	pp, err := peVal.GetByEntity("permission")
+	err = rVal.Edit(1, m.NewRole("admin"))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Printf("%v\n", pp)
+	fmt.Println(err)
 }
 
 func Data() (
@@ -123,23 +114,64 @@ func Data() (
 		m.NewUser("Jim", "Doe", "jim_doe", "jim@doe.com", "password3"),
 	}
 
-	postPermissions := []*m.Permission{
-		pe.PostAdd,
-		pe.PostAddAll,
-		pe.PostEdit,
-		pe.PostGetOne,
-		pe.PostGetAll,
-		pe.PostRemove,
-	}
+	permissions := []*m.Permission{
+		pe.AuthLogin,
+		pe.AuthResetPassword,
 
-	_ = []*m.Permission{
+		pe.AuthorAdd,
+		pe.AuthorAddAll,
+		pe.AuthorEdit,
+		pe.AuthorGetAll,
+		pe.AuthorGetOne,
+		pe.AuthorRemove,
+
 		pe.BookAdd,
 		pe.BookAddAll,
 		pe.BookEdit,
-		pe.BookGetOne,
 		pe.BookGetAll,
+		pe.BookGetOne,
 		pe.BookRemove,
+
+		pe.PermissionAdd,
+		pe.PermissionAddAll,
+		pe.PermissionEdit,
+		pe.PermissionGetAll,
+		pe.PermissionGetByEntity,
+		pe.PermissionGetOne,
+		pe.PermissionRemove,
+
+		pe.PostAdd,
+		pe.PostAddAll,
+		pe.PostEdit,
+		pe.PostGetAll,
+		pe.PostGetOne,
+		pe.PostRemove,
+
+		pe.RoleAdd,
+		pe.RoleAddAll,
+		pe.RoleEdit,
+		pe.RoleGetAll,
+		pe.RoleGetOne,
+		pe.RoleRemove,
+
+		pe.UserAdd,
+		pe.UserAddAll,
+		pe.UserEdit,
+		pe.UserGetAll,
+		pe.UserGetOne,
+		pe.UserRemove,
+
+		pe.PermissionManagementAddPermissionToRole,
+		pe.PermissionManagementAddPermissionsToRole,
+		pe.PermissionManagementGetPermissionsByRoleId,
+		pe.PermissionManagementGetPermissonsByUserId,
+		pe.PermissionManagementRemovePermissionFromRole,
+		pe.PermissionManagementRemovePermissionsFromRole,
+
+		pe.RoleManagementAddRoleToUser,
+		pe.RoleManagementGetRoleByUserId,
+		pe.RoleManagementRemoveRoleFromUser,
 	}
 
-	return authors, books, posts, users, postPermissions
+	return authors, books, posts, users, permissions
 }

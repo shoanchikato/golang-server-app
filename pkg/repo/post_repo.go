@@ -15,7 +15,7 @@ type PostRepo interface {
 	Add(post *m.Post) error
 	AddAll(post *[]*m.Post) error
 	Edit(id int, post *m.Post) error
-	GetAll() (*[]m.Post, error)
+	GetAll(lastId, limit int) (*[]m.Post, error)
 	GetOne(id int) (*m.Post, error)
 	Remove(id int) error
 }
@@ -74,14 +74,14 @@ func (p *postRepo) Edit(id int, post *m.Post) error {
 }
 
 // GetAll
-func (p *postRepo) GetAll() (*[]m.Post, error) {
+func (p *postRepo) GetAll(lastId, limit int) (*[]m.Post, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
 	post := m.Post{}
 	posts := []m.Post{}
 
-	rows, err := p.db.Query(st.GET_ALL_POST_STMT)
+	rows, err := p.db.Query(st.GET_ALL_POST_STMT, lastId, limit)
 	if err != nil {
 		return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}

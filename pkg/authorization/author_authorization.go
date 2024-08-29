@@ -13,7 +13,7 @@ type AuthorAuthorization interface {
 	Add(userId int, author *m.Author) error
 	AddAll(userId int, authors *[]*m.Author) error
 	Edit(userId int, id int, newAuthor *m.Author) error
-	GetAll(userId int) (*[]m.Author, error)
+	GetAll(userId, lastId, limit int) (*[]m.Author, error)
 	GetOne(userId int, id int) (*m.Author, error)
 	Remove(userId int, id int) error
 }
@@ -58,13 +58,13 @@ func (a *authorAuthorization) Edit(userId int, id int, newAuthor *m.Author) erro
 }
 
 // GetAll
-func (a *authorAuthorization) GetAll(userId int) (*[]m.Author, error) {
+func (a *authorAuthorization) GetAll(userId, lastId, limit int) (*[]m.Author, error) {
 	err := a.auth.CheckForAuthorization(userId, p.AuthorGetAll.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetAll, err)
 	}
 
-	return a.validator.GetAll()
+	return a.validator.GetAll(lastId, limit)
 }
 
 // GetOne

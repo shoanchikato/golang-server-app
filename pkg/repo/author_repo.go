@@ -15,7 +15,7 @@ type AuthorRepo interface {
 	Add(author *m.Author) error
 	AddAll(author *[]*m.Author) error
 	Edit(id int, author *m.Author) error
-	GetAll() (*[]m.Author, error)
+	GetAll(lastId, limit int) (*[]m.Author, error)
 	GetOne(id int) (*m.Author, error)
 	GetMore(id int) (*m.Author, error)
 	Remove(id int) error
@@ -75,14 +75,14 @@ func (p *authorRepo) Edit(id int, author *m.Author) error {
 }
 
 // GetAll
-func (p *authorRepo) GetAll() (*[]m.Author, error) {
+func (p *authorRepo) GetAll(lastId, limit int) (*[]m.Author, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
 	author := m.Author{}
 	authors := []m.Author{}
 
-	rows, err := p.db.Query(st.GET_ALL_AUTHOR_STMT)
+	rows, err := p.db.Query(st.GET_ALL_AUTHOR_STMT, lastId, limit)
 	if err != nil {
 		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}

@@ -14,7 +14,7 @@ type PostValidator interface {
 	Add(post *m.Post) error
 	AddAll(posts *[]*m.Post) error
 	Edit(id int, newPost *m.Post) error
-	GetAll() (*[]m.Post, error)
+	GetAll(lastId, limit int) (*[]m.Post, error)
 	GetOne(id int) (*m.Post, error)
 	Remove(id int) error
 }
@@ -85,8 +85,8 @@ func (v *postValidator) Edit(id int, newPost *m.Post) error {
 }
 
 // GetAll
-func (v *postValidator) GetAll() (*[]m.Post, error) {
-	return v.Repo.GetAll()
+func (v *postValidator) GetAll(lastId, limit int) (*[]m.Post, error) {
+	return v.Repo.GetAll(lastId, limit)
 }
 
 // GetOne

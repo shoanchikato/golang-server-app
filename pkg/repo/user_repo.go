@@ -15,7 +15,7 @@ type UserRepo interface {
 	Add(user *m.User) error
 	AddAll(user *[]*m.User) error
 	Edit(id int, user *m.User) error
-	GetAll() (*[]m.User, error)
+	GetAll(lastId, limit int) (*[]m.User, error)
 	GetOne(id int) (*m.User, error)
 	Remove(id int) error
 }
@@ -88,14 +88,14 @@ func (p *userRepo) Edit(id int, user *m.User) error {
 }
 
 // GetAll
-func (p *userRepo) GetAll() (*[]m.User, error) {
+func (p *userRepo) GetAll(lastId, limit int) (*[]m.User, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
 	user := m.User{}
 	users := []m.User{}
 
-	rows, err := p.db.Query(st.GET_ALL_USER_STMT)
+	rows, err := p.db.Query(st.GET_ALL_USER_STMT, lastId, limit)
 	if err != nil {
 		return nil, errors.Join(e.ErrUserDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}

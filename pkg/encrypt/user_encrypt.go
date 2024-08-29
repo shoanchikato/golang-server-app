@@ -10,7 +10,7 @@ type UserEncryption interface {
 	Add(user *m.User) error
 	AddAll(users *[]*m.User) error
 	Edit(id int, newUser *m.User) error
-	GetAll() (*[]m.User, error)
+	GetAll(lastId, limit int) (*[]m.User, error)
 	GetOne(id int) (*m.User, error)
 	Remove(id int) error
 }
@@ -54,8 +54,8 @@ func (u *userEncryption) Edit(id int, newUser *m.User) error {
 }
 
 // GetAll
-func (u *userEncryption) GetAll() (*[]m.User, error) {
-	return u.repo.GetAll()
+func (u *userEncryption) GetAll(lastId, limit int) (*[]m.User, error) {
+	return u.repo.GetAll(lastId, limit)
 }
 
 // GetOne

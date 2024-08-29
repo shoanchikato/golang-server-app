@@ -14,7 +14,7 @@ type BookRepo interface {
 	Add(book *m.Book) error
 	AddAll(book *[]*m.Book) error
 	Edit(id int, book *m.Book) error
-	GetAll() (*[]m.Book, error)
+	GetAll(lastId, limit int) (*[]m.Book, error)
 	GetOne(id int) (*m.Book, error)
 	Remove(id int) error
 }
@@ -74,14 +74,14 @@ func (p *bookRepo) Edit(id int, book *m.Book) error {
 }
 
 // GetAll
-func (p *bookRepo) GetAll() (*[]m.Book, error) {
+func (p *bookRepo) GetAll(lastId, limit int) (*[]m.Book, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
 	book := m.Book{}
 	books := []m.Book{}
 
-	rows, err := p.db.Query(st.GET_ALL_BOOK_STMT)
+	rows, err := p.db.Query(st.GET_ALL_BOOK_STMT, lastId, limit)
 	if err != nil {
 		return nil, errors.Join(e.ErrBookDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}

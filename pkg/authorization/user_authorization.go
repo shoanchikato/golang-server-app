@@ -13,7 +13,7 @@ type User interface {
 	Add(userId int, user *m.Author) error
 	AddAll(userId int, users *[]*m.Author) error
 	Edit(userId int, id int, newAuthor *m.Author) error
-	GetAll(userId int) (*[]m.Author, error)
+	GetAll(userId, lastId, limit int) (*[]m.Author, error)
 	GetOne(userId int, id int) (*m.Author, error)
 	Remove(userId int, id int) error
 }
@@ -58,13 +58,13 @@ func (u *userAuthorization) Edit(userId int, id int, newAuthor *m.Author) error 
 }
 
 // GetAll
-func (u *userAuthorization) GetAll(userId int) (*[]m.Author, error) {
+func (u *userAuthorization) GetAll(userId, lastId, limit int) (*[]m.Author, error) {
 	err := u.auth.CheckForAuthorization(userId, p.UserGetAll.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetAll, err)
 	}
 
-	return u.validator.GetAll()
+	return u.validator.GetAll(lastId, limit)
 }
 
 // GetOne

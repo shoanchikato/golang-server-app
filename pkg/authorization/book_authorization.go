@@ -13,7 +13,7 @@ type BookAuthorization interface {
 	Add(userId int, book *m.Book) error
 	AddAll(userId int, books *[]*m.Book) error
 	Edit(userId int, id int, newBook *m.Book) error
-	GetAll(userId int) (*[]m.Book, error)
+	GetAll(userId, lastId, limit int) (*[]m.Book, error)
 	GetOne(userId int, id int) (*m.Book, error)
 	Remove(userId int, id int) error
 }
@@ -58,13 +58,13 @@ func (b *bookAuthorization) Edit(userId int, id int, newBook *m.Book) error {
 }
 
 // GetAll
-func (b *bookAuthorization) GetAll(userId int) (*[]m.Book, error) {
+func (b *bookAuthorization) GetAll(userId, lastId, limit int) (*[]m.Book, error) {
 	err := b.auth.CheckForAuthorization(userId, p.BookGetAll.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrBookDomain, e.ErrOnGetAll, err)
 	}
 
-	return b.v.GetAll()
+	return b.v.GetAll(lastId, limit)
 }
 
 // GetOne

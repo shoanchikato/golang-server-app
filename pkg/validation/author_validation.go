@@ -14,7 +14,7 @@ type AuthorValidator interface {
 	Add(author *m.Author) error
 	AddAll(authors *[]*m.Author) error
 	Edit(id int, newAuthor *m.Author) error
-	GetAll() (*[]m.Author, error)
+	GetAll(lastId, limit int) (*[]m.Author, error)
 	GetOne(id int) (*m.Author, error)
 	Remove(id int) error
 }
@@ -85,8 +85,8 @@ func (v *authorValidator) Edit(id int, newAuthor *m.Author) error {
 }
 
 // GetAll
-func (v *authorValidator) GetAll() (*[]m.Author, error) {
-	return v.Repo.GetAll()
+func (v *authorValidator) GetAll(lastId, limit int) (*[]m.Author, error) {
+	return v.Repo.GetAll(lastId, limit)
 }
 
 // GetOne

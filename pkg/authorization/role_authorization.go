@@ -13,7 +13,7 @@ type Role interface {
 	Add(userId int, role *m.Role) error
 	AddAll(userId int, roles *[]*m.Role) error
 	Edit(userId int, id int, newAuthor *m.Role) error
-	GetAll(userId int) (*[]m.Role, error)
+	GetAll(userId, lastId, limit int) (*[]m.Role, error)
 	GetOne(userId int, id int) (*m.Role, error)
 	Remove(userId int, id int) error
 }
@@ -58,13 +58,13 @@ func (r *roleAuthorization) Edit(userId int, id int, newAuthor *m.Role) error {
 }
 
 // GetAll
-func (r *roleAuthorization) GetAll(userId int) (*[]m.Role, error) {
+func (r *roleAuthorization) GetAll(userId, lastId, limit int) (*[]m.Role, error) {
 	err := r.auth.CheckForAuthorization(userId, p.RoleGetAll.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetAll, err)
 	}
 
-	return r.validator.GetAll()
+	return r.validator.GetAll(lastId, limit)
 }
 
 // GetOne

@@ -14,7 +14,7 @@ type UserValidator interface {
 	Add(user *m.User) error
 	AddAll(users *[]*m.User) error
 	Edit(id int, newUser *m.User) error
-	GetAll() (*[]m.User, error)
+	GetAll(lastId, limit int) (*[]m.User, error)
 	GetOne(id int) (*m.User, error)
 	Remove(id int) error
 }
@@ -85,8 +85,8 @@ func (v *userValidator) Edit(id int, newUser *m.User) error {
 }
 
 // GetAll
-func (v *userValidator) GetAll() (*[]m.User, error) {
-	return v.encrypt.GetAll()
+func (v *userValidator) GetAll(lastId, limit int) (*[]m.User, error) {
+	return v.encrypt.GetAll(lastId, limit)
 }
 
 // GetOne

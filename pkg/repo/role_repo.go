@@ -14,7 +14,7 @@ type RoleRepo interface {
 	Add(role *m.Role) error
 	AddAll(roles *[]*m.Role) error
 	Edit(id int, role *m.Role) error
-	GetAll() (*[]m.Role, error)
+	GetAll(lastId, limit int) (*[]m.Role, error)
 	GetOne(id int) (*m.Role, error)
 	Remove(id int) error
 }
@@ -69,14 +69,14 @@ func (p *roleRepo) Edit(id int, role *m.Role) error {
 }
 
 // GetAll
-func (p *roleRepo) GetAll() (*[]m.Role, error) {
+func (p *roleRepo) GetAll(lastId, limit int) (*[]m.Role, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
 	role := m.Role{}
 	roles := []m.Role{}
 
-	rows, err := p.db.Query(st.GET_ALL_ROLE_STMT)
+	rows, err := p.db.Query(st.GET_ALL_ROLE_STMT, lastId, limit)
 	if err != nil {
 		return nil, errors.Join(e.ErrRoleDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}

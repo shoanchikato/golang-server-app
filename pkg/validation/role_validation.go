@@ -14,7 +14,7 @@ type RoleValidator interface {
 	Add(role *m.Role) error
 	AddAll(roles *[]*m.Role) error
 	Edit(id int, newRole *m.Role) error
-	GetAll() (*[]m.Role, error)
+	GetAll(lastId, limit int) (*[]m.Role, error)
 	GetOne(id int) (*m.Role, error)
 	Remove(id int) error
 }
@@ -85,8 +85,8 @@ func (r *roleValidator) Edit(id int, newRole *m.Role) error {
 }
 
 // GetAll
-func (r *roleValidator) GetAll() (*[]m.Role, error) {
-	return r.repo.GetAll()
+func (r *roleValidator) GetAll(lastId, limit int) (*[]m.Role, error) {
+	return r.repo.GetAll(lastId, limit)
 }
 
 // GetOne

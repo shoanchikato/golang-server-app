@@ -13,7 +13,7 @@ type PostAuthorization interface {
 	Add(userId int, post *m.Post) error
 	AddAll(userId int, posts *[]*m.Post) error
 	Edit(userId int, id int, newPost *m.Post) error
-	GetAll(userId int) (*[]m.Post, error)
+	GetAll(userId, lastId, limit int) (*[]m.Post, error)
 	GetOne(userId int, id int) (*m.Post, error)
 	Remove(userId int, id int) error
 }
@@ -58,13 +58,13 @@ func (p *postAuthorization) Edit(userId int, id int, newPost *m.Post) error {
 }
 
 // GetAll
-func (p *postAuthorization) GetAll(userId int) (*[]m.Post, error) {
+func (p *postAuthorization) GetAll(userId, lastId, limit int) (*[]m.Post, error) {
 	err := p.auth.CheckForAuthorization(userId, pe.PostGetAll.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetAll, err)
 	}
 
-	return p.validator.GetAll()
+	return p.validator.GetAll(lastId, limit)
 }
 
 // GetOne

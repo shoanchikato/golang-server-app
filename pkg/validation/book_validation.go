@@ -14,7 +14,7 @@ type BookValidator interface {
 	Add(book *m.Book) error
 	AddAll(books *[]*m.Book) error
 	Edit(id int, newBook *m.Book) error
-	GetAll() (*[]m.Book, error)
+	GetAll(lastId, limit int) (*[]m.Book, error)
 	GetOne(id int) (*m.Book, error)
 	Remove(id int) error
 }
@@ -83,8 +83,8 @@ func (v *bookValidator) Edit(id int, newBook *m.Book) error {
 }
 
 // GetAll
-func (v *bookValidator) GetAll() (*[]m.Book, error) {
-	return v.Repo.GetAll()
+func (v *bookValidator) GetAll(lastId, limit int) (*[]m.Book, error) {
+	return v.Repo.GetAll(lastId, limit)
 }
 
 // GetOne

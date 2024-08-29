@@ -11,6 +11,8 @@ var (
 	ErrOnGetMore = errors.New("get more: ")
 	ErrOnRemove  = errors.New("remove post: ")
 
+	ErrOnGetByEntity = errors.New("get by entity: ")
+
 	ErrOnLogin         = errors.New("login: ")
 	ErrOnResetPassword = errors.New("reset password: ")
 

@@ -14,6 +14,7 @@ type PermissionAuthorization interface {
 	AddAll(userId int, permissions *[]*m.Permission) error
 	Edit(userId int, id int, newPermission *m.Permission) error
 	GetAll(userId, lastId, limit int) (*[]m.Permission, error)
+	GetByEntity(userId int, entity string) (*[]m.Permission, error)
 	GetOne(userId int, id int) (*m.Permission, error)
 	Remove(userId int, id int) error
 }
@@ -68,6 +69,16 @@ func (p *permissionAuthorization) GetAll(userId, lastId, limit int) (*[]m.Permis
 	}
 
 	return p.validator.GetAll(lastId, limit)
+}
+
+// GetByEntity
+func (p *permissionAuthorization) GetByEntity(userId int, entity string) (*[]m.Permission, error) {
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionGetByEntity.Name)
+	if err != nil {
+		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetByEntity, err)
+	}
+
+	return p.validator.GetByEntity(entity)
 }
 
 // GetOne

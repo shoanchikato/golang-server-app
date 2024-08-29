@@ -16,6 +16,7 @@ type PermissionRepo interface {
 	AddAll(permissions *[]*m.Permission) error
 	Edit(id int, permission *m.Permission) error
 	GetAll(lastId, limit int) (*[]m.Permission, error)
+	GetByEntity(entity string) (*[]m.Permission, error)
 	GetOne(id int) (*m.Permission, error)
 	Remove(id int) error
 }
@@ -100,6 +101,36 @@ func (p *permissionRepo) GetAll(lastId, limit int) (*[]m.Permission, error) {
 	err = rows.Err()
 	if err != nil {
 		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
+	}
+
+	return &permissions, nil
+}
+
+// GetAll
+func (p *permissionRepo) GetByEntity(entity string) (*[]m.Permission, error) {
+	p.rw.RLock()
+	defer p.rw.RUnlock()
+
+	rows, err := p.db.Query(st.GET_BY_ENTITY_PERMISSION_STMT, entity)
+	if err != nil {
+		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetByEntity, e.ErrRepoPreparingStmt, err)
+	}
+	defer rows.Close()
+
+	permission := m.Permission{}
+	permissions := []m.Permission{}
+
+	for rows.Next() {
+		err = rows.Scan(&permission.Id, &permission.Name, &permission.Entity, &permission.Operation)
+		if err != nil {
+			return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetByEntity, e.ErrRepoExecutingStmt, err)
+		}
+
+		permissions = append(permissions, permission)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetByEntity, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &permissions, nil

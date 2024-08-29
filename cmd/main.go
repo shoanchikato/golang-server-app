@@ -80,7 +80,7 @@ func main() {
 		pe.UserRemove,
 	}
 
-	pp, err := peVal.GetAll(-110, 25)
+	pp, err := peVal.GetByEntity("permission")
 	if err != nil {
 		fmt.Println(err)
 		return

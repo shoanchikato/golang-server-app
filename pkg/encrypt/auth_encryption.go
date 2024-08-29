@@ -9,7 +9,7 @@ import (
 )
 
 type AuthEncryption interface {
-	Login(credentials m.Credentials) (bool, error)
+	Login(credentials m.Credentials) (userId *int, err error)
 	ResetPassword(credentials m.Credentials, newPassword string) error
 }
 
@@ -23,32 +23,32 @@ func NewAuthEncryption(repo r.AuthRepo, encrypt s.EncryptionService) AuthEncrypt
 }
 
 // Login
-func (a *authEncryption) Login(credentials m.Credentials) (bool, error) {
+func (a *authEncryption) Login(credentials m.Credentials) (userId *int, err error) {
 	authDetails, err := a.repo.GetByUsername(credentials.Username)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
 	isMatch, err := a.encrypt.CheckPassword(&authDetails.Password, &credentials.Password)
 	if err != nil {
-		return false, errors.Join(e.ErrIncorrectCredentials, err)
+		return nil, errors.Join(e.ErrIncorrectCredentials, err)
 	}
 
 	if !isMatch {
-		return false, e.ErrIncorrectCredentials
+		return nil, e.ErrIncorrectCredentials
 	}
 
-	return true, nil
+	return &authDetails.UserId, nil
 }
 
 // ResetPassword
 func (a *authEncryption) ResetPassword(credentials m.Credentials, newPassword string) error {
-	isMatch, err := a.Login(credentials)
+	userId, err := a.Login(credentials)
 	if err != nil {
 		return err
 	}
 
-	if !isMatch {
+	if userId == nil {
 		return e.ErrIncorrectCredentials
 	}
 

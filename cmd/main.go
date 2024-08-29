@@ -71,13 +71,13 @@ func main() {
 
 	_, _, _, _, _ = Data()
 
-	err = rVal.Edit(1, m.NewRole("admin"))
+	userId, err := aVal.Login(m.NewCredentials("jim_doe", "password3"))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(err)
+	fmt.Println(*userId)
 }
 
 func Data() (

@@ -10,7 +10,7 @@ import (
 )
 
 type AuthAuthorization interface {
-	Login(userId int, credentials *m.Credentials) (bool, error)
+	Login(credentials *m.Credentials) (userId *int, err error)
 	ResetPassword(userId int, credentials *m.Credentials, newPassword string) error
 }
 
@@ -27,12 +27,7 @@ func NewAuthAuthorization(
 }
 
 // Login
-func (a authAuthorization) Login(userId int, credentials *m.Credentials) (bool, error) {
-	err := a.auth.CheckForAuthorization(userId, p.AuthLogin.Name)
-	if err != nil {
-		return false, errors.Join(e.ErrAuthDomain, e.ErrOnLogin, err)
-	}
-
+func (a authAuthorization) Login(credentials *m.Credentials) (userId *int, err error) {
 	return a.validator.Login(credentials)
 }
 

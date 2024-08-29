@@ -9,7 +9,7 @@ import (
 )
 
 type AuthValidator interface {
-	Login(credentials *m.Credentials) (bool, error)
+	Login(credentials *m.Credentials) (userId *int, err error)
 	ResetPassword(credentials *m.Credentials, newPassword string) error
 }
 
@@ -22,10 +22,10 @@ func NewAuthValidator(service en.AuthEncryption) AuthValidator {
 }
 
 // Login implements AuthValidator.
-func (a *authValidator) Login(credentials *m.Credentials) (bool, error) {
-	_, err := valid.ValidateStruct(credentials)
+func (a *authValidator) Login(credentials *m.Credentials) (userId *int, err error) {
+	_, err = valid.ValidateStruct(credentials)
 	if err != nil {
-		return false, e.NewValidationError(e.ErrLoginValidation, err.Error())
+		return nil, e.NewValidationError(e.ErrLoginValidation, err.Error())
 	}
 
 	return a.service.Login(*credentials)

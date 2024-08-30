@@ -11,11 +11,11 @@ func main() {
 	app := d.Di()
 	defer app.DB.Close()
 
-	dep := app.Valid.Author
+	dep := app.Valid.User
 
-	// _, _, _, _, _ = Data()
+	_, _, _, pp, _ := Data()
 
-	pp, err := dep.GetAll(0, 0)
+	err := dep.AddAll(&pp)
 	if err != nil {
 		fmt.Println(err)
 		return

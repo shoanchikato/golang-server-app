@@ -99,7 +99,7 @@ func Di() DI {
 	uAuth := a.NewUserAuthorization(auth, uVal)
 
 	return DI{
-		DB: db,
+		DB:    db,
 		Valid: Valid{aVal, auVal, peVal, pmVal, pVal, rVal, rmVal, uVal, bVal},
 		Auth:  Auth{aAuth, auAuth, peAuth, pmAuth, pAuth, rAuth, rmAuth, uAuth, bAuth},
 	}

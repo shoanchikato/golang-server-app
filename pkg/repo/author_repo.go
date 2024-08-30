@@ -114,7 +114,7 @@ func (p *authorRepo) GetOne(id int) (*m.Author, error) {
 	row := p.db.QueryRow(st.GET_ONE_AUTHOR_STMT, id)
 	err := row.Scan(&author.Id, &author.FirstName, &author.LastName)
 	if err == sql.ErrNoRows {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("author id", strconv.Itoa(id)))
 	}
 
 	if err != nil {

@@ -139,7 +139,7 @@ func (p *userRepo) GetOne(id int) (*m.User, error) {
 		&user.Email,
 	)
 	if err == sql.ErrNoRows {
-		return nil, errors.Join(e.ErrUserDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
+		return nil, errors.Join(e.ErrUserDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("user id", strconv.Itoa(id)))
 	}
 
 	if err != nil {

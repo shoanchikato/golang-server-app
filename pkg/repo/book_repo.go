@@ -113,7 +113,7 @@ func (p *bookRepo) GetOne(id int) (*m.Book, error) {
 	row := p.db.QueryRow(st.GET_ONE_BOOK_STMT, id)
 	err := row.Scan(&book.Id, &book.Name, &book.Year)
 	if err == sql.ErrNoRows {
-		return nil, errors.Join(e.ErrBookDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
+		return nil, errors.Join(e.ErrBookDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("book id", strconv.Itoa(id)))
 	}
 
 	if err != nil {

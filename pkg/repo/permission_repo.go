@@ -144,7 +144,7 @@ func (p *permissionRepo) GetOne(id int) (*m.Permission, error) {
 	row := p.db.QueryRow(st.GET_ONE_PERMISSION_STMT, id)
 	err := row.Scan(&permission.Id, &permission.Name, &permission.Entity, &permission.Operation)
 	if err == sql.ErrNoRows {
-		return nil, errors.Join(e.ErrPermissionDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
+		return nil, errors.Join(e.ErrPermissionDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("permission id", strconv.Itoa(id)))
 	}
 
 	if err != nil {

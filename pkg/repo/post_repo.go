@@ -113,7 +113,7 @@ func (p *postRepo) GetOne(id int) (*m.Post, error) {
 	row := p.db.QueryRow(st.GET_ONE_POST_STMT, id)
 	err := row.Scan(&post.Id, &post.Title, &post.Body, &post.UserId)
 	if err == sql.ErrNoRows {
-		return nil, errors.Join(e.ErrPostDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
+		return nil, errors.Join(e.ErrPostDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("post id", strconv.Itoa(id)))
 	}
 
 	if err != nil {

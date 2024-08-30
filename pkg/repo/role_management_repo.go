@@ -74,7 +74,7 @@ func (r *rMRepo) GetRoleByUserId(userId int) (*m.Role, error) {
 		return nil, errors.Join(
 			e.ErrPermissionManagementDomain,
 			e.ErrRepoExecutingStmt,
-			e.NewErrRepoNotFound(strconv.Itoa(userId)),
+			e.NewErrRepoNotFound("user id", strconv.Itoa(userId)),
 		)
 	}
 

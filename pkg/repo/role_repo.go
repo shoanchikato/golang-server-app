@@ -108,7 +108,7 @@ func (p *roleRepo) GetOne(id int) (*m.Role, error) {
 	row := p.db.QueryRow(st.GET_ONE_ROLE_STMT, id)
 	err := row.Scan(&role.Id, &role.Name)
 	if err == sql.ErrNoRows {
-		return nil, errors.Join(e.ErrRoleDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound(strconv.Itoa(id)))
+		return nil, errors.Join(e.ErrRoleDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("role id", strconv.Itoa(id)))
 	}
 
 	if err != nil {

@@ -17,15 +17,18 @@ var (
 )
 
 // RepoNotFoundError
-type RepoNotFoundError string
+type RepoNotFoundError struct {
+	Entity string
+	Id    string
+}
 
-func NewErrRepoNotFound(id string) error {
-	err := RepoNotFoundError(id)
+func NewErrRepoNotFound(entity, id string) error {
+	err := RepoNotFoundError{entity, id}
 	return &err
 }
 
 func (e *RepoNotFoundError) Error() string {
-	return fmt.Sprintf("%v not found", *e)
+	return fmt.Sprintf("%s %s not found", e.Entity, e.Id)
 }
 
 func (e *RepoNotFoundError) Is(target error) bool {

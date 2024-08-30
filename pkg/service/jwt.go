@@ -2,6 +2,7 @@ package service
 
 import (
 	e "app/pkg/errors"
+	m "app/pkg/model"
 	"errors"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 )
 
 type JWTService interface {
-	ParseToken(*string) (*Token, error)
+	ParseToken(*string) (*m.Token, error)
 	GetAccessToken(userId int) (string, error)
 	GetRefreshToken(userId int) (string, error)
 }
@@ -18,21 +19,6 @@ type jwtService struct {
 	secret               *string
 	accessTokenDuration  time.Duration
 	refreshTokenDuration time.Duration
-}
-
-type Token struct {
-	UserId  int    `json:"user_id"`
-	Expires string `json:"expires"`
-	Issued  string `json:"issued"`
-	jwt.RegisteredClaims
-}
-
-func (t *Token) GetExpires() (time.Time, error ){
-	return time.Parse(time.RFC3339, t.Expires)
-}
-
-func (t *Token) GetIssued() (time.Time, error ){
-	return time.Parse(time.RFC3339, t.Issued)
 }
 
 func NewJWTService(
@@ -44,11 +30,11 @@ func NewJWTService(
 }
 
 func (j *jwtService) newToken(userId int, duration time.Duration) (string, error) {
-	claims := Token{
-		userId,
-		time.Now().Add(duration).Format(time.RFC3339),
-		time.Now().Format(time.RFC3339),
-		jwt.RegisteredClaims{},
+	claims := m.Token{
+		UserId: userId,
+		Expires: time.Now().Add(duration).Format(time.RFC3339),
+		Issued: time.Now().Format(time.RFC3339),
+		RegisteredClaims: jwt.RegisteredClaims{},
 	}
 
 	unsignedToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -79,16 +65,16 @@ func (j *jwtService) GetRefreshToken(userId int) (string, error) {
 	return token, nil
 }
 
-func (j *jwtService) ParseToken(tokenString *string) (*Token, error) {
+func (j *jwtService) ParseToken(tokenString *string) (*m.Token, error) {
 	op := func(token *jwt.Token) (interface{}, error) {
 		return []byte(*j.secret), nil
 	}
 
-	token, err := jwt.ParseWithClaims(*tokenString, &Token{}, op)
+	token, err := jwt.ParseWithClaims(*tokenString, &m.Token{}, op)
 
 	switch {
 	case token.Valid:
-		claims, ok := token.Claims.(*Token)
+		claims, ok := token.Claims.(*m.Token)
 		if !ok {
 			return nil, errors.Join(e.ErrParseToken, err)
 		}

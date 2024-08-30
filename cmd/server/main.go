@@ -4,6 +4,7 @@ import (
 	d "app/pkg/di"
 	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -17,23 +18,32 @@ func main() {
 
 	// _, _, _, pp, _ := Data()
 
-	token, err := dep.GetRefreshToken(2342)
+	tokenStr, err := dep.GetAccessToken(2342)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	details, err := dep.ParseToken(&token)
+	newToken := ""
+	if len(os.Args) < 2 {
+		newToken = tokenStr
+	} else {
+		newToken = os.Args[1]
+	}
+
+	token, err := dep.ParseToken(&newToken)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	s := strings.Builder{}
-	json.NewEncoder(&s).Encode(details)
+	json.NewEncoder(&s).Encode(token)
 
-	expires, _ := details.GetExpires()
-	issued, _ := details.GetIssued()
+	expires, _ := token.GetExpires()
+	issued, _ := token.GetIssued()
 
-	fmt.Println(s.String(), token, expires, issued)
+	hasExpired, _ := token.HasExpired()
+
+	fmt.Println(s.String(), tokenStr, expires, issued, hasExpired)
 }

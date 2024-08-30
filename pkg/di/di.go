@@ -53,8 +53,8 @@ func Di() DI {
 	signingSecret := "my secret"
 	jwt := s.NewJWTService(
 		&signingSecret,
-		time.Duration(10*time.Second),
-		time.Duration(10*time.Minute),
+		time.Duration(20*time.Second),
+		time.Duration(1*time.Minute),
 	)
 
 	rw := &sync.RWMutex{}

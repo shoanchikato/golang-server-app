@@ -9,7 +9,7 @@ import (
 	"errors"
 )
 
-type Role interface {
+type RoleAuthorization interface {
 	Add(userId int, role *m.Role) error
 	AddAll(userId int, roles *[]*m.Role) error
 	Edit(userId int, id int, newAuthor *m.Role) error
@@ -23,7 +23,7 @@ type roleAuthorization struct {
 	validator v.RoleValidator
 }
 
-func NewRoleAuthorization(auth s.AuthorizationService, validator v.RoleValidator) Role {
+func NewRoleAuthorization(auth s.AuthorizationService, validator v.RoleValidator) RoleAuthorization {
 	return &roleAuthorization{auth, validator}
 }
 

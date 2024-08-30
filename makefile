@@ -2,7 +2,7 @@ run-r: build
 	./app
 
 run:
-	go run cmd/main.go
+	go run cmd/server/*.go
 
 get:
 	go get ./...
@@ -14,7 +14,7 @@ lint:
 	go vet --race ./...
 
 build:
-	go build -o app cmd/main.go
+	go build -o app cmd/server/*.go
 
 release:
-	go build -o app -ldflags "-s -w" cmd/main.go
+	go build -o app -ldflags "-s -w" cmd/server/*.go

@@ -9,26 +9,26 @@ import (
 	"errors"
 )
 
-type User interface {
-	Add(userId int, user *m.Author) error
-	AddAll(userId int, users *[]*m.Author) error
-	Edit(userId int, id int, newAuthor *m.Author) error
-	GetAll(userId, lastId, limit int) (*[]m.Author, error)
-	GetOne(userId int, id int) (*m.Author, error)
+type UserAuthorization interface {
+	Add(userId int, user *m.User) error
+	AddAll(userId int, users *[]*m.User) error
+	Edit(userId int, id int, newAuthor *m.User) error
+	GetAll(userId, lastId, limit int) (*[]m.User, error)
+	GetOne(userId int, id int) (*m.User, error)
 	Remove(userId int, id int) error
 }
 
 type userAuthorization struct {
 	auth      s.AuthorizationService
-	validator v.AuthorValidator
+	validator v.UserValidator
 }
 
-func NewUser(auth s.AuthorizationService, validator v.AuthorValidator) User {
+func NewUserAuthorization(auth s.AuthorizationService, validator v.UserValidator) UserAuthorization {
 	return &userAuthorization{auth, validator}
 }
 
 // Add
-func (u *userAuthorization) Add(userId int, user *m.Author) error {
+func (u *userAuthorization) Add(userId int, user *m.User) error {
 	err := u.auth.CheckForAuthorization(userId, p.UserAdd.Name)
 	if err != nil {
 		return errors.Join(e.ErrAuthorDomain, e.ErrOnAdd, err)
@@ -38,7 +38,7 @@ func (u *userAuthorization) Add(userId int, user *m.Author) error {
 }
 
 // AddAll
-func (u *userAuthorization) AddAll(userId int, users *[]*m.Author) error {
+func (u *userAuthorization) AddAll(userId int, users *[]*m.User) error {
 	err := u.auth.CheckForAuthorization(userId, p.UserAddAll.Name)
 	if err != nil {
 		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddAll, err)
@@ -48,7 +48,7 @@ func (u *userAuthorization) AddAll(userId int, users *[]*m.Author) error {
 }
 
 // Edit
-func (u *userAuthorization) Edit(userId int, id int, newAuthor *m.Author) error {
+func (u *userAuthorization) Edit(userId int, id int, newAuthor *m.User) error {
 	err := u.auth.CheckForAuthorization(userId, p.UserEdit.Name)
 	if err != nil {
 		return errors.Join(e.ErrAuthorDomain, e.ErrOnEdit, err)
@@ -58,7 +58,7 @@ func (u *userAuthorization) Edit(userId int, id int, newAuthor *m.Author) error 
 }
 
 // GetAll
-func (u *userAuthorization) GetAll(userId, lastId, limit int) (*[]m.Author, error) {
+func (u *userAuthorization) GetAll(userId, lastId, limit int) (*[]m.User, error) {
 	err := u.auth.CheckForAuthorization(userId, p.UserGetAll.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetAll, err)
@@ -68,7 +68,7 @@ func (u *userAuthorization) GetAll(userId, lastId, limit int) (*[]m.Author, erro
 }
 
 // GetOne
-func (u *userAuthorization) GetOne(userId int, id int) (*m.Author, error) {
+func (u *userAuthorization) GetOne(userId int, id int) (*m.User, error) {
 	err := u.auth.CheckForAuthorization(userId, p.UserGetOne.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetOne, err)

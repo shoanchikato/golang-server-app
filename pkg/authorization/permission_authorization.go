@@ -45,7 +45,7 @@ func (p *permissionAuthorization) Add(userId int, permission *m.Permission) erro
 func (p *permissionAuthorization) AddAll(userId int, permissions *[]*m.Permission) error {
 	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
-		return errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
+		return errors.Join(e.ErrPermissionDomain, e.ErrOnAddAll, err)
 	}
 
 	return p.validator.AddAll(permissions)
@@ -55,7 +55,7 @@ func (p *permissionAuthorization) AddAll(userId int, permissions *[]*m.Permissio
 func (p *permissionAuthorization) Edit(userId int, id int, newPermission *m.Permission) error {
 	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
-		return errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
+		return errors.Join(e.ErrPermissionDomain, e.ErrOnEdit, err)
 	}
 
 	return p.validator.Edit(id, newPermission)
@@ -65,7 +65,7 @@ func (p *permissionAuthorization) Edit(userId int, id int, newPermission *m.Perm
 func (p *permissionAuthorization) GetAll(userId, lastId, limit int) (*[]m.Permission, error) {
 	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
+		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetAll, err)
 	}
 
 	return p.validator.GetAll(lastId, limit)
@@ -85,7 +85,7 @@ func (p *permissionAuthorization) GetByEntity(userId int, entity string) (*[]m.P
 func (p *permissionAuthorization) GetOne(userId int, id int) (*m.Permission, error) {
 	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
+		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetOne, err)
 	}
 
 	return p.validator.GetOne(id)
@@ -95,7 +95,7 @@ func (p *permissionAuthorization) GetOne(userId int, id int) (*m.Permission, err
 func (p *permissionAuthorization) Remove(userId int, id int) error {
 	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
-		return errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
+		return errors.Join(e.ErrPermissionDomain, e.ErrOnRemove, err)
 	}
 
 	return p.validator.Remove(id)

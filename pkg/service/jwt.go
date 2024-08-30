@@ -27,6 +27,14 @@ type Token struct {
 	jwt.RegisteredClaims
 }
 
+func (t *Token) GetExpires() (time.Time, error ){
+	return time.Parse(time.RFC3339, t.Expires)
+}
+
+func (t *Token) GetIssued() (time.Time, error ){
+	return time.Parse(time.RFC3339, t.Issued)
+}
+
 func NewJWTService(
 	secret *string,
 	accessTokenDuration time.Duration,

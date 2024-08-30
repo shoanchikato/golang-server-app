@@ -32,5 +32,8 @@ func main() {
 	s := strings.Builder{}
 	json.NewEncoder(&s).Encode(details)
 
-	fmt.Println(s.String(), token)
+	expires, _ := details.GetExpires()
+	issued, _ := details.GetIssued()
+
+	fmt.Println(s.String(), token, expires, issued)
 }

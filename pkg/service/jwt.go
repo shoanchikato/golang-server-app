@@ -9,15 +9,22 @@ import (
 )
 
 type JWTService interface {
-	ParseToken(*string) (*jwt.RegisteredClaims, error)
-	GetAccessToken() (string, error)
-	GetRefreshToken() (string, error)
+	ParseToken(*string) (*Token, error)
+	GetAccessToken(userId int) (string, error)
+	GetRefreshToken(userId int) (string, error)
 }
 
 type jwtService struct {
 	secret               *string
 	accessTokenDuration  time.Duration
 	refreshTokenDuration time.Duration
+}
+
+type Token struct {
+	UserId  int    `json:"user_id"`
+	Expires string `json:"expires"`
+	Issued  string `json:"issued"`
+	jwt.RegisteredClaims
 }
 
 func NewJWTService(
@@ -28,11 +35,12 @@ func NewJWTService(
 	return &jwtService{secret, accessTokenDuration, refreshTokenDuration}
 }
 
-func (j *jwtService) newToken(duration time.Duration) (string, error) {
-	claims := &jwt.RegisteredClaims{
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
-		IssuedAt:  jwt.NewNumericDate(time.Now()),
-		Issuer:    "app",
+func (j *jwtService) newToken(userId int, duration time.Duration) (string, error) {
+	claims := Token{
+		userId,
+		time.Now().Add(duration).Format(time.RFC3339),
+		time.Now().Format(time.RFC3339),
+		jwt.RegisteredClaims{},
 	}
 
 	unsignedToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -45,8 +53,8 @@ func (j *jwtService) newToken(duration time.Duration) (string, error) {
 	return token, nil
 }
 
-func (j *jwtService) GetAccessToken() (string, error) {
-	token, err := j.newToken(j.accessTokenDuration)
+func (j *jwtService) GetAccessToken(userId int) (string, error) {
+	token, err := j.newToken(userId, j.accessTokenDuration)
 	if err != nil {
 		return "", errors.Join(e.ErrGetAccessToken, err)
 	}
@@ -54,8 +62,8 @@ func (j *jwtService) GetAccessToken() (string, error) {
 	return token, nil
 }
 
-func (j *jwtService) GetRefreshToken() (string, error) {
-	token, err := j.newToken(j.refreshTokenDuration)
+func (j *jwtService) GetRefreshToken(userId int) (string, error) {
+	token, err := j.newToken(userId, j.refreshTokenDuration)
 	if err != nil {
 		return "", errors.Join(e.ErrGetRefreshToken, err)
 	}
@@ -63,16 +71,16 @@ func (j *jwtService) GetRefreshToken() (string, error) {
 	return token, nil
 }
 
-func (j *jwtService) ParseToken(tokenString *string) (*jwt.RegisteredClaims, error) {
+func (j *jwtService) ParseToken(tokenString *string) (*Token, error) {
 	op := func(token *jwt.Token) (interface{}, error) {
 		return []byte(*j.secret), nil
 	}
 
-	token, err := jwt.ParseWithClaims(*tokenString, &jwt.RegisteredClaims{}, op)
+	token, err := jwt.ParseWithClaims(*tokenString, &Token{}, op)
 
 	switch {
 	case token.Valid:
-		claims, ok := token.Claims.(*jwt.RegisteredClaims)
+		claims, ok := token.Claims.(*Token)
 		if !ok {
 			return nil, errors.Join(e.ErrParseToken, err)
 		}

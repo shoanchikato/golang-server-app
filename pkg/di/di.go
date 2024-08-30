@@ -39,6 +39,7 @@ type Auth struct {
 
 type DI struct {
 	DB    *sql.DB
+	Jwt   s.JWTService
 	Valid Valid
 	Auth  Auth
 }
@@ -50,10 +51,10 @@ func Di() DI {
 	}
 
 	signingSecret := "my secret"
-	_ = s.NewJWTService(
+	jwt := s.NewJWTService(
 		&signingSecret,
 		time.Duration(10*time.Second),
-		time.Duration(1*time.Minute),
+		time.Duration(10*time.Minute),
 	)
 
 	rw := &sync.RWMutex{}
@@ -100,6 +101,7 @@ func Di() DI {
 
 	return DI{
 		DB:    db,
+		Jwt:   jwt,
 		Valid: Valid{aVal, auVal, peVal, pmVal, pVal, rVal, rmVal, uVal, bVal},
 		Auth:  Auth{aAuth, auAuth, peAuth, pmAuth, pAuth, rAuth, rmAuth, uAuth, bAuth},
 	}

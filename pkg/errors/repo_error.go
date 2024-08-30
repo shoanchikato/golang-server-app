@@ -19,7 +19,7 @@ var (
 // RepoNotFoundError
 type RepoNotFoundError struct {
 	Entity string
-	Id    string
+	Id     string
 }
 
 func NewErrRepoNotFound(entity, id string) error {

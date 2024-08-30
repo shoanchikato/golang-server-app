@@ -76,6 +76,8 @@ func (p *bookRepo) GetAll(lastId, limit int) (*[]m.Book, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
+	p.dbU.CheckLimit(&limit)
+
 	book := m.Book{}
 	books := []m.Book{}
 

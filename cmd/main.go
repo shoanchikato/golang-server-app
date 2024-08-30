@@ -71,7 +71,7 @@ func main() {
 
 	_, _, _, _, _ = Data()
 
-	pp, err := auVal.GetOne(1)
+	pp, err := auVal.GetAll(0, 0)
 	if err != nil {
 		fmt.Println(err)
 		return

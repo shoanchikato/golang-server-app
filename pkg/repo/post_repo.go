@@ -76,6 +76,8 @@ func (p *postRepo) GetAll(lastId, limit int) (*[]m.Post, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
+	p.dbU.CheckLimit(&limit)
+
 	post := m.Post{}
 	posts := []m.Post{}
 

@@ -90,6 +90,8 @@ func (p *userRepo) GetAll(lastId, limit int) (*[]m.User, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
+	p.dbU.CheckLimit(&limit)
+
 	user := m.User{}
 	users := []m.User{}
 

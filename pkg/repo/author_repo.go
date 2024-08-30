@@ -77,6 +77,8 @@ func (p *authorRepo) GetAll(lastId, limit int) (*[]m.Author, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
+	p.dbU.CheckLimit(&limit)
+
 	author := m.Author{}
 	authors := []m.Author{}
 

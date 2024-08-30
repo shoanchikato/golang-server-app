@@ -71,6 +71,8 @@ func (p *roleRepo) GetAll(lastId, limit int) (*[]m.Role, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()
 
+	p.dbU.CheckLimit(&limit)
+
 	role := m.Role{}
 	roles := []m.Role{}
 

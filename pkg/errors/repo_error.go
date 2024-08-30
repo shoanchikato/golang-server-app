@@ -12,9 +12,11 @@ var (
 	ErrRepoCommitTx       = errors.New("repo: error committing transaction")
 	ErrRepoLastInsertedId = errors.New("repo: error getting last inserted id")
 
-	ErrRepoNotFound = errors.New("repo: not found")
+	ErrRepoNotFound  = errors.New("repo: not found")
+	ErrRepoDuplicate = errors.New("repo: duplicate entry")
 )
 
+// RepoNotFoundError
 type RepoNotFoundError string
 
 func NewErrRepoNotFound(id string) error {
@@ -28,4 +30,24 @@ func (e *RepoNotFoundError) Error() string {
 
 func (e *RepoNotFoundError) Is(target error) bool {
 	return ErrRepoNotFound == target
+}
+
+// RepoDuplicateError
+type RepoDuplicateError struct {
+	Field  string
+	ErrStr string
+}
+
+func NewErrRepoDuplicate(field string) error {
+	errStr := fmt.Sprintf("%s already exists", field)
+	err := RepoDuplicateError{field, errStr}
+	return &err
+}
+
+func (e *RepoDuplicateError) Error() string {
+	return fmt.Sprintf("repo: duplicate entry: %s", e.ErrStr)
+}
+
+func (e *RepoDuplicateError) Is(target error) bool {
+	return ErrRepoDuplicate == target
 }

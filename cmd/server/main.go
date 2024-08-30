@@ -13,9 +13,9 @@ func main() {
 
 	dep := app.Valid.User
 
-	_, _, _, pp, _ := Data()
+	// _, _, _, pp, _ := Data()
 
-	err := dep.AddAll(&pp)
+	pp, err := dep.GetAll(0, 0)
 	if err != nil {
 		fmt.Println(err)
 		return

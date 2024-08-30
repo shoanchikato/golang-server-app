@@ -20,7 +20,7 @@ func NewAuthorizationService(repo r.PermissionManagementRepo) AuthorizationServi
 }
 
 func (a *authorizationService) hasPermission(permissionName string, permissions *[]m.Permission) bool {
-	for _, permission := range (*permissions) {
+	for _, permission := range *permissions {
 		if permissionName == permission.Name {
 			return true
 		}

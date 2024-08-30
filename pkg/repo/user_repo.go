@@ -56,7 +56,7 @@ func (p *userRepo) Add(user *m.User) error {
 
 // AddAll
 func (p *userRepo) AddAll(users *[]*m.User) error {
-	for _, user := range (*users) {
+	for _, user := range *users {
 		err := p.Add(user)
 		if err != nil {
 			return err

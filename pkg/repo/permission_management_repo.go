@@ -42,7 +42,7 @@ func NewPermissionManagementRepo(
 func (p *pMRepo) AddPermissionToRole(permissionId, roleId int) error {
 	permissions, _ := p.GetPermissionsByRoleId(roleId)
 	if permissions != nil {
-		for _, permission := range (*permissions) {
+		for _, permission := range *permissions {
 			if permissionId == permission.Id {
 				return nil
 			}

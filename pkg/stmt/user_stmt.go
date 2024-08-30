@@ -9,10 +9,10 @@ const (
 		);
 		CREATE TABLE IF NOT EXISTS auth (
 			id INTEGER PRIMARY KEY,
-			username TEXT,
-			email TEXT,
+			username TEXT UNIQUE,
+			email TEXT UNIQUE,
 			password TEXT,
-			user_id TEXT
+			user_id TEXT UNIQUE
 		);
 		CREATE TABLE IF NOT EXISTS users_auth (
 			user_id INT,

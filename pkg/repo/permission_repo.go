@@ -50,7 +50,7 @@ func (p *permissionRepo) Add(permission *m.Permission) error {
 
 // AddAll
 func (p *permissionRepo) AddAll(permissions *[]*m.Permission) error {
-	for _, permission := range (*permissions) {
+	for _, permission := range *permissions {
 		err := p.Add(permission)
 		if err != nil {
 			return err

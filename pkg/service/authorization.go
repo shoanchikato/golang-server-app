@@ -19,10 +19,9 @@ func NewAuthorizationService(repo r.PermissionManagementRepo) AuthorizationServi
 	return &authorizationService{repo}
 }
 
-func (a *authorizationService) hasPermission(permission string, permissions *[]m.Permission) bool {
-	pp := *permissions
-	for i := 0; i < len(pp); i++ {
-		if string(permission) == pp[i].Name {
+func (a *authorizationService) hasPermission(permissionName string, permissions *[]m.Permission) bool {
+	for _, permission := range (*permissions) {
+		if permissionName == permission.Name {
 			return true
 		}
 	}

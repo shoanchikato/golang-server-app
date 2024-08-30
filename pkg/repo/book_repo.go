@@ -49,9 +49,7 @@ func (p *bookRepo) Add(book *m.Book) error {
 
 // AddAll
 func (p *bookRepo) AddAll(books *[]*m.Book) error {
-	newBooks := *books
-	for i := 0; i < len(newBooks); i++ {
-		book := newBooks[i]
+	for _, book := range (*books) {
 		err := p.Add(book)
 		if err != nil {
 			return err

@@ -42,9 +42,8 @@ func NewPermissionManagementRepo(
 func (p *pMRepo) AddPermissionToRole(permissionId, roleId int) error {
 	permissions, _ := p.GetPermissionsByRoleId(roleId)
 	if permissions != nil {
-		pp := *permissions
-		for i := 0; i < len(pp); i++ {
-			if permissionId == pp[i].Id {
+		for _, permission := range (*permissions) {
+			if permissionId == permission.Id {
 				return nil
 			}
 		}
@@ -70,8 +69,7 @@ func (p *pMRepo) AddPermissionToRole(permissionId, roleId int) error {
 
 // AddPermissionsToRole
 func (p *pMRepo) AddPermissionsToRole(permissionIds []int, roleId int) error {
-	for i := 0; i < len(permissionIds); i++ {
-		permissionId := permissionIds[i]
+	for _, permissionId := range permissionIds {
 		err := p.AddPermissionToRole(permissionId, roleId)
 		if err != nil {
 			return err
@@ -177,9 +175,8 @@ func (p *pMRepo) RemovePermissionFromRole(roleId int, permissionId int) error {
 }
 
 // RemovePermissionsFromRole
-func (p *pMRepo) RemovePermissionsFromRole(roleId int, permissions []int) error {
-	for i := 0; i < len(permissions); i++ {
-		permissionId := permissions[i]
+func (p *pMRepo) RemovePermissionsFromRole(roleId int, permissionIds []int) error {
+	for _, permissionId := range permissionIds {
 		err := p.RemovePermissionFromRole(roleId, permissionId)
 		if err != nil {
 			return err

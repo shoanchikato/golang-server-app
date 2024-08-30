@@ -37,7 +37,7 @@ func (u *userEncryption) Add(user *m.User) error {
 // AddAll
 func (u *userEncryption) AddAll(users *[]*m.User) error {
 	newUsers := *users
-	for i := 0; i < len(newUsers); i++ {
+	for i := range newUsers {
 		user := newUsers[i]
 		err := u.encrypt.HashPassword(&user.Password)
 		if err != nil {

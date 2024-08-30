@@ -50,9 +50,7 @@ func (p *authorRepo) Add(author *m.Author) error {
 
 // AddAll
 func (p *authorRepo) AddAll(authors *[]*m.Author) error {
-	newAuthors := *authors
-	for i := 0; i < len(newAuthors); i++ {
-		author := newAuthors[i]
+	for _, author := range (*authors) {
 		err := p.Add(author)
 		if err != nil {
 			return err

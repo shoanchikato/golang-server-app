@@ -46,7 +46,7 @@ func (v *authorValidator) Add(author *m.Author) error {
 func (v *authorValidator) AddAll(authors *[]*m.Author) error {
 	newAuthors := *authors
 	errs := make([]string, len(newAuthors))
-	for i := 0; i < len(newAuthors); i++ {
+	for i := range newAuthors {
 		_, err := valid.ValidateStruct(newAuthors[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
@@ -54,7 +54,7 @@ func (v *authorValidator) AddAll(authors *[]*m.Author) error {
 		}
 	}
 
-	for i := len(newAuthors); i > 0; i-- {
+	for i := len(newAuthors) - 1; i > 0; i-- {
 		if errs[i] != "" {
 			newErrors := strings.Join(errs, "")
 			return e.NewValidationError(e.ErrAddAllValidation, newErrors)

@@ -49,9 +49,7 @@ func (p *postRepo) Add(post *m.Post) error {
 
 // AddAll
 func (p *postRepo) AddAll(posts *[]*m.Post) error {
-	newPosts := *posts
-	for i := 0; i < len(newPosts); i++ {
-		post := newPosts[i]
+	for _, post := range (*posts) {
 		err := p.Add(post)
 		if err != nil {
 			return err

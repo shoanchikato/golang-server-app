@@ -46,7 +46,7 @@ func (v *postValidator) Add(post *m.Post) error {
 func (v *postValidator) AddAll(posts *[]*m.Post) error {
 	newPosts := *posts
 	errs := make([]string, len(newPosts))
-	for i := 0; i < len(newPosts); i++ {
+	for i := range newPosts {
 		_, err := valid.ValidateStruct(newPosts[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())

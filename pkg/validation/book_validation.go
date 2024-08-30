@@ -46,7 +46,7 @@ func (v *bookValidator) Add(book *m.Book) error {
 func (v *bookValidator) AddAll(books *[]*m.Book) error {
 	newBooks := *books
 	errs := make([]string, len(newBooks))
-	for i := 0; i < len(newBooks); i++ {
+	for i := range newBooks {
 		_, err := valid.ValidateStruct(newBooks[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())

@@ -46,7 +46,7 @@ func (v *userValidator) Add(user *m.User) error {
 func (v *userValidator) AddAll(users *[]*m.User) error {
 	newUsers := *users
 	errs := make([]string, len(newUsers))
-	for i := 0; i < len(newUsers); i++ {
+	for i := range newUsers {
 		_, err := valid.ValidateStruct(newUsers[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())

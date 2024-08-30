@@ -44,9 +44,7 @@ func (p *roleRepo) Add(role *m.Role) error {
 
 // AddAll
 func (p *roleRepo) AddAll(roles *[]*m.Role) error {
-	newRoles := *roles
-	for i := 0; i < len(newRoles); i++ {
-		role := newRoles[i]
+	for _, role := range (*roles) {
 		err := p.Add(role)
 		if err != nil {
 			return err

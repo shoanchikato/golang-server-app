@@ -68,7 +68,7 @@ func (r *rMRepo) GetRoleByUserId(userId int) (*m.Role, error) {
 
 	role := m.Role{}
 
-	row := r.db.QueryRow(st.GET_ROLE_BY_USER_Id_STMT, userId)
+	row := r.db.QueryRow(st.GET_ROLE_BY_USER_ID_STMT, userId)
 	err := row.Scan(&role.Id, &role.Name)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(

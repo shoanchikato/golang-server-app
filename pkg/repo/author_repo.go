@@ -136,7 +136,7 @@ func (p *authorRepo) GetMore(id int) (*m.Author, error) {
 	book := m.Book{}
 	books := []m.Book{}
 
-	rows, err := p.db.Query(st.GET_BOOKS_BY_AUTHOR_Id_STMT, id)
+	rows, err := p.db.Query(st.GET_BOOKS_BY_AUTHOR_ID_STMT, id)
 	if err != nil {
 		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, e.ErrRepoPreparingStmt, err)
 	}

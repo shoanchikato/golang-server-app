@@ -1,7 +1,7 @@
 package stmt
 
 const (
-	GET_PERMISSIONS_BY_ROLE_Id_STMT = `
+	GET_PERMISSIONS_BY_ROLE_ID_STMT = `
 		SELECT 
 			p.id,
 			p.name

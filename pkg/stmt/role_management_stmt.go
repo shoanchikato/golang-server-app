@@ -1,7 +1,7 @@
 package stmt
 
 const (
-	GET_ROLE_BY_USER_Id_STMT = `
+	GET_ROLE_BY_USER_ID_STMT = `
 		SELECT 
 			r.id,
 			r.name

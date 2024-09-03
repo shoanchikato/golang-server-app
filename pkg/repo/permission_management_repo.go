@@ -92,7 +92,7 @@ func (p *pMRepo) GetPermissionsByRoleId(roleId int) (*[]m.Permission, error) {
 	permission := m.Permission{}
 	permissions := []m.Permission{}
 
-	rows, err := p.db.Query(st.GET_PERMISSIONS_BY_ROLE_Id_STMT, roleId)
+	rows, err := p.db.Query(st.GET_PERMISSIONS_BY_ROLE_ID_STMT, roleId)
 	if err != nil {
 		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}

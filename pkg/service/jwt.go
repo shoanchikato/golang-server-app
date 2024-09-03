@@ -31,9 +31,9 @@ func NewJWTService(
 
 func (j *jwtService) newToken(userId int, duration time.Duration) (string, error) {
 	claims := m.Token{
-		UserId: userId,
-		Expires: time.Now().Add(duration).Format(time.RFC3339),
-		Issued: time.Now().Format(time.RFC3339),
+		UserId:           userId,
+		Expires:          time.Now().Add(duration).Format(time.RFC3339),
+		Issued:           time.Now().Format(time.RFC3339),
 		RegisteredClaims: jwt.RegisteredClaims{},
 	}
 
@@ -77,6 +77,15 @@ func (j *jwtService) ParseToken(tokenString *string) (*m.Token, error) {
 		claims, ok := token.Claims.(*m.Token)
 		if !ok {
 			return nil, errors.Join(e.ErrParseToken, err)
+		}
+
+		hasExpired, err := claims.HasExpired()
+		if err != nil {
+			return nil, err
+		}
+
+		if hasExpired {
+			return nil, errors.Join(e.ErrTokenExpired)
 		}
 
 		return claims, nil

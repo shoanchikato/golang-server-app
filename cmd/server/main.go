@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -37,13 +37,12 @@ func main() {
 		return
 	}
 
-	s := strings.Builder{}
-	json.NewEncoder(&s).Encode(token)
+	json.NewEncoder(os.Stdout).Encode(token)
 
 	expires, _ := token.GetExpires()
 	issued, _ := token.GetIssued()
 
 	hasExpired, _ := token.HasExpired()
 
-	fmt.Println(s.String(), tokenStr, expires, issued, hasExpired)
+	fmt.Println(tokenStr, time.Now().After(expires), issued, hasExpired)
 }

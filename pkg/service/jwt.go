@@ -13,6 +13,7 @@ type JWTService interface {
 	ParseToken(*string) (*m.Token, error)
 	GetAccessToken(userId int) (string, error)
 	GetRefreshToken(userId int) (string, error)
+	GetTokens(userId int) (*m.Tokens, error)
 }
 
 type jwtService struct {
@@ -63,6 +64,20 @@ func (j *jwtService) GetRefreshToken(userId int) (string, error) {
 	}
 
 	return token, nil
+}
+
+func (j *jwtService) GetTokens(userId int) (*m.Tokens, error) {
+	accessToken, err := j.GetAccessToken(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	refreshToken, err := j.GetRefreshToken(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return m.NewTokens(accessToken, refreshToken), nil
 }
 
 func (j *jwtService) ParseToken(tokenString *string) (*m.Token, error) {

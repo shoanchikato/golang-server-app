@@ -29,3 +29,12 @@ func (t *Token) HasExpired() (bool, error) {
 
 	return exp.Before(time.Now()), nil
 }
+
+type Tokens struct {
+	Access  string `json:"access_token"`
+	Refresh string `json:"refresh_token"`
+}
+
+func NewTokens(access, refresh string) *Tokens {
+	return &Tokens{access, refresh}
+}

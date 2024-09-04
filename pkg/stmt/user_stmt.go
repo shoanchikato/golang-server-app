@@ -33,9 +33,9 @@ const (
 		INSERT INTO users_auth (user_id, auth_id) VALUES (LAST_INSERT_ROWId(), (SELECT LAST_INSERT_ROWId() FROM auth));
 	`
 	EDIT_USER_STMT = `
-		UPDATE users SET first_name = $1 last_name = $2 WHERE id = $5;
+		UPDATE users SET first_name = $1, last_name = $2 WHERE id = $3;
 
-		UPDATE auth SET username = $3 email = $4 WHERE user_id = $5;
+		UPDATE auth SET username = $4, email = $5 WHERE user_id = $6;
 	`
 	GET_ALL_USER_STMT = `
 		SELECT 

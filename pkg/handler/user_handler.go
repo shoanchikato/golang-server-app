@@ -25,7 +25,7 @@ func NewUserHandler(auth aa.UserAuthorization) UserHandler {
 	return &userHandler{auth}
 }
 
-// Add implements UserHandler.
+// Add
 func (u *userHandler) Add(c *fiber.Ctx) error {
 	user := m.User{}
 
@@ -47,7 +47,7 @@ func (u *userHandler) Add(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(user)
 }
 
-// AddAll implements UserHandler.
+// AddAll
 func (u *userHandler) AddAll(c *fiber.Ctx) error {
 	users := []m.User{}
 
@@ -74,7 +74,7 @@ func (u *userHandler) AddAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(newUsers)
 }
 
-// Edit implements UserHandler.
+// Edit
 func (u *userHandler) Edit(c *fiber.Ctx) error {
 	user := m.User{}
 
@@ -101,7 +101,7 @@ func (u *userHandler) Edit(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(user)
 }
 
-// GetAll implements UserHandler.
+// GetAll
 func (u *userHandler) GetAll(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c)
 	if err != nil {
@@ -116,7 +116,7 @@ func (u *userHandler) GetAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(users)
 }
 
-// GetOne implements UserHandler.
+// GetOne
 func (u *userHandler) GetOne(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c)
 	if err != nil {
@@ -136,7 +136,7 @@ func (u *userHandler) GetOne(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(user)
 }
 
-// Remove implements UserHandler.
+// Remove
 func (u *userHandler) Remove(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c)
 	if err != nil {

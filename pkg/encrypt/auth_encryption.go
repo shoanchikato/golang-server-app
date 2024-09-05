@@ -26,7 +26,7 @@ func NewAuthEncryption(repo r.AuthRepo, encrypt s.EncryptionService) AuthEncrypt
 func (a *authEncryption) Login(credentials m.Credentials) (userId *int, err error) {
 	authDetails, err := a.repo.GetByUsername(credentials.Username)
 	if err != nil {
-		return nil, err
+		return nil, errors.Join(e.ErrIncorrectCredentials, err)
 	}
 
 	isMatch, err := a.encrypt.CheckPassword(&authDetails.Password, &credentials.Password)

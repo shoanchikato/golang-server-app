@@ -34,14 +34,12 @@ func (u *userHandler) Add(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
-	ctx := c.UserContext()
-	userIdKey := userContextKey("userId")
-	userId := ctx.Value(userIdKey).(int)
-	if userId == 0 {
-		return c.SendStatus(http.StatusUnauthorized)
+	userId, err := getAuthUserId(c)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
-	err = u.auth.Add(userId, &user)
+	err = u.auth.Add(*userId, &user)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
@@ -51,25 +49,109 @@ func (u *userHandler) Add(c *fiber.Ctx) error {
 
 // AddAll implements UserHandler.
 func (u *userHandler) AddAll(c *fiber.Ctx) error {
-	panic("unimplemented")
+	users := []m.User{}
+
+	err := c.BodyParser(&users)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	userId, err := getAuthUserId(c)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	newUsers := []*m.User{}
+	for i := range users {
+		newUsers[i] = &users[i]
+	}
+
+	err = u.auth.AddAll(*userId, &newUsers)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	return c.Status(http.StatusCreated).JSON(newUsers)
 }
 
 // Edit implements UserHandler.
 func (u *userHandler) Edit(c *fiber.Ctx) error {
-	panic("unimplemented")
+	user := m.User{}
+
+	err := c.BodyParser(&user)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	id, err := getId(c)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString("please provide an numeric id")
+	}
+
+	userId, err := getAuthUserId(c)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	err = u.auth.Edit(*userId, *id, &user)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	return c.Status(http.StatusCreated).JSON(user)
 }
 
 // GetAll implements UserHandler.
 func (u *userHandler) GetAll(c *fiber.Ctx) error {
-	panic("unimplemented")
+	userId, err := getAuthUserId(c)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	users, err := u.auth.GetAll(*userId, 0, 50)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	return c.Status(http.StatusCreated).JSON(users)
 }
 
 // GetOne implements UserHandler.
 func (u *userHandler) GetOne(c *fiber.Ctx) error {
-	panic("unimplemented")
+	userId, err := getAuthUserId(c)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	id, err := getId(c)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString("please provide an numeric id")
+	}
+
+	user, err := u.auth.GetOne(*userId, *id)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	return c.Status(http.StatusCreated).JSON(user)
 }
 
 // Remove implements UserHandler.
 func (u *userHandler) Remove(c *fiber.Ctx) error {
-	panic("unimplemented")
+	userId, err := getAuthUserId(c)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	id, err := getId(c)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString("please provide an numeric id")
+	}
+
+	err = u.auth.Remove(*userId, *id)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	}
+
+	return c.SendStatus(http.StatusAccepted)
 }

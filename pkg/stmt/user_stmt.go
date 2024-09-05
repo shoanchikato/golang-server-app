@@ -71,7 +71,7 @@ const (
 	`
 	REMOVE_USER_STMT = `
 		DELETE FROM users WHERE id = $1;
-		DELETE FROM auth WHERE user_id = $1;
-		DELETE FROM users_auth WHERE user_id = $1;
+		DELETE FROM auth WHERE user_id = $2;
+		DELETE FROM users_auth WHERE user_id = $3;
 	`
 )

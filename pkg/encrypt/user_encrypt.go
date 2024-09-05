@@ -50,6 +50,11 @@ func (u *userEncryption) AddAll(users *[]*m.User) error {
 
 // Edit
 func (u *userEncryption) Edit(id int, newUser *m.User) error {
+	err := u.encrypt.HashPassword(&newUser.Password)
+	if err != nil {
+		return err
+	}
+
 	return u.repo.Edit(id, newUser)
 }
 

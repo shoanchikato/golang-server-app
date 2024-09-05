@@ -50,6 +50,7 @@ func (p *userRepo) Add(user *m.User) error {
 	}
 
 	user.Id = int(id)
+	user.Password = ""
 
 	return nil
 }
@@ -68,10 +69,11 @@ func (p *userRepo) AddAll(users *[]*m.User) error {
 
 // Edit
 func (p *userRepo) Edit(id int, user *m.User) error {
-	idx, err := p.dbU.Transaction(
+	_, err := p.dbU.Transaction(
 		st.EDIT_USER_STMT,
 		user.FirstName,
 		user.LastName,
+		id,
 		user.Username,
 		user.Email,
 		id,
@@ -80,7 +82,7 @@ func (p *userRepo) Edit(id int, user *m.User) error {
 		return errors.Join(e.ErrUserDomain, e.ErrOnEdit, err)
 	}
 
-	user.Id = int(idx)
+	user.Id = int(id)
 
 	return nil
 }
@@ -156,7 +158,7 @@ func (p *userRepo) Remove(id int) error {
 		return err
 	}
 
-	_, err = p.dbU.Transaction(st.REMOVE_USER_STMT, id)
+	_, err = p.dbU.Transaction(st.REMOVE_USER_STMT, id, id, id)
 	if err != nil {
 		return errors.Join(e.ErrUserDomain, e.ErrOnRemove, err)
 	}

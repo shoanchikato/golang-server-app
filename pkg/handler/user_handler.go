@@ -82,7 +82,7 @@ func (u *userHandler) AddAll(c *fiber.Ctx) error {
 
 // Edit
 func (u *userHandler) Edit(c *fiber.Ctx) error {
-	user := m.User{}
+	user := m.EditUser{}
 
 	err := c.BodyParser(&user)
 	if err != nil {

@@ -13,7 +13,7 @@ import (
 type UserValidator interface {
 	Add(user *m.User) error
 	AddAll(users *[]*m.User) error
-	Edit(id int, newUser *m.User) error
+	Edit(id int, newUser *m.EditUser) error
 	GetAll(lastId, limit int) (*[]m.User, error)
 	GetOne(id int) (*m.User, error)
 	Remove(id int) error
@@ -70,7 +70,7 @@ func (v *userValidator) AddAll(users *[]*m.User) error {
 }
 
 // Edit
-func (v *userValidator) Edit(id int, newUser *m.User) error {
+func (v *userValidator) Edit(id int, newUser *m.EditUser) error {
 	_, err := valid.ValidateStruct(newUser)
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())

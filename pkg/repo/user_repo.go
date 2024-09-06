@@ -14,7 +14,7 @@ import (
 type UserRepo interface {
 	Add(user *m.User) error
 	AddAll(user *[]*m.User) error
-	Edit(id int, user *m.User) error
+	Edit(id int, user *m.EditUser) error
 	GetAll(lastId, limit int) (*[]m.User, error)
 	GetOne(id int) (*m.User, error)
 	Remove(id int) error
@@ -68,7 +68,7 @@ func (p *userRepo) AddAll(users *[]*m.User) error {
 }
 
 // Edit
-func (p *userRepo) Edit(id int, user *m.User) error {
+func (p *userRepo) Edit(id int, user *m.EditUser) error {
 	_, err := p.dbU.Transaction(
 		st.EDIT_USER_STMT,
 		user.FirstName,
@@ -83,7 +83,6 @@ func (p *userRepo) Edit(id int, user *m.User) error {
 	}
 
 	user.Id = int(id)
-	user.Password = ""
 
 	return nil
 }

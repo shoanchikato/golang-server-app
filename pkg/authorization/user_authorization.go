@@ -12,7 +12,7 @@ import (
 type UserAuthorization interface {
 	Add(userId int, user *m.User) error
 	AddAll(userId int, users *[]*m.User) error
-	Edit(userId int, id int, newAuthor *m.User) error
+	Edit(userId int, id int, newAuthor *m.EditUser) error
 	GetAll(userId, lastId, limit int) (*[]m.User, error)
 	GetOne(userId int, id int) (*m.User, error)
 	Remove(userId int, id int) error
@@ -48,13 +48,13 @@ func (u *userAuthorization) AddAll(userId int, users *[]*m.User) error {
 }
 
 // Edit
-func (u *userAuthorization) Edit(userId int, id int, newAuthor *m.User) error {
+func (u *userAuthorization) Edit(userId int, id int, user *m.EditUser) error {
 	err := u.auth.CheckForAuthorization(userId, p.UserEdit.Name)
 	if err != nil {
 		return errors.Join(e.ErrAuthorDomain, e.ErrOnEdit, err)
 	}
 
-	return u.validator.Edit(id, newAuthor)
+	return u.validator.Edit(id, user)
 }
 
 // GetAll

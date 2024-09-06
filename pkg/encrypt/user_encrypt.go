@@ -9,7 +9,7 @@ import (
 type UserEncryption interface {
 	Add(user *m.User) error
 	AddAll(users *[]*m.User) error
-	Edit(id int, newUser *m.User) error
+	Edit(id int, newUser *m.EditUser) error
 	GetAll(lastId, limit int) (*[]m.User, error)
 	GetOne(id int) (*m.User, error)
 	Remove(id int) error
@@ -49,12 +49,7 @@ func (u *userEncryption) AddAll(users *[]*m.User) error {
 }
 
 // Edit
-func (u *userEncryption) Edit(id int, newUser *m.User) error {
-	err := u.encrypt.HashPassword(&newUser.Password)
-	if err != nil {
-		return err
-	}
-
+func (u *userEncryption) Edit(id int, newUser *m.EditUser) error {
 	return u.repo.Edit(id, newUser)
 }
 

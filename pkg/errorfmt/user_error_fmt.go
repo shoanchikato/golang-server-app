@@ -9,7 +9,7 @@ import (
 type UserErrorFmt interface {
 	Add(userId int, user *m.User) error
 	AddAll(userId int, users *[]*m.User) error
-	Edit(userId int, id int, user *m.User) error
+	Edit(userId int, id int, user *m.EditUser) error
 	GetAll(userId, lastId, limit int) (*[]m.User, error)
 	GetOne(userId int, id int) (*m.User, error)
 	Remove(userId int, id int) error
@@ -45,7 +45,7 @@ func (u *userErrorFmt) AddAll(userId int, users *[]*m.User) error {
 }
 
 // Edit
-func (u *userErrorFmt) Edit(userId int, id int, user *m.User) error {
+func (u *userErrorFmt) Edit(userId int, id int, user *m.EditUser) error {
 	err := u.auth.Edit(userId, id, user)
 	if err != nil {
 		return u.service.GetError(err)

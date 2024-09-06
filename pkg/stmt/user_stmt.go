@@ -22,7 +22,8 @@ const (
 		);
 
 		-- create indexes
-		CREATE INDEX IF NOT EXISTS idx_username ON auth (username);
+		CREATE INDEX IF NOT EXISTS idx_users_username ON auth (username);
+		CREATE INDEX IF NOT EXISTS idx_users_email ON auth (email);
 		CREATE INDEX IF NOT EXISTS idx_users_auth_user_id_auth_id ON users_auth (user_id, auth_id);
 	`
 	ADD_USER_STMT = `

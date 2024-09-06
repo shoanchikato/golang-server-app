@@ -2,10 +2,10 @@ package errors
 
 type HttpError struct {
 	Message    string
-	HTTPStatus uint
+	HTTPStatus int
 }
 
-func NewHttpError(message string, httpStatus uint) error {
+func NewHttpError(message string, httpStatus int) error {
 	return &HttpError{message, httpStatus}
 }
 

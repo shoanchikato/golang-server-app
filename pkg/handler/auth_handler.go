@@ -1,9 +1,11 @@
 package handler
 
 import (
-	aa "app/pkg/authorization"
+	ef "app/pkg/errorfmt"
+	e "app/pkg/errors"
 	m "app/pkg/model"
 	s "app/pkg/service"
+	"errors"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,12 +17,12 @@ type AuthHandler interface {
 }
 
 type authHandler struct {
-	auth aa.AuthAuthorization
-	jwt  s.JWTService
+	service ef.AuthErrorFmt
+	jwt     s.JWTService
 }
 
-func NewAuthHandler(auth aa.AuthAuthorization, jwt s.JWTService) AuthHandler {
-	return &authHandler{auth, jwt}
+func NewAuthHandler(service ef.AuthErrorFmt, jwt s.JWTService) AuthHandler {
+	return &authHandler{service, jwt}
 }
 
 // Login
@@ -32,9 +34,11 @@ func (a *authHandler) Login(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
-	userId, err := a.auth.Login(&credentials)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	userId, err := a.service.Login(&credentials)
+
+	httpErr := &e.HttpError{}
+	if errors.As(err, &httpErr) {
+		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
 	}
 
 	tokens, err := a.jwt.GetTokens(*userId)
@@ -54,9 +58,11 @@ func (a *authHandler) ResetPassword(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
-	err = a.auth.ResetPassword(credentials.Username, credentials.Password)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	err = a.service.ResetPassword(credentials.Username, credentials.Password)
+
+	httpErr := &e.HttpError{}
+	if errors.As(err, &httpErr) {
+		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
 	}
 
 	return c.SendStatus(http.StatusCreated)

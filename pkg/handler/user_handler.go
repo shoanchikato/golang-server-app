@@ -1,8 +1,10 @@
 package handler
 
 import (
-	aa "app/pkg/authorization"
+	ef "app/pkg/errorfmt"
+	e "app/pkg/errors"
 	m "app/pkg/model"
+	"errors"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
@@ -18,11 +20,11 @@ type UserHandler interface {
 }
 
 type userHandler struct {
-	auth aa.UserAuthorization
+	service ef.UserErrorFmt
 }
 
-func NewUserHandler(auth aa.UserAuthorization) UserHandler {
-	return &userHandler{auth}
+func NewUserHandler(service ef.UserErrorFmt) UserHandler {
+	return &userHandler{service}
 }
 
 // Add
@@ -39,9 +41,11 @@ func (u *userHandler) Add(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
-	err = u.auth.Add(*userId, &user)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	err = u.service.Add(*userId, &user)
+
+	httpErr := &e.HttpError{}
+	if errors.As(err, &httpErr) {
+		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
 	}
 
 	return c.Status(http.StatusCreated).JSON(user)
@@ -66,9 +70,11 @@ func (u *userHandler) AddAll(c *fiber.Ctx) error {
 		newUsers[i] = &users[i]
 	}
 
-	err = u.auth.AddAll(*userId, &newUsers)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	err = u.service.AddAll(*userId, &newUsers)
+
+	httpErr := &e.HttpError{}
+	if errors.As(err, &httpErr) {
+		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
 	}
 
 	return c.Status(http.StatusCreated).JSON(newUsers)
@@ -93,9 +99,11 @@ func (u *userHandler) Edit(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
-	err = u.auth.Edit(*userId, *id, &user)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	err = u.service.Edit(*userId, *id, &user)
+
+	httpErr := &e.HttpError{}
+	if errors.As(err, &httpErr) {
+		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
 	}
 
 	return c.Status(http.StatusCreated).JSON(user)
@@ -108,9 +116,11 @@ func (u *userHandler) GetAll(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
-	users, err := u.auth.GetAll(*userId, 0, 50)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	users, err := u.service.GetAll(*userId, 0, 50)
+
+	httpErr := &e.HttpError{}
+	if errors.As(err, &httpErr) {
+		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
 	}
 
 	return c.Status(http.StatusCreated).JSON(users)
@@ -128,9 +138,11 @@ func (u *userHandler) GetOne(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString("please provide an numeric id")
 	}
 
-	user, err := u.auth.GetOne(*userId, *id)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	user, err := u.service.GetOne(*userId, *id)
+	
+	httpErr := &e.HttpError{}
+	if errors.As(err, &httpErr) {
+		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
 	}
 
 	return c.Status(http.StatusCreated).JSON(user)
@@ -148,9 +160,11 @@ func (u *userHandler) Remove(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString("please provide an numeric id")
 	}
 
-	err = u.auth.Remove(*userId, *id)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+	err = u.service.Remove(*userId, *id)
+	
+	httpErr := &e.HttpError{}
+	if errors.As(err, &httpErr) {
+		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
 	}
 
 	return c.SendStatus(http.StatusAccepted)

@@ -25,20 +25,20 @@ func (er *errorFmt) GetError(err error) error {
 	duplicateErr := &e.RepoDuplicateError{}
 
 	switch {
-	case errors.Is(err, e.ErrNotAuthorized):
-		return e.NewHttpError("user is not authorized", http.StatusUnauthorized)
-	case errors.As(err, &validationErr):
-		return e.NewHttpError(validationErr.ErrStr, http.StatusBadRequest)
-	case errors.As(err, &notFoundErr):
-		return e.NewHttpError(notFoundErr.ErrStr, http.StatusNotFound)
-	case errors.As(err, &duplicateErr):
-		return e.NewHttpError(duplicateErr.ErrStr, http.StatusBadRequest)
 	case errors.Is(err, e.ErrIncorrectCredentials):
 		return e.NewHttpError("incorrect username or password", http.StatusBadRequest)
+	case errors.Is(err, e.ErrNotAuthorized):
+		return e.NewHttpError("user is not authorized", http.StatusUnauthorized)
 	case errors.Is(err, e.ErrInvalidToken):
 		return e.NewHttpError(err.Error(), http.StatusBadRequest)
 	case errors.Is(err, e.ErrTokenExpired):
 		return e.NewHttpError(err.Error(), http.StatusBadRequest)
+	case errors.As(err, &validationErr):
+		return e.NewHttpError(validationErr.ErrStr, http.StatusBadRequest)
+	case errors.As(err, &duplicateErr):
+		return e.NewHttpError(duplicateErr.ErrStr, http.StatusBadRequest)
+	case errors.As(err, &notFoundErr):
+		return e.NewHttpError(notFoundErr.ErrStr, http.StatusNotFound)
 	default:
 		log.Println("Server error", err)
 		return e.NewHttpError("server error", http.StatusInternalServerError)

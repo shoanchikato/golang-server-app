@@ -1,7 +1,7 @@
 package handler
 
 import (
-	a "app/pkg/authorization"
+	ef "app/pkg/errorfmt"
 	s "app/pkg/service"
 )
 
@@ -10,9 +10,9 @@ type Handlers struct {
 	User UserHandler
 }
 
-func HandlerDi(authorizations *a.Authorizations, jwt s.JWTService) *Handlers {
-	auth := NewAuthHandler(authorizations.Auth, jwt)
-	user := NewUserHandler(authorizations.User)
+func HandlerDi(errorFmts *ef.ErrorFmts, jwt s.JWTService) *Handlers {
+	auth := NewAuthHandler(errorFmts.Auth, jwt)
+	user := NewUserHandler(errorFmts.User)
 
 	return &Handlers{auth, user}
 }

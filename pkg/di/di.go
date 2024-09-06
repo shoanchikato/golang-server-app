@@ -3,6 +3,7 @@ package di
 import (
 	a "app/pkg/authorization"
 	e "app/pkg/encrypt"
+	ef "app/pkg/errorfmt"
 	h "app/pkg/handler"
 	r "app/pkg/repo"
 	rt "app/pkg/route"
@@ -52,8 +53,12 @@ func Di() DI {
 	auth := s.NewAuthorizationService(repos.PermissionManagement)
 	authorizations := a.AuthorizationDi(auth, validators)
 
+	// ErrorFmt
+	errorFmt := s.NewErrorFmt()
+	errorFmts := ef.ErrorFmtDi(errorFmt, authorizations)
+
 	// Handlers
-	handlers := h.HandlerDi(authorizations, jwt)
+	handlers := h.HandlerDi(errorFmts, jwt)
 
 	// Middleware
 	authMiddleware := h.NewAuthMiddleware(jwt)

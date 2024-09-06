@@ -20,15 +20,17 @@ var (
 type RepoNotFoundError struct {
 	Entity string
 	Id     string
+	ErrStr string
 }
 
 func NewErrRepoNotFound(entity, id string) error {
-	err := RepoNotFoundError{entity, id}
+	errStr := fmt.Sprintf("%s %s not found", entity, id)
+	err := RepoNotFoundError{entity, id, errStr}
 	return &err
 }
 
 func (e *RepoNotFoundError) Error() string {
-	return fmt.Sprintf("%s %s not found", e.Entity, e.Id)
+	return e.ErrStr
 }
 
 func (e *RepoNotFoundError) Is(target error) bool {

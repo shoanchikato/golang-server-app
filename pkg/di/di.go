@@ -5,6 +5,7 @@ import (
 	e "app/pkg/encrypt"
 	ef "app/pkg/errorfmt"
 	h "app/pkg/handler"
+	mi "app/pkg/middleware"
 	r "app/pkg/repo"
 	rt "app/pkg/route"
 	s "app/pkg/service"
@@ -61,7 +62,7 @@ func Di() DI {
 	handlers := h.HandlerDi(errorFmts, jwt)
 
 	// Middleware
-	authMiddleware := h.NewAuthMiddleware(jwt)
+	authMiddleware := mi.NewAuthMiddleware(jwt)
 
 	// Fiber app
 	app := fiber.New()

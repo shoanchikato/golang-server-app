@@ -1,4 +1,4 @@
-package handler
+package middleware
 
 import (
 	s "app/pkg/service"
@@ -16,7 +16,7 @@ type authMiddleware struct {
 	auth s.JWTService
 }
 
-type userContextKey string
+type UserContextKey string
 
 func NewAuthMiddleware(jwt s.JWTService) AuthMiddleware {
 	return &authMiddleware{jwt}
@@ -36,7 +36,7 @@ func (a *authMiddleware) JWTParser(c *fiber.Ctx) error {
 		return c.Status(http.StatusUnauthorized).SendString(err.Error())
 	}
 
-	userIDKey := userContextKey("userId")
+	userIDKey := UserContextKey("userId")
 
 	ctx := context.WithValue(context.Background(), userIDKey, token.UserId)
 

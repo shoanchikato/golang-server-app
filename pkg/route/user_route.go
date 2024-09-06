@@ -2,11 +2,12 @@ package route
 
 import (
 	h "app/pkg/handler"
+	mi "app/pkg/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewUserRoutes(app *fiber.App, handler h.UserHandler, middleware h.AuthMiddleware) {
+func NewUserRoutes(app *fiber.App, handler h.UserHandler, middleware mi.AuthMiddleware) {
 	auth := app.Group("/users")
 	auth.Use(middleware.JWTParser)
 	auth.Post("/", handler.Add)

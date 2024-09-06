@@ -1,5 +1,11 @@
 package errors
 
+import "errors"
+
+var (
+	ErrProvideNumericId = errors.New("please provide a numeric id")
+)
+
 type HttpError struct {
 	Message    string
 	HTTPStatus int

@@ -91,7 +91,7 @@ func (u *userHandler) Edit(c *fiber.Ctx) error {
 
 	id, err := getId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString("please provide an numeric id")
+		return c.Status(http.StatusBadRequest).SendString(e.ErrProvideNumericId.Error())
 	}
 
 	userId, err := getAuthUserId(c)
@@ -135,11 +135,11 @@ func (u *userHandler) GetOne(c *fiber.Ctx) error {
 
 	id, err := getId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString("please provide an numeric id")
+		return c.Status(http.StatusBadRequest).SendString(e.ErrProvideNumericId.Error())
 	}
 
 	user, err := u.service.GetOne(*userId, *id)
-	
+
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
 		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
@@ -157,11 +157,11 @@ func (u *userHandler) Remove(c *fiber.Ctx) error {
 
 	id, err := getId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString("please provide an numeric id")
+		return c.Status(http.StatusBadRequest).SendString(e.ErrProvideNumericId.Error())
 	}
 
 	err = u.service.Remove(*userId, *id)
-	
+
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
 		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)

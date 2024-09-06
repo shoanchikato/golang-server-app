@@ -1,9 +1,9 @@
 package errorfmt
 
 import (
+	a "app/pkg/authorization"
 	m "app/pkg/model"
 	s "app/pkg/service"
-	a "app/pkg/authorization"
 )
 
 type UserErrorFmt interface {
@@ -16,7 +16,7 @@ type UserErrorFmt interface {
 }
 
 type userErrorFmt struct {
-	auth a.UserAuthorization
+	auth    a.UserAuthorization
 	service s.ErrorFmt
 }
 

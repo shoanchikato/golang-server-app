@@ -1,8 +1,8 @@
 package errorfmt
 
 import (
-	s "app/pkg/service"
 	a "app/pkg/authorization"
+	s "app/pkg/service"
 )
 
 type ErrorFmts struct {

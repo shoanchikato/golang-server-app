@@ -83,6 +83,7 @@ func (p *userRepo) Edit(id int, user *m.User) error {
 	}
 
 	user.Id = int(id)
+	user.Password = ""
 
 	return nil
 }

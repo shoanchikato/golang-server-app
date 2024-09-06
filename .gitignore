@@ -1,6 +1,4 @@
 app
 main
-small.db
-small.db-shm
-small.db-wal
+small*
 .vscode

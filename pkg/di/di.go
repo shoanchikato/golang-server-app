@@ -55,7 +55,7 @@ func Di() DI {
 
 	// ErrorFmt
 	errorFmt := s.NewErrorFmt()
-	errorFmts := ef.ErrorFmtDi(errorFmt, authorizations)
+	errorFmts := ef.ErrorFmtDi(errorFmt, jwt, authorizations)
 
 	// Handlers
 	handlers := h.HandlerDi(errorFmts, jwt)

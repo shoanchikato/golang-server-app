@@ -10,9 +10,9 @@ type ErrorFmts struct {
 	User UserErrorFmt
 }
 
-func ErrorFmtDi(errorFmt s.ErrorFmt, authorizations *a.Authorizations) *ErrorFmts {
+func ErrorFmtDi(errorFmt s.ErrorFmt, jwt s.JWTService, authorizations *a.Authorizations) *ErrorFmts {
 	user := NewUserErrorFmt(authorizations.User, errorFmt)
-	auth := NewAuthErrorFmt(authorizations.Auth, errorFmt)
+	auth := NewAuthErrorFmt(authorizations.Auth, jwt, errorFmt)
 
 	return &ErrorFmts{auth, user}
 }

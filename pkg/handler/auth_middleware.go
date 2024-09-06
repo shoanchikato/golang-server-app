@@ -26,6 +26,7 @@ func NewAuthMiddleware(jwt s.JWTService) AuthMiddleware {
 func (a *authMiddleware) JWTParser(c *fiber.Ctx) error {
 	value := c.Get("Authorization")
 	if value == "" {
+		// TODO: assign to default userId with default set permissions
 		return c.SendStatus(http.StatusUnauthorized)
 	}
 

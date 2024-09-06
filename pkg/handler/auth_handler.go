@@ -34,16 +34,11 @@ func (a *authHandler) Login(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
-	userId, err := a.service.Login(&credentials)
+	tokens, err := a.service.Login(&credentials)
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
 		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
-	}
-
-	tokens, err := a.jwt.GetTokens(*userId)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
 
 	return c.JSON(tokens)

@@ -35,6 +35,10 @@ func (er *errorFmt) GetError(err error) error {
 		return e.NewHttpError(duplicateErr.ErrStr, http.StatusBadRequest)
 	case errors.Is(err, e.ErrIncorrectCredentials):
 		return e.NewHttpError("incorrect username or password", http.StatusBadRequest)
+	case errors.Is(err, e.ErrInvalidToken):
+		return e.NewHttpError(err.Error(), http.StatusBadRequest)
+	case errors.Is(err, e.ErrTokenExpired):
+		return e.NewHttpError(err.Error(), http.StatusBadRequest)
 	default:
 		log.Println("Server error", err)
 		return e.NewHttpError("server error", http.StatusInternalServerError)

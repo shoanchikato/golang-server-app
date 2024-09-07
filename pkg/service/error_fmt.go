@@ -26,13 +26,17 @@ func (er *errorFmt) GetError(err error) error {
 
 	switch {
 	case errors.Is(err, e.ErrIncorrectCredentials):
-		return e.NewHttpError("incorrect username or password", http.StatusBadRequest)
+		log.Println(err)
+		return e.NewHttpError("incorrect username or password", http.StatusUnauthorized)
 	case errors.Is(err, e.ErrNotAuthorized):
+		log.Println(err)
 		return e.NewHttpError("user is not authorized", http.StatusUnauthorized)
 	case errors.Is(err, e.ErrInvalidToken):
-		return e.NewHttpError(err.Error(), http.StatusBadRequest)
+		log.Println(err)
+		return e.NewHttpError("token is invalid", http.StatusUnauthorized)
 	case errors.Is(err, e.ErrTokenExpired):
-		return e.NewHttpError(err.Error(), http.StatusBadRequest)
+		log.Println(err)
+		return e.NewHttpError(err.Error(), http.StatusUnauthorized)
 	case errors.As(err, &validationErr):
 		return e.NewHttpError(validationErr.ErrStr, http.StatusBadRequest)
 	case errors.As(err, &duplicateErr):

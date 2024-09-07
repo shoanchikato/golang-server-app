@@ -62,7 +62,7 @@ func Di() DI {
 	handlers := h.HandlerDi(errorFmts, jwt)
 
 	// Middleware
-	authMiddleware := mi.NewAuthMiddleware(jwt)
+	authMiddleware := mi.NewAuthMiddleware(jwt, errorFmt)
 
 	// Fiber app
 	app := fiber.New()

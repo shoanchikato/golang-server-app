@@ -43,7 +43,7 @@ func (p *permissionAuthorization) Add(userId int, permission *m.Permission) erro
 
 // AddAll
 func (p *permissionAuthorization) AddAll(userId int, permissions *[]*m.Permission) error {
-	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionAddAll.Name)
 	if err != nil {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnAddAll, err)
 	}
@@ -53,7 +53,7 @@ func (p *permissionAuthorization) AddAll(userId int, permissions *[]*m.Permissio
 
 // Edit
 func (p *permissionAuthorization) Edit(userId int, id int, newPermission *m.Permission) error {
-	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionEdit.Name)
 	if err != nil {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnEdit, err)
 	}
@@ -63,7 +63,7 @@ func (p *permissionAuthorization) Edit(userId int, id int, newPermission *m.Perm
 
 // GetAll
 func (p *permissionAuthorization) GetAll(userId, lastId, limit int) (*[]m.Permission, error) {
-	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionGetAll.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetAll, err)
 	}
@@ -83,7 +83,7 @@ func (p *permissionAuthorization) GetByEntity(userId int, entity string) (*[]m.P
 
 // GetOne
 func (p *permissionAuthorization) GetOne(userId int, id int) (*m.Permission, error) {
-	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionGetOne.Name)
 	if err != nil {
 		return nil, errors.Join(e.ErrPermissionDomain, e.ErrOnGetOne, err)
 	}
@@ -93,7 +93,7 @@ func (p *permissionAuthorization) GetOne(userId int, id int) (*m.Permission, err
 
 // Remove
 func (p *permissionAuthorization) Remove(userId int, id int) error {
-	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
+	err := p.auth.CheckForAuthorization(userId, pe.PermissionRemove.Name)
 	if err != nil {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnRemove, err)
 	}

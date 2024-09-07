@@ -1,7 +1,7 @@
 package handler
 
 import (
-	ef "app/pkg/errorfmt"
+	ef "app/pkg/httperrorfmt"
 	s "app/pkg/service"
 )
 

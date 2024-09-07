@@ -3,8 +3,8 @@ package di
 import (
 	a "app/pkg/authorization"
 	e "app/pkg/encrypt"
-	ef "app/pkg/errorfmt"
 	h "app/pkg/handler"
+	ef "app/pkg/httperrorfmt"
 	mi "app/pkg/middleware"
 	r "app/pkg/repo"
 	rt "app/pkg/route"

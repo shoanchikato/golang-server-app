@@ -1,4 +1,4 @@
-package errorfmt
+package httperrorfmt
 
 import (
 	a "app/pkg/authorization"

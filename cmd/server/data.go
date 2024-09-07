@@ -3,6 +3,7 @@ package main
 import (
 	m "app/pkg/model"
 	pe "app/pkg/permission"
+	v "app/pkg/validation"
 )
 
 func Data() (
@@ -99,4 +100,19 @@ func Data() (
 	}
 
 	return authors, books, posts, users, permissions
+}
+
+func AddSuperUser(validators v.Validators) {
+	user := m.NewUser("John", "Doe", "john_doe", "john@doe.com", "password1")
+	validators.User.Add(user)
+
+	role := m.NewRole("admin")
+	validators.Role.Add(role)
+
+	permissions, _ := validators.Permission.GetAll(0, 50)
+	for i := range *permissions {
+		validators.PermissionManagement.AddPermissionToRole(i, 1)
+	}
+
+	validators.RoleManagement.AddRoleToUser(1, 1)
 }

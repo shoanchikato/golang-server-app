@@ -1,9 +1,9 @@
 package handler
 
 import (
+	mi "app/pkg/middleware"
 	"errors"
 	"strconv"
-	mi "app/pkg/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -11,12 +11,23 @@ import (
 func getId(c *fiber.Ctx) (*int, error) {
 	idStr := c.Params("id")
 
-	int, err := strconv.Atoi(idStr)
+	intValue, err := strconv.Atoi(idStr)
 	if err != nil {
 		return nil, err
 	}
 
-	return &int, nil
+	return &intValue, nil
+}
+
+func getIntParam(c *fiber.Ctx, name string) (*int, error) {
+	strValue := c.Params(name)
+
+	intValue, err := strconv.Atoi(strValue)
+	if err != nil {
+		return nil, err
+	}
+
+	return &intValue, nil
 }
 
 func getAuthUserId(c *fiber.Ctx) (*int, error) {
@@ -28,5 +39,4 @@ func getAuthUserId(c *fiber.Ctx) (*int, error) {
 	}
 
 	return &userId, nil
-
 }

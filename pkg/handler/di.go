@@ -10,9 +10,9 @@ type Handlers struct {
 	User UserHandler
 }
 
-func HandlerDi(errorFmts *ef.ErrorFmts, jwt s.JWTService) *Handlers {
-	auth := NewAuthHandler(errorFmts.Auth, jwt)
-	user := NewUserHandler(errorFmts.User)
+func HandlerDi(httpErrorFmts *ef.HttpErrorFmts, jwt s.JWTService) *Handlers {
+	auth := NewAuthHandler(httpErrorFmts.Auth, jwt)
+	user := NewUserHandler(httpErrorFmts.User)
 
 	return &Handlers{auth, user}
 }

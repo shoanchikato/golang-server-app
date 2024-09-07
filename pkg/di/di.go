@@ -54,15 +54,15 @@ func Di() DI {
 	auth := s.NewAuthorizationService(repos.PermissionManagement)
 	authorizations := a.AuthorizationDi(auth, validators)
 
-	// ErrorFmt
-	errorFmt := s.NewErrorFmt()
-	errorFmts := ef.ErrorFmtDi(errorFmt, jwt, authorizations)
+	// HttpErrorFmt
+	httpErrorFmt := s.NewHttpErrorFmt()
+	httpErrorFmts := ef.HttpErrorFmtDi(httpErrorFmt, jwt, authorizations)
 
 	// Handlers
-	handlers := h.HandlerDi(errorFmts, jwt)
+	handlers := h.HandlerDi(httpErrorFmts, jwt)
 
 	// Middleware
-	authMiddleware := mi.NewAuthMiddleware(jwt, errorFmt)
+	authMiddleware := mi.NewAuthMiddleware(jwt, httpErrorFmt)
 
 	// Fiber app
 	app := fiber.New()

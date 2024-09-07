@@ -6,7 +6,7 @@ import (
 	s "app/pkg/service"
 )
 
-type UserErrorFmt interface {
+type UserHttpErrorFmt interface {
 	Add(userId int, user *m.User) error
 	AddAll(userId int, users *[]*m.User) error
 	Edit(userId int, id int, user *m.EditUser) error
@@ -15,17 +15,17 @@ type UserErrorFmt interface {
 	Remove(userId int, id int) error
 }
 
-type userErrorFmt struct {
+type userHttpErrorFmt struct {
 	auth    a.UserAuthorization
-	service s.ErrorFmt
+	service s.HttpErrorFmt
 }
 
-func NewUserErrorFmt(auth a.UserAuthorization, service s.ErrorFmt) UserErrorFmt {
-	return &userErrorFmt{auth, service}
+func NewUserHttpErrorFmt(auth a.UserAuthorization, service s.HttpErrorFmt) UserHttpErrorFmt {
+	return &userHttpErrorFmt{auth, service}
 }
 
 // Add
-func (u *userErrorFmt) Add(userId int, user *m.User) error {
+func (u *userHttpErrorFmt) Add(userId int, user *m.User) error {
 	err := u.auth.Add(userId, user)
 	if err != nil {
 		return u.service.GetError(err)
@@ -35,7 +35,7 @@ func (u *userErrorFmt) Add(userId int, user *m.User) error {
 }
 
 // AddAll
-func (u *userErrorFmt) AddAll(userId int, users *[]*m.User) error {
+func (u *userHttpErrorFmt) AddAll(userId int, users *[]*m.User) error {
 	err := u.auth.AddAll(userId, users)
 	if err != nil {
 		return u.service.GetError(err)
@@ -45,7 +45,7 @@ func (u *userErrorFmt) AddAll(userId int, users *[]*m.User) error {
 }
 
 // Edit
-func (u *userErrorFmt) Edit(userId int, id int, user *m.EditUser) error {
+func (u *userHttpErrorFmt) Edit(userId int, id int, user *m.EditUser) error {
 	err := u.auth.Edit(userId, id, user)
 	if err != nil {
 		return u.service.GetError(err)
@@ -55,7 +55,7 @@ func (u *userErrorFmt) Edit(userId int, id int, user *m.EditUser) error {
 }
 
 // GetAll
-func (u *userErrorFmt) GetAll(userId int, lastId int, limit int) (*[]m.User, error) {
+func (u *userHttpErrorFmt) GetAll(userId int, lastId int, limit int) (*[]m.User, error) {
 	users, err := u.auth.GetAll(userId, lastId, limit)
 	if err != nil {
 		return nil, u.service.GetError(err)
@@ -65,7 +65,7 @@ func (u *userErrorFmt) GetAll(userId int, lastId int, limit int) (*[]m.User, err
 }
 
 // GetOne
-func (u *userErrorFmt) GetOne(userId int, id int) (*m.User, error) {
+func (u *userHttpErrorFmt) GetOne(userId int, id int) (*m.User, error) {
 	user, err := u.auth.GetOne(userId, id)
 	if err != nil {
 		return nil, u.service.GetError(err)
@@ -75,7 +75,7 @@ func (u *userErrorFmt) GetOne(userId int, id int) (*m.User, error) {
 }
 
 // Remove
-func (u *userErrorFmt) Remove(userId int, id int) error {
+func (u *userHttpErrorFmt) Remove(userId int, id int) error {
 	err := u.auth.Remove(userId, id)
 	if err != nil {
 		return u.service.GetError(err)

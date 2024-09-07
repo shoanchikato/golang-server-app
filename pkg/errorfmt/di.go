@@ -5,14 +5,14 @@ import (
 	s "app/pkg/service"
 )
 
-type ErrorFmts struct {
-	Auth AuthErrorFmt
-	User UserErrorFmt
+type HttpErrorFmts struct {
+	Auth AuthHttpErrorFmt
+	User UserHttpErrorFmt
 }
 
-func ErrorFmtDi(errorFmt s.ErrorFmt, jwt s.JWTService, authorizations *a.Authorizations) *ErrorFmts {
-	user := NewUserErrorFmt(authorizations.User, errorFmt)
-	auth := NewAuthErrorFmt(authorizations.Auth, jwt, errorFmt)
+func HttpErrorFmtDi(httpErrorFmt s.HttpErrorFmt, jwt s.JWTService, authorizations *a.Authorizations) *HttpErrorFmts {
+	user := NewUserHttpErrorFmt(authorizations.User, httpErrorFmt)
+	auth := NewAuthHttpErrorFmt(authorizations.Auth, jwt, httpErrorFmt)
 
-	return &ErrorFmts{auth, user}
+	return &HttpErrorFmts{auth, user}
 }

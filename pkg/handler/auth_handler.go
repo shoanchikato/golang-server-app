@@ -17,11 +17,11 @@ type AuthHandler interface {
 }
 
 type authHandler struct {
-	service ef.AuthErrorFmt
+	service ef.AuthHttpErrorFmt
 	jwt     s.JWTService
 }
 
-func NewAuthHandler(service ef.AuthErrorFmt, jwt s.JWTService) AuthHandler {
+func NewAuthHandler(service ef.AuthHttpErrorFmt, jwt s.JWTService) AuthHandler {
 	return &authHandler{service, jwt}
 }
 

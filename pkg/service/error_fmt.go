@@ -7,18 +7,18 @@ import (
 	"net/http"
 )
 
-type ErrorFmt interface {
+type HttpErrorFmt interface {
 	GetError(err error) error
 }
 
-type errorFmt struct{}
+type httpErrorFmt struct{}
 
-func NewErrorFmt() ErrorFmt {
-	return &errorFmt{}
+func NewHttpErrorFmt() HttpErrorFmt {
+	return &httpErrorFmt{}
 }
 
-// GetError implements ErrorFormatter.
-func (er *errorFmt) GetError(err error) error {
+// GetError
+func (er *httpErrorFmt) GetError(err error) error {
 
 	validationErr := &e.ValidationError{}
 	notFoundErr := &e.RepoNotFoundError{}

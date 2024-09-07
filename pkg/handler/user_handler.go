@@ -20,10 +20,10 @@ type UserHandler interface {
 }
 
 type userHandler struct {
-	service ef.UserErrorFmt
+	service ef.UserHttpErrorFmt
 }
 
-func NewUserHandler(service ef.UserErrorFmt) UserHandler {
+func NewUserHandler(service ef.UserHttpErrorFmt) UserHandler {
 	return &userHandler{service}
 }
 

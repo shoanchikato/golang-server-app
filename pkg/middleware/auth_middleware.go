@@ -15,14 +15,14 @@ type AuthMiddleware interface {
 }
 
 type authMiddleware struct {
-	auth     s.JWTService
-	errorFmt s.ErrorFmt
+	auth         s.JWTService
+	httpErrorFmt s.HttpErrorFmt
 }
 
 type UserContextKey string
 
-func NewAuthMiddleware(jwt s.JWTService, errorFmt s.ErrorFmt) AuthMiddleware {
-	return &authMiddleware{jwt, errorFmt}
+func NewAuthMiddleware(jwt s.JWTService, httpErrorFmt s.HttpErrorFmt) AuthMiddleware {
+	return &authMiddleware{jwt, httpErrorFmt}
 }
 
 // JWTParser
@@ -35,9 +35,9 @@ func (a *authMiddleware) JWTParser(c *fiber.Ctx) error {
 
 	tokenStr := value
 	token, err := a.auth.ParseToken(&tokenStr)
-	
+
 	httpErr := &e.HttpError{}
-	if err = a.errorFmt.GetError(err); errors.As(err, &httpErr) {
+	if err = a.httpErrorFmt.GetError(err); errors.As(err, &httpErr) {
 		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
 	}
 

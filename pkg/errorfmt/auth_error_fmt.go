@@ -6,23 +6,23 @@ import (
 	s "app/pkg/service"
 )
 
-type AuthErrorFmt interface {
+type AuthHttpErrorFmt interface {
 	Login(credentials *m.Credentials) (tokens *m.Tokens, err error)
 	ResetPassword(username, newPassword string) error
 }
 
-type authErrorFmt struct {
+type authHttpErrorFmt struct {
 	auth    a.AuthAuthorization
 	jwt     s.JWTService
-	service s.ErrorFmt
+	service s.HttpErrorFmt
 }
 
-func NewAuthErrorFmt(auth a.AuthAuthorization, jwt s.JWTService, service s.ErrorFmt) AuthErrorFmt {
-	return &authErrorFmt{auth, jwt, service}
+func NewAuthHttpErrorFmt(auth a.AuthAuthorization, jwt s.JWTService, service s.HttpErrorFmt) AuthHttpErrorFmt {
+	return &authHttpErrorFmt{auth, jwt, service}
 }
 
 // Login
-func (a *authErrorFmt) Login(credentials *m.Credentials) (*m.Tokens, error) {
+func (a *authHttpErrorFmt) Login(credentials *m.Credentials) (*m.Tokens, error) {
 	userId, err := a.auth.Login(credentials)
 	if err != nil {
 		return nil, a.service.GetError(err)
@@ -37,7 +37,7 @@ func (a *authErrorFmt) Login(credentials *m.Credentials) (*m.Tokens, error) {
 }
 
 // ResetPassword
-func (a *authErrorFmt) ResetPassword(username string, newPassword string) error {
+func (a *authHttpErrorFmt) ResetPassword(username string, newPassword string) error {
 	err := a.auth.ResetPassword(username, newPassword)
 	if err != nil {
 		return a.service.GetError(err)

@@ -2,25 +2,26 @@ package service
 
 import (
 	_ "github.com/asaskevich/govalidator"
-	valid "github.com/go-playground/validator"
+	_ "github.com/go-playground/validator"
 )
 
-type ValidationService interface {
-	Validate(value any) error
+type ValidateModel interface {
+	Validate() error
 }
 
-type validationService struct {
-	validator *valid.Validate
+type ValidationService interface {
+	Validate(model ValidateModel) error
 }
+
+type validationService struct {}
 
 func NewValidationService() ValidationService {
-	validator := valid.New()
-	return &validationService{validator}
+	return &validationService{}
 }
 
 // Validate
-func (v *validationService) Validate(value any) error {
-	err := v.validator.Struct(value)
+func (v *validationService) Validate(model ValidateModel) error {
+	err := model.Validate()
 	if err != nil {
 		return err
 	}

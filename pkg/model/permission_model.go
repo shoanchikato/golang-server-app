@@ -1,12 +1,16 @@
 package model
 
-import "fmt"
+import (
+	"fmt"
+
+	valid "github.com/go-ozzo/ozzo-validation/v4"
+)
 
 type Permission struct {
 	Id        int    `json:"id,omitempty"`
-	Name      string `json:"name" validate:"required~name is required"`
-	Entity    string `json:"entity" validate:"required~entity is required"`
-	Operation string `json:"operation" validate:"required~operation is required"`
+	Name      string `json:"name"`
+	Entity    string `json:"entity"`
+	Operation string `json:"operation"`
 }
 
 func NewPermission(name, entity, operation string) *Permission {
@@ -17,4 +21,12 @@ func (p Permission) String() string {
 	return fmt.Sprintf(
 		`{%d, "%s", "%s", "%s"}`,
 		p.Id, p.Name, p.Entity, p.Operation)
+}
+
+func (p *Permission) Validate() error {
+	return valid.ValidateStruct(p,
+		valid.Field(&p.Name, valid.Required.Error("title is required")),
+		valid.Field(&p.Entity, valid.Required.Error("body is required")),
+		valid.Field(&p.Operation, valid.Required.Error("user_id is required")),
+	)
 }

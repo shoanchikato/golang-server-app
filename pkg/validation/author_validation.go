@@ -7,8 +7,6 @@ import (
 	s "app/pkg/service"
 	"fmt"
 	"strings"
-
-	valid "github.com/asaskevich/govalidator"
 )
 
 type AuthorValidator interface {
@@ -49,7 +47,7 @@ func (v *authorValidator) AddAll(authors *[]*m.Author) error {
 	newAuthors := *authors
 	errs := make([]string, len(newAuthors))
 	for i := range newAuthors {
-		_, err := valid.ValidateStruct(newAuthors[i])
+		err := newAuthors[i].Validate()
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
 			errs[i] = errStr
@@ -73,7 +71,7 @@ func (v *authorValidator) AddAll(authors *[]*m.Author) error {
 
 // Edit
 func (v *authorValidator) Edit(id int, newAuthor *m.Author) error {
-	_, err := valid.ValidateStruct(newAuthor)
+	err := newAuthor.Validate()
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())
 	}

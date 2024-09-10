@@ -4,11 +4,11 @@ import "fmt"
 
 type User struct {
 	Id        int    `json:"id,omitempty"`
-	FirstName string `json:"first_name" valid:"required~first_name is required"`
-	LastName  string `json:"last_name" valid:"required~last_name is required"`
-	Username  string `json:"username" valid:"required~username is required"`
-	Email     string `json:"email" valid:"email~is not a valid email,required~email is required"`
-	Password  string `json:"password,omitempty" valid:"required~password is required"`
+	FirstName string `json:"first_name" validate:"required~first_name is required"`
+	LastName  string `json:"last_name" validate:"required~last_name is required"`
+	Username  string `json:"username" validate:"required~username is required"`
+	Email     string `json:"email" validate:"email~is not a valid email,required~email is required"`
+	Password  string `json:"password,omitempty" validate:"required~password is required"`
 }
 
 func NewUser(firstName, lastName, username, email, password string) *User {
@@ -24,10 +24,10 @@ func (u User) String() string {
 
 type EditUser struct {
 	Id        int    `json:"id,omitempty"`
-	FirstName string `json:"first_name" valid:"required~first_name is required"`
-	LastName  string `json:"last_name" valid:"required~last_name is required"`
-	Username  string `json:"username" valid:"required~username is required"`
-	Email     string `json:"email" valid:"email~is not a valid email,required~email is required"`
+	FirstName string `json:"first_name" validate:"required~first_name is required"`
+	LastName  string `json:"last_name" validate:"required~last_name is required"`
+	Username  string `json:"username" validate:"required~username is required"`
+	Email     string `json:"email" validate:"email~is not a valid email,required~email is required"`
 }
 
 func (e EditUser) ToUser() *User {

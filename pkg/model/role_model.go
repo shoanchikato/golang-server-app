@@ -2,7 +2,7 @@ package model
 
 type Role struct {
 	Id   int    `json:"id,omitempty"`
-	Name string `json:"name" valid:"required~name is required"`
+	Name string `json:"name" validate:"required~name is required"`
 }
 
 func NewRole(name string) *Role {

@@ -4,9 +4,9 @@ import "fmt"
 
 type Permission struct {
 	Id        int    `json:"id,omitempty"`
-	Name      string `json:"name" valid:"required~name is required"`
-	Entity    string `json:"entity" valid:"required~entity is required"`
-	Operation string `json:"operation" valid:"required~operation is required"`
+	Name      string `json:"name" validate:"required~name is required"`
+	Entity    string `json:"entity" validate:"required~entity is required"`
+	Operation string `json:"operation" validate:"required~operation is required"`
 }
 
 func NewPermission(name, entity, operation string) *Permission {

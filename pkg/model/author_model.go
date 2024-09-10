@@ -6,8 +6,8 @@ import (
 
 type Author struct {
 	Id        int     `json:"id"`
-	FirstName string  `json:"first_name" valid:"required~first_name is required"`
-	LastName  string  `json:"last_name" valid:"required~last_name is required"`
+	FirstName string  `json:"first_name" validate:"required~first_name is required"`
+	LastName  string  `json:"last_name" validate:"required~last_name is required"`
 	Books     *[]Book `json:"books,omitempty"`
 }
 

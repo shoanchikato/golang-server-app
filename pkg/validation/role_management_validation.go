@@ -3,6 +3,7 @@ package validation
 import (
 	m "app/pkg/model"
 	r "app/pkg/repo"
+	s "app/pkg/service"
 )
 
 type RoleManagementValidator interface {
@@ -13,10 +14,11 @@ type RoleManagementValidator interface {
 
 type rMValidator struct {
 	repo r.RoleManagementRepo
+	service s.ValidationService
 }
 
-func NewRoleManagementValidator(repo r.RoleManagementRepo) RoleManagementValidator {
-	return &rMValidator{repo}
+func NewRoleManagementValidator(repo r.RoleManagementRepo, service s.ValidationService) RoleManagementValidator {
+	return &rMValidator{repo, service}
 }
 
 // AddRoleToUser

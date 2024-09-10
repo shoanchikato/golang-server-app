@@ -4,6 +4,7 @@ import (
 	e "app/pkg/errors"
 	m "app/pkg/model"
 	r "app/pkg/repo"
+	s "app/pkg/service"
 	"fmt"
 	"strings"
 
@@ -21,15 +22,16 @@ type AuthorValidator interface {
 
 type authorValidator struct {
 	Repo r.AuthorRepo
+	service s.ValidationService
 }
 
-func NewAuthorValidator(repo r.AuthorRepo) AuthorValidator {
-	return &authorValidator{repo}
+func NewAuthorValidator(repo r.AuthorRepo, service s.ValidationService) AuthorValidator {
+	return &authorValidator{repo, service}
 }
 
 // Add
 func (v *authorValidator) Add(author *m.Author) error {
-	_, err := valid.ValidateStruct(author)
+	err := v.service.Validate(author)
 	if err != nil {
 		return e.NewValidationError(e.ErrAddValidation, err.Error())
 	}

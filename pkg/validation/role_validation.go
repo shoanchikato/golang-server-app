@@ -4,10 +4,9 @@ import (
 	e "app/pkg/errors"
 	m "app/pkg/model"
 	r "app/pkg/repo"
+	s "app/pkg/service"
 	"fmt"
 	"strings"
-
-	valid "github.com/asaskevich/govalidator"
 )
 
 type RoleValidator interface {
@@ -21,15 +20,16 @@ type RoleValidator interface {
 
 type roleValidator struct {
 	repo r.RoleRepo
+	service s.ValidationService
 }
 
-func NewRoleValidator(repo r.RoleRepo) RoleValidator {
-	return &roleValidator{repo}
+func NewRoleValidator(repo r.RoleRepo, service s.ValidationService) RoleValidator {
+	return &roleValidator{repo, service}
 }
 
 // Add
 func (r *roleValidator) Add(role *m.Role) error {
-	_, err := valid.ValidateStruct(role)
+	err := r.service.Validate(role)
 	if err != nil {
 		return e.NewValidationError(e.ErrAddValidation, err.Error())
 	}
@@ -47,7 +47,7 @@ func (r *roleValidator) AddAll(roles *[]*m.Role) error {
 	newRoles := *roles
 	errs := make([]string, len(newRoles))
 	for i := range newRoles {
-		_, err := valid.ValidateStruct(newRoles[i])
+		err := r.service.Validate(newRoles[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
 			errs[i] = errStr
@@ -71,7 +71,7 @@ func (r *roleValidator) AddAll(roles *[]*m.Role) error {
 
 // Edit
 func (r *roleValidator) Edit(id int, newRole *m.Role) error {
-	_, err := valid.ValidateStruct(newRole)
+	err := r.service.Validate(newRole)
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())
 	}

@@ -48,7 +48,8 @@ func Di() DI {
 	encryptions := e.EncryptDi(en, repos)
 
 	// Validators
-	validators := v.ValidationDi(repos, encryptions)
+	validation := s.NewValidationService()
+	validators := v.ValidationDi(repos, encryptions, validation)
 
 	// Authorization
 	auth := s.NewAuthorizationService(repos.PermissionManagement)

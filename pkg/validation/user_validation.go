@@ -4,10 +4,9 @@ import (
 	en "app/pkg/encrypt"
 	e "app/pkg/errors"
 	m "app/pkg/model"
+	s "app/pkg/service"
 	"fmt"
 	"strings"
-
-	valid "github.com/asaskevich/govalidator"
 )
 
 type UserValidator interface {
@@ -21,15 +20,16 @@ type UserValidator interface {
 
 type userValidator struct {
 	encrypt en.UserEncryption
+	service s.ValidationService
 }
 
-func NewUserValidator(encrypt en.UserEncryption) UserValidator {
-	return &userValidator{encrypt}
+func NewUserValidator(encrypt en.UserEncryption, service s.ValidationService) UserValidator {
+	return &userValidator{encrypt, service}
 }
 
 // Add
 func (v *userValidator) Add(user *m.User) error {
-	_, err := valid.ValidateStruct(user)
+	err := v.service.Validate(user)
 	if err != nil {
 		return e.NewValidationError(e.ErrAddValidation, err.Error())
 	}
@@ -47,7 +47,7 @@ func (v *userValidator) AddAll(users *[]*m.User) error {
 	newUsers := *users
 	errs := make([]string, len(newUsers))
 	for i := range newUsers {
-		_, err := valid.ValidateStruct(newUsers[i])
+		err := v.service.Validate(newUsers[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
 			errs[i] = errStr
@@ -71,7 +71,7 @@ func (v *userValidator) AddAll(users *[]*m.User) error {
 
 // Edit
 func (v *userValidator) Edit(id int, newUser *m.EditUser) error {
-	_, err := valid.ValidateStruct(newUser)
+	err := v.service.Validate(newUser)
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())
 	}

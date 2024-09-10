@@ -4,10 +4,9 @@ import (
 	e "app/pkg/errors"
 	m "app/pkg/model"
 	r "app/pkg/repo"
+	s "app/pkg/service"
 	"fmt"
 	"strings"
-
-	valid "github.com/asaskevich/govalidator"
 )
 
 type PostValidator interface {
@@ -21,15 +20,16 @@ type PostValidator interface {
 
 type postValidator struct {
 	Repo r.PostRepo
+	service s.ValidationService
 }
 
-func NewPostValidator(repo r.PostRepo) PostValidator {
-	return &postValidator{repo}
+func NewPostValidator(repo r.PostRepo, service s.ValidationService) PostValidator {
+	return &postValidator{repo, service}
 }
 
 // Add
 func (v *postValidator) Add(post *m.Post) error {
-	_, err := valid.ValidateStruct(post)
+	err := v.service.Validate(post)
 	if err != nil {
 		return e.NewValidationError(e.ErrAddValidation, err.Error())
 	}
@@ -47,7 +47,7 @@ func (v *postValidator) AddAll(posts *[]*m.Post) error {
 	newPosts := *posts
 	errs := make([]string, len(newPosts))
 	for i := range newPosts {
-		_, err := valid.ValidateStruct(newPosts[i])
+		err := v.service.Validate(newPosts[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
 			errs[i] = errStr
@@ -71,7 +71,7 @@ func (v *postValidator) AddAll(posts *[]*m.Post) error {
 
 // Edit
 func (v *postValidator) Edit(id int, newPost *m.Post) error {
-	_, err := valid.ValidateStruct(newPost)
+	err := v.service.Validate(newPost)
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())
 	}

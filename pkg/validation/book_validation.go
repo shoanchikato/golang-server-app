@@ -4,10 +4,9 @@ import (
 	e "app/pkg/errors"
 	m "app/pkg/model"
 	r "app/pkg/repo"
+	s "app/pkg/service"
 	"fmt"
 	"strings"
-
-	valid "github.com/asaskevich/govalidator"
 )
 
 type BookValidator interface {
@@ -21,15 +20,16 @@ type BookValidator interface {
 
 type bookValidator struct {
 	Repo r.BookRepo
+	service s.ValidationService
 }
 
-func NewBookValidator(repo r.BookRepo) BookValidator {
-	return &bookValidator{repo}
+func NewBookValidator(repo r.BookRepo, service s.ValidationService) BookValidator {
+	return &bookValidator{repo, service}
 }
 
 // Add
 func (v *bookValidator) Add(book *m.Book) error {
-	_, err := valid.ValidateStruct(book)
+	err := v.service.Validate(book)
 	if err != nil {
 		return e.NewValidationError(e.ErrAddValidation, err.Error())
 	}
@@ -47,7 +47,7 @@ func (v *bookValidator) AddAll(books *[]*m.Book) error {
 	newBooks := *books
 	errs := make([]string, len(newBooks))
 	for i := range newBooks {
-		_, err := valid.ValidateStruct(newBooks[i])
+		err := v.service.Validate(newBooks[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
 			errs[i] = errStr
@@ -69,7 +69,7 @@ func (v *bookValidator) AddAll(books *[]*m.Book) error {
 
 // Edit
 func (v *bookValidator) Edit(id int, newBook *m.Book) error {
-	_, err := valid.ValidateStruct(newBook)
+	err := v.service.Validate(newBook)
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())
 	}

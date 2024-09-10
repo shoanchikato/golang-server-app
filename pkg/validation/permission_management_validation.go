@@ -3,6 +3,7 @@ package validation
 import (
 	m "app/pkg/model"
 	r "app/pkg/repo"
+	s "app/pkg/service"
 )
 
 type PermissionManagementValidator interface {
@@ -16,10 +17,11 @@ type PermissionManagementValidator interface {
 
 type pMValidator struct {
 	repo r.PermissionManagementRepo
+	service s.ValidationService
 }
 
-func NewPermissionManagementValidator(repo r.PermissionManagementRepo) PermissionManagementValidator {
-	return &pMValidator{repo}
+func NewPermissionManagementValidator(repo r.PermissionManagementRepo, validation s.ValidationService) PermissionManagementValidator {
+	return &pMValidator{repo, validation}
 }
 
 // AddPermissionToRole

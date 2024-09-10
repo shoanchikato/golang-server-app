@@ -5,8 +5,7 @@ import (
 	en "app/pkg/encrypt"
 	e "app/pkg/errors"
 	m "app/pkg/model"
-
-	valid "github.com/asaskevich/govalidator"
+	s "app/pkg/service"
 )
 
 type AuthValidator interface {
@@ -15,16 +14,17 @@ type AuthValidator interface {
 }
 
 type authValidator struct {
-	service en.AuthEncryption
+	service    en.AuthEncryption
+	validation s.ValidationService
 }
 
-func NewAuthValidator(service en.AuthEncryption) AuthValidator {
-	return &authValidator{service}
+func NewAuthValidator(service en.AuthEncryption, validation s.ValidationService) AuthValidator {
+	return &authValidator{service, validation}
 }
 
 // Login
 func (a *authValidator) Login(credentials *m.Credentials) (userId *int, err error) {
-	_, err = valid.ValidateStruct(credentials)
+	err = a.validation.Validate(credentials)
 	if err != nil {
 		return nil, e.NewValidationError(e.ErrLoginValidation, err.Error())
 	}

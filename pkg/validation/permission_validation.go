@@ -4,10 +4,9 @@ import (
 	e "app/pkg/errors"
 	m "app/pkg/model"
 	r "app/pkg/repo"
+	s "app/pkg/service"
 	"fmt"
 	"strings"
-
-	valid "github.com/asaskevich/govalidator"
 )
 
 type PermissionValidator interface {
@@ -22,15 +21,16 @@ type PermissionValidator interface {
 
 type permissionValidator struct {
 	repo r.PermissionRepo
+	service s.ValidationService
 }
 
-func NewPermissionValidator(repo r.PermissionRepo) PermissionValidator {
-	return &permissionValidator{repo}
+func NewPermissionValidator(repo r.PermissionRepo, service s.ValidationService) PermissionValidator {
+	return &permissionValidator{repo, service}
 }
 
 // Add
 func (v *permissionValidator) Add(permission *m.Permission) error {
-	_, err := valid.ValidateStruct(permission)
+	err := v.service.Validate(permission)
 	if err != nil {
 		return e.NewValidationError(e.ErrAddValidation, err.Error())
 	}
@@ -48,7 +48,7 @@ func (v *permissionValidator) AddAll(permissions *[]*m.Permission) error {
 	newPermissions := *permissions
 	errs := make([]string, len(newPermissions))
 	for i := range newPermissions {
-		_, err := valid.ValidateStruct(newPermissions[i])
+		err := v.service.Validate(newPermissions[i])
 		if err != nil {
 			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
 			errs[i] = errStr
@@ -72,7 +72,7 @@ func (v *permissionValidator) AddAll(permissions *[]*m.Permission) error {
 
 // Edit
 func (v *permissionValidator) Edit(id int, newPermission *m.Permission) error {
-	_, err := valid.ValidateStruct(newPermission)
+	err := v.service.Validate(newPermission)
 	if err != nil {
 		return e.NewValidationError(e.ErrEditValidation, err.Error())
 	}

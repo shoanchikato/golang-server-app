@@ -3,6 +3,7 @@ package validation
 import (
 	en "app/pkg/encrypt"
 	r "app/pkg/repo"
+	s "app/pkg/service"
 )
 
 type Validators struct {
@@ -17,16 +18,16 @@ type Validators struct {
 	PermissionManagement PermissionManagementValidator
 }
 
-func ValidationDi(repos *r.Repos, encryptions *en.Encryptions) *Validators {
-	user := NewUserValidator(encryptions.User)
-	auth := NewAuthValidator(encryptions.Auth)
-	role := NewRoleValidator(repos.Role)
-	permission := NewPermissionValidator(repos.Permission)
-	author := NewAuthorValidator(repos.Author)
-	book := NewBookValidator(repos.Book)
-	post := NewPostValidator(repos.Post)
-	roleManagment := NewRoleManagementValidator(repos.RoleManagement)
-	permissionManagement := NewPermissionManagementValidator(repos.PermissionManagement)
+func ValidationDi(repos *r.Repos, encryptions *en.Encryptions, validation s.ValidationService) *Validators {
+	user := NewUserValidator(encryptions.User, validation)
+	auth := NewAuthValidator(encryptions.Auth, validation)
+	role := NewRoleValidator(repos.Role, validation)
+	permission := NewPermissionValidator(repos.Permission, validation)
+	author := NewAuthorValidator(repos.Author, validation)
+	book := NewBookValidator(repos.Book, validation)
+	post := NewPostValidator(repos.Post, validation)
+	roleManagment := NewRoleManagementValidator(repos.RoleManagement, validation)
+	permissionManagement := NewPermissionManagementValidator(repos.PermissionManagement, validation)
 
 	return &Validators{user, auth, role, permission, author, book, post, roleManagment, permissionManagement}
 }

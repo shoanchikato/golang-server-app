@@ -13,6 +13,9 @@ fmt:
 lint:
 	go vet --race ./...
 
+tidy:
+	go mod tidy
+
 build:
 	go build -o app cmd/server/*.go
 

@@ -1,10 +1,5 @@
 package service
 
-import (
-	_ "github.com/asaskevich/govalidator"
-	_ "github.com/go-playground/validator"
-)
-
 type ValidateModel interface {
 	Validate() error
 }

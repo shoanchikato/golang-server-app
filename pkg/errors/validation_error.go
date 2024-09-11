@@ -14,18 +14,18 @@ var (
 )
 
 type ValidationError struct {
-	Err    error
-	ErrStr string
+	DomainErr error
+	Errs      []error
 }
 
-func NewValidationError(err error, errStr string) error {
-	return &ValidationError{err, errStr}
+func NewValidationError(domainErr error, errs ...error) error {
+	return &ValidationError{domainErr, errs}
 }
 
 func (v *ValidationError) Error() string {
-	return fmt.Sprintf("%s: %s", v.Err.Error(), v.ErrStr)
+	return fmt.Sprintf("%s: %s", v.DomainErr, v.Errs)
 }
 
 func (v *ValidationError) Is(target error) bool {
-	return target == v.Err
+	return target == v.DomainErr
 }

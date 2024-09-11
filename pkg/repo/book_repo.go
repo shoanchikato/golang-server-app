@@ -23,26 +23,27 @@ type bookRepo struct {
 	db  *sql.DB
 	rw  *sync.RWMutex
 	dbU DBUtil
+	ar AuthorRepo
 }
 
-func NewBookRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil) BookRepo {
+func NewBookRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil, ar AuthorRepo) BookRepo {
 
-	return &bookRepo{db, rw, dbU}
+	return &bookRepo{db, rw, dbU, ar}
 }
 
 // Add
 func (p *bookRepo) Add(book *m.Book) error {
-	id, err := p.dbU.Transaction(st.ADD_BOOK_STMT, book.Name, book.Year)
+	_, err := p.ar.GetOne(book.AuthorId)
+	if err != nil {
+		return errors.Join(e.ErrBookDomain, e.ErrOnAdd, err)
+	}
+
+	id, err := p.dbU.Transaction(st.ADD_BOOK_STMT, book.Name, book.Year, book.AuthorId)
 	if err != nil {
 		return errors.Join(e.ErrBookDomain, e.ErrOnAdd, err)
 	}
 
 	book.Id = int(id)
-
-	_, err = p.dbU.Transaction(st.ADD_AUTHOR_BOOK_RLTN_STMT, book.AuthorId, book.Id)
-	if err != nil {
-		return errors.Join(e.ErrBookDomain, e.ErrOnAdd, err)
-	}
 
 	return nil
 }

@@ -24,7 +24,7 @@ type postRepo struct {
 	db  *sql.DB
 	rw  *sync.RWMutex
 	dbU DBUtil
-	ur UserRepo
+	ur  UserRepo
 }
 
 func NewPostRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil, ur UserRepo) PostRepo {

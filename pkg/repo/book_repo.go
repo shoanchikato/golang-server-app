@@ -23,7 +23,7 @@ type bookRepo struct {
 	db  *sql.DB
 	rw  *sync.RWMutex
 	dbU DBUtil
-	ar AuthorRepo
+	ar  AuthorRepo
 }
 
 func NewBookRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil, ar AuthorRepo) BookRepo {
@@ -62,7 +62,7 @@ func (p *bookRepo) AddAll(books *[]*m.Book) error {
 
 // Edit
 func (p *bookRepo) Edit(id int, book *m.Book) error {
-	idx, err := p.dbU.Transaction(st.EDIT_BOOK_STMT, book.Name, book.Year, id)
+	idx, err := p.dbU.Transaction(st.EDIT_BOOK_STMT, book.Name, book.Year, book.AuthorId, id)
 	if err != nil {
 		return errors.Join(e.ErrBookDomain, e.ErrOnEdit, err)
 	}
@@ -89,7 +89,7 @@ func (p *bookRepo) GetAll(lastId, limit int) (*[]m.Book, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&book.Id, &book.Name, &book.Year)
+		err = rows.Scan(&book.Id, &book.Name, &book.Year, &book.AuthorId)
 		if err != nil {
 			return nil, errors.Join(e.ErrBookDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
@@ -112,7 +112,7 @@ func (p *bookRepo) GetOne(id int) (*m.Book, error) {
 	book := m.Book{}
 
 	row := p.db.QueryRow(st.GET_ONE_BOOK_STMT, id)
-	err := row.Scan(&book.Id, &book.Name, &book.Year)
+	err := row.Scan(&book.Id, &book.Name, &book.Year, &book.AuthorId)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(e.ErrBookDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("book id", strconv.Itoa(id)))
 	}
@@ -126,7 +126,7 @@ func (p *bookRepo) GetOne(id int) (*m.Book, error) {
 
 // Remove
 func (p *bookRepo) Remove(id int) error {
-	_, err := p.dbU.Transaction(st.REMOVE_BOOK_STMT, id)
+	_, err := p.dbU.Transaction(st.REMOVE_BOOK_STMT, id, id)
 	if err != nil {
 		return errors.Join(e.ErrBookDomain, e.ErrOnRemove, err)
 	}

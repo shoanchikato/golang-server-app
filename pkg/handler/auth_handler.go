@@ -31,7 +31,7 @@ func (a *authHandler) Login(c *fiber.Ctx) error {
 
 	err := c.BodyParser(&credentials)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
 	}
 
 	tokens, err := a.service.Login(&credentials)
@@ -50,7 +50,7 @@ func (a *authHandler) ResetPassword(c *fiber.Ctx) error {
 
 	err := c.BodyParser(&credentials)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
 	}
 
 	err = a.service.ResetPassword(credentials.Username, credentials.Password)

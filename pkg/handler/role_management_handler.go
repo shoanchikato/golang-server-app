@@ -27,17 +27,17 @@ func NewRoleManagementHandler(service ef.RoleManagementHttpErrorFmt) RoleManagem
 func (r *roleManagementHandler) AddRoleToUser(c *fiber.Ctx) error {
 	adminId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
 	}
 
 	roleId, err := getIntParam(c, "roleId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(e.ErrProvideNumericId.Error())
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
 	}
 
 	userId, err := getIntParam(c, "userId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(e.ErrProvideNumericId.Error())
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
 	}
 
 	err = r.service.AddRoleToUser(*adminId, *roleId, *userId)
@@ -53,12 +53,12 @@ func (r *roleManagementHandler) AddRoleToUser(c *fiber.Ctx) error {
 func (r *roleManagementHandler) GetRoleByUserId(c *fiber.Ctx) error {
 	adminId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
 	}
 
 	userId, err := getIntParam(c, "userId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(e.ErrProvideNumericId.Error())
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
 	}
 
 	role, err := r.service.GetRoleByUserId(*adminId, *userId)
@@ -74,17 +74,17 @@ func (r *roleManagementHandler) GetRoleByUserId(c *fiber.Ctx) error {
 func (r *roleManagementHandler) RemoveRoleFromUser(c *fiber.Ctx) error {
 	adminId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(err.Error())
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
 	}
 
 	roleId, err := getIntParam(c, "roleId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(e.ErrProvideNumericId.Error())
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
 	}
 
 	userId, err := getIntParam(c, "userId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).SendString(e.ErrProvideNumericId.Error())
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
 	}
 
 	err = r.service.RemoveRoleFromUser(*adminId, *roleId, *userId)

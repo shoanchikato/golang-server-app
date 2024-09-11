@@ -34,25 +34,25 @@ func (er *httpErrorFmt) GetError(err error) error {
 		switch {
 		case errors.Is(err, e.ErrIncorrectCredentials):
 			logger.Error(err.Error())
-			return e.NewHttpError("incorrect username or password", http.StatusUnauthorized)
+			return e.NewHttpError(http.StatusUnauthorized, e.ErrIncorrectCredentials)
 		case errors.Is(err, e.ErrNotAuthorized):
 			logger.Error(err.Error())
-			return e.NewHttpError("user is not authorized", http.StatusUnauthorized)
+			return e.NewHttpError(http.StatusUnauthorized, e.ErrNotAuthorized)
 		case errors.Is(err, e.ErrInvalidToken):
 			logger.Error(err.Error())
-			return e.NewHttpError("token is invalid", http.StatusUnauthorized)
+			return e.NewHttpError(http.StatusUnauthorized, e.ErrInvalidToken)
 		case errors.Is(err, e.ErrTokenExpired):
 			logger.Error(err.Error())
-			return e.NewHttpError(err.Error(), http.StatusUnauthorized)
+			return e.NewHttpError(http.StatusUnauthorized, e.ErrTokenExpired)
 		case errors.As(err, &validationErr):
-			return e.NewHttpError(validationErr.ErrStr, http.StatusBadRequest)
+			return e.NewHttpError(http.StatusBadRequest, err)
 		case errors.As(err, &duplicateErr):
-			return e.NewHttpError(duplicateErr.ErrStr, http.StatusBadRequest)
+			return e.NewHttpError(http.StatusBadRequest, err)
 		case errors.As(err, &notFoundErr):
-			return e.NewHttpError(notFoundErr.ErrStr, http.StatusNotFound)
+			return e.NewHttpError(http.StatusNotFound, err)
 		default:
 			logger.Error(fmt.Sprintf("Server error: %v", err))
-			return e.NewHttpError("server error", http.StatusInternalServerError)
+			return e.NewHttpError(http.StatusInternalServerError, errors.New("server error"))
 		}
 	}
 

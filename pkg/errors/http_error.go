@@ -9,6 +9,7 @@ var (
 	ErrProvideNumericId = errors.New("please provide a numeric id")
 )
 
+// HttpError
 type HttpError struct {
 	Err        error
 	HTTPStatus int
@@ -34,6 +35,8 @@ func (h *HttpError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(NewHttpErrorMap(h.Err.Error()))
 }
 
+
+// HttpErrorMap
 type HttpErrorMap = map[string]map[string]string
 
 func NewHttpErrorMap(message string) *HttpErrorMap {

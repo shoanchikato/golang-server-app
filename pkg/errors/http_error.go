@@ -3,11 +3,27 @@ package errors
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 )
 
 var (
 	ErrProvideNumericId = errors.New("please provide a numeric id")
 )
+
+// IntParamError
+type IntParamError struct {
+	ErrStr string
+	ParamName string
+}
+
+func NewIntParamError(paramName string) *IntParamError {
+	errStr :=  fmt.Sprintf("please provide a numeric %s", paramName)
+	return &IntParamError{errStr, paramName}
+}
+
+func (i *IntParamError) Error() string {
+	return i.ErrStr
+}
 
 // HttpError
 type HttpError struct {

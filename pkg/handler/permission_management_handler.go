@@ -46,7 +46,7 @@ func (p *permissionManagementHandler) AddPermissionToRole(c *fiber.Ctx) error {
 	err = p.service.AddPermissionToRole(*adminId, *permissionId, *roleId)
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.SendStatus(http.StatusAccepted)
@@ -73,7 +73,7 @@ func (p *permissionManagementHandler) AddPermissionsToRole(c *fiber.Ctx) error {
 	err = p.service.AddPermissionsToRole(*adminId, permissionIds, *roleId)
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.SendStatus(http.StatusAccepted)
@@ -94,7 +94,7 @@ func (p *permissionManagementHandler) GetPermissionsByRoleId(c *fiber.Ctx) error
 	permissions, err := p.service.GetPermissionsByRoleId(*adminId, *roleId)
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.Status(http.StatusOK).JSON(permissions)
@@ -115,7 +115,7 @@ func (p *permissionManagementHandler) GetPermissionsByUserId(c *fiber.Ctx) error
 	permissions, err := p.service.GetPermissionsByUserId(*adminId, *userId)
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.Status(http.StatusOK).JSON(permissions)
@@ -141,7 +141,7 @@ func (p *permissionManagementHandler) RemovePermissionFromRole(c *fiber.Ctx) err
 	err = p.service.RemovePermissionFromRole(*adminId, *roleId, *permissionId)
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.SendStatus(http.StatusAccepted)
@@ -168,7 +168,7 @@ func (p *permissionManagementHandler) RemovePermissionsFromRole(c *fiber.Ctx) er
 	err = p.service.RemovePermissionsFromRole(*adminId, *roleId, permissionIds)
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.SendStatus(http.StatusAccepted)

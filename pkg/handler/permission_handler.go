@@ -45,7 +45,7 @@ func (p *permissionHandler) Add(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.Status(http.StatusCreated).JSON(permission)
@@ -74,7 +74,7 @@ func (p *permissionHandler) AddAll(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.Status(http.StatusCreated).JSON(newPermissions)
@@ -103,7 +103,7 @@ func (p *permissionHandler) Edit(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.Status(http.StatusCreated).JSON(permission)
@@ -120,7 +120,7 @@ func (p *permissionHandler) GetAll(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.Status(http.StatusCreated).JSON(users)
@@ -142,7 +142,7 @@ func (p *permissionHandler) GetOne(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.Status(http.StatusCreated).JSON(user)
@@ -164,7 +164,7 @@ func (p *permissionHandler) Remove(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).SendString(httpErr.Message)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
 	}
 
 	return c.SendStatus(http.StatusAccepted)

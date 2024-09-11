@@ -25,8 +25,8 @@ func (p Permission) String() string {
 
 func (p *Permission) Validate() error {
 	return valid.ValidateStruct(p,
-		valid.Field(&p.Name, valid.Required.Error("title is required")),
-		valid.Field(&p.Entity, valid.Required.Error("body is required")),
-		valid.Field(&p.Operation, valid.Required.Error("user_id is required")),
+		valid.Field(&p.Name, valid.Required.Error("name is required")),
+		valid.Field(&p.Entity, valid.Required.Error("entity is required")),
+		valid.Field(&p.Operation, valid.Required.Error("operation is required")),
 	)
 }

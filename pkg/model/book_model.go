@@ -26,8 +26,8 @@ func (b Book) String() string {
 
 func (b *Book) Validate() error {
 	return valid.ValidateStruct(b,
-		valid.Field(&b.Name, valid.Required.Error("username is required")),
-		valid.Field(&b.Year, valid.Required.Error("password is required")),
+		valid.Field(&b.Name, valid.Required.Error("name is required")),
+		valid.Field(&b.Year, valid.Required.Error("year is required")),
 		valid.Field(&b.AuthorId, valid.Required.Error("author_id is required")),
 	)
 }

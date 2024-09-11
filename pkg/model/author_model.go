@@ -26,7 +26,7 @@ func NewAuthor(firstName, lastName string) *Author {
 
 func (a *Author) Validate() error {
 	return valid.ValidateStruct(a,
-		valid.Field(&a.FirstName, valid.Required.Error("username is required")),
-		valid.Field(&a.LastName, valid.Required.Error("password is required")),
+		valid.Field(&a.FirstName, valid.Required.Error("first_name is required")),
+		valid.Field(&a.LastName, valid.Required.Error("last_name is required")),
 	)
 }

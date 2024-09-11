@@ -24,7 +24,7 @@ func RepoDi(db *sql.DB, rw *sync.RWMutex, dbU DBUtil) *Repos {
 	permission := NewPermissionRepo(db, rw, dbU)
 	author := NewAuthorRepo(db, rw, dbU)
 	book := NewBookRepo(db, rw, dbU, author)
-	post := NewPostRepo(db, rw, dbU)
+	post := NewPostRepo(db, rw, dbU, user)
 	roleManagment := NewRoleManagementRepo(db, rw, dbU, user, role, permission)
 	permissionManagement := NewPermissionManagementRepo(db, rw, dbU, user, role, permission)
 

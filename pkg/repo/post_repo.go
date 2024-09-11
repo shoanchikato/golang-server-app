@@ -24,19 +24,25 @@ type postRepo struct {
 	db  *sql.DB
 	rw  *sync.RWMutex
 	dbU DBUtil
+	ur UserRepo
 }
 
-func NewPostRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil) PostRepo {
+func NewPostRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil, ur UserRepo) PostRepo {
 	_, err := db.Exec(st.CREATE_POST_TABLE_STMT)
 	if err != nil {
 		log.Fatalf("error creating post table: %v: %s\n", err, st.CREATE_POST_TABLE_STMT)
 	}
 
-	return &postRepo{db, rw, dbU}
+	return &postRepo{db, rw, dbU, ur}
 }
 
 // Add
 func (p *postRepo) Add(post *m.Post) error {
+	_, err := p.ur.GetOne(post.UserId)
+	if err != nil {
+		return errors.Join(e.ErrPostDomain, e.ErrOnAdd, err)
+	}
+
 	id, err := p.dbU.Transaction(st.ADD_POST_STMT, post.Title, post.Body, post.UserId)
 	if err != nil {
 		return errors.Join(e.ErrPostDomain, e.ErrOnAdd, err)

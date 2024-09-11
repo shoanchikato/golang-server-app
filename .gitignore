@@ -2,3 +2,4 @@ app
 main
 small*
 .vscode
+.env

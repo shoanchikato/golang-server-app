@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 )
 
 type DI struct {
@@ -25,12 +26,22 @@ type DI struct {
 }
 
 func Di() DI {
-	db, err := sql.Open("sqlite3", "small.db?_journal_mode=WAL")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	env, err := godotenv.Read()
+	if err != nil {
+		log.Fatal("error loading env map")
+	}
+
+	db, err := sql.Open(env["DB_DRIVER"], env["DB_CONN"])
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	signingSecret := "my secret"
+	signingSecret := env["SECRET"]
 	jwt := s.NewJWTService(
 		&signingSecret,
 		time.Duration(20*time.Minute),

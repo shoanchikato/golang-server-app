@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 )
@@ -28,4 +29,12 @@ func (v *ValidationError) Error() string {
 
 func (v *ValidationError) Is(target error) bool {
 	return target == v.DomainErr
+}
+
+func (v *ValidationError) MarshalJSON() ([]byte, error) {
+	if len(v.Errs) > 1 {
+		return json.Marshal(v.Errs)
+	}
+
+	return json.Marshal(v.Errs[0])
 }

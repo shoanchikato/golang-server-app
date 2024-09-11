@@ -45,7 +45,7 @@ func (p *roleHandler) Add(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusCreated).JSON(role)
@@ -74,7 +74,7 @@ func (p *roleHandler) AddAll(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusCreated).JSON(newRoles)
@@ -103,7 +103,7 @@ func (p *roleHandler) Edit(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusCreated).JSON(role)
@@ -120,7 +120,7 @@ func (p *roleHandler) GetAll(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusCreated).JSON(users)
@@ -142,7 +142,7 @@ func (p *roleHandler) GetOne(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusCreated).JSON(user)
@@ -164,7 +164,7 @@ func (p *roleHandler) Remove(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.SendStatus(http.StatusAccepted)

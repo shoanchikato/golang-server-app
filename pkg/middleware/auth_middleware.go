@@ -38,7 +38,7 @@ func (a *authMiddleware) JWTParser(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if err = a.httpErrorFmt.GetError(err); errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	userIDKey := UserContextKey("userId")

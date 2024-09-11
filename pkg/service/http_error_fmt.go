@@ -45,11 +45,11 @@ func (er *httpErrorFmt) GetError(err error) error {
 			logger.Error(err.Error())
 			return e.NewHttpError(http.StatusUnauthorized, e.ErrTokenExpired)
 		case errors.As(err, &validationErr):
-			return e.NewHttpError(http.StatusBadRequest, err)
+			return e.NewHttpError(http.StatusBadRequest, validationErr)
 		case errors.As(err, &duplicateErr):
-			return e.NewHttpError(http.StatusBadRequest, err)
+			return e.NewHttpError(http.StatusBadRequest, duplicateErr)
 		case errors.As(err, &notFoundErr):
-			return e.NewHttpError(http.StatusNotFound, err)
+			return e.NewHttpError(http.StatusNotFound, notFoundErr)
 		default:
 			logger.Error(fmt.Sprintf("Server error: %v", err))
 			return e.NewHttpError(http.StatusInternalServerError, errors.New("server error"))

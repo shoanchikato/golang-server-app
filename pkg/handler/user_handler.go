@@ -45,7 +45,7 @@ func (u *userHandler) Add(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusCreated).JSON(user)
@@ -67,14 +67,14 @@ func (u *userHandler) AddAll(c *fiber.Ctx) error {
 
 	newUsers := []*m.User{}
 	for i := range users {
-		newUsers[i] = &users[i]
+		newUsers = append(newUsers, &users[i])
 	}
 
 	err = u.service.AddAll(*userId, &newUsers)
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusCreated).JSON(newUsers)
@@ -103,7 +103,7 @@ func (u *userHandler) Edit(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusCreated).JSON(user)
@@ -120,7 +120,7 @@ func (u *userHandler) GetAll(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusCreated).JSON(users)
@@ -142,7 +142,7 @@ func (u *userHandler) GetOne(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusCreated).JSON(user)
@@ -164,7 +164,7 @@ func (u *userHandler) Remove(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.SendStatus(http.StatusAccepted)

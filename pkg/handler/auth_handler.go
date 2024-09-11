@@ -38,7 +38,7 @@ func (a *authHandler) Login(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.JSON(tokens)
@@ -57,7 +57,7 @@ func (a *authHandler) ResetPassword(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.SendStatus(http.StatusCreated)

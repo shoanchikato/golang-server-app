@@ -43,7 +43,7 @@ func (r *roleManagementHandler) AddRoleToUser(c *fiber.Ctx) error {
 	err = r.service.AddRoleToUser(*adminId, *roleId, *userId)
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.SendStatus(http.StatusAccepted)
@@ -64,7 +64,7 @@ func (r *roleManagementHandler) GetRoleByUserId(c *fiber.Ctx) error {
 	role, err := r.service.GetRoleByUserId(*adminId, *userId)
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.Status(http.StatusOK).JSON(role)
@@ -90,7 +90,7 @@ func (r *roleManagementHandler) RemoveRoleFromUser(c *fiber.Ctx) error {
 	err = r.service.RemoveRoleFromUser(*adminId, *roleId, *userId)
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
-		return c.Status(httpErr.HTTPStatus).JSON(httpErr.Errs)
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
 	return c.SendStatus(http.StatusAccepted)

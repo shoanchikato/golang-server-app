@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 )
@@ -20,37 +21,45 @@ var (
 type RepoNotFoundError struct {
 	Entity string
 	Id     string
-	ErrStr string
+	Err    error
 }
 
 func NewErrRepoNotFound(entity, id string) error {
-	errStr := fmt.Sprintf("%s %s not found", entity, id)
-	err := RepoNotFoundError{entity, id, errStr}
+	notFoundErr := fmt.Errorf("%s %s not found", entity, id)
+	err := RepoNotFoundError{entity, id, notFoundErr}
 	return &err
 }
 
 func (e *RepoNotFoundError) Error() string {
-	return e.ErrStr
+	return e.Err.Error()
 }
 
 func (e *RepoNotFoundError) Is(target error) bool {
 	return ErrRepoNotFound == target
 }
 
+func (e *RepoNotFoundError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(
+		struct {
+			Message string `json:"message"`
+		}{e.Err.Error()},
+	)
+}
+
 // RepoDuplicateError
 type RepoDuplicateError struct {
-	Field  string
-	ErrStr string
+	Field string
+	Err   error
 }
 
 func NewErrRepoDuplicate(field string) error {
-	errStr := fmt.Sprintf("%s already exists", field)
-	err := RepoDuplicateError{field, errStr}
+	duplicateErr := fmt.Errorf("%s already exists", field)
+	err := RepoDuplicateError{field, duplicateErr}
 	return &err
 }
 
 func (e *RepoDuplicateError) Error() string {
-	return fmt.Sprintf("repo: duplicate entry: %s", e.ErrStr)
+	return e.Err.Error()
 }
 
 func (e *RepoDuplicateError) Is(target error) bool {

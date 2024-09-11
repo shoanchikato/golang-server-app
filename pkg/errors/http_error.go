@@ -1,9 +1,8 @@
 package errors
 
 import (
+	"encoding/json"
 	"errors"
-	"fmt"
-	"strings"
 )
 
 var (
@@ -11,21 +10,31 @@ var (
 )
 
 type HttpError struct {
-	Errs       []error
+	Err        error
 	HTTPStatus int
 }
 
-func NewHttpError(httpStatus int, errs ...error) error {
-	return &HttpError{errs, httpStatus}
+func NewHttpError(httpStatus int, err error) error {
+	return &HttpError{err, httpStatus}
 }
 
 func (h *HttpError) Error() string {
-	errStrs := []string{}
+	return h.Err.Error()
+}
 
-	for i, err := range h.Errs {
-		value := fmt.Sprintf("[%d]: %s", i, err)
-		errStrs = append(errStrs, value)
+func (h *HttpError) MarshalJSON() ([]byte, error) {
+	if m, ok := h.Err.(json.Marshaler); ok {
+		return json.Marshal(
+			map[string]json.Marshaler{
+				"error": m,
+			},
+		)
 	}
 
-	return strings.Join(errStrs, "")
+	return json.Marshal(
+		map[string]map[string]string{
+			"error": {
+				"message": h.Err.Error(),
+			},
+		})
 }

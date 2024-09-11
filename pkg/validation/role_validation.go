@@ -5,8 +5,6 @@ import (
 	m "app/pkg/model"
 	r "app/pkg/repo"
 	s "app/pkg/service"
-	"fmt"
-	"strings"
 )
 
 type RoleValidator interface {
@@ -19,7 +17,7 @@ type RoleValidator interface {
 }
 
 type roleValidator struct {
-	repo r.RoleRepo
+	repo    r.RoleRepo
 	service s.ValidationService
 }
 
@@ -31,7 +29,7 @@ func NewRoleValidator(repo r.RoleRepo, service s.ValidationService) RoleValidato
 func (r *roleValidator) Add(role *m.Role) error {
 	err := r.service.Validate(role)
 	if err != nil {
-		return e.NewValidationError(e.ErrAddValidation, err.Error())
+		return e.NewValidationError(e.ErrAddValidation, err)
 	}
 
 	err = r.repo.Add(role)
@@ -45,20 +43,16 @@ func (r *roleValidator) Add(role *m.Role) error {
 // AddAll
 func (r *roleValidator) AddAll(roles *[]*m.Role) error {
 	newRoles := *roles
-	errs := make([]string, len(newRoles))
+	errs := make([]error, 0, len(newRoles))
 	for i := range newRoles {
 		err := r.service.Validate(newRoles[i])
 		if err != nil {
-			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
-			errs[i] = errStr
+			errs = append(errs, err)
 		}
 	}
 
-	for i := len(newRoles) - 1; i > 0; i-- {
-		if errs[i] != "" {
-			newErrors := strings.Join(errs, "")
-			return e.NewValidationError(e.ErrAddAllValidation, newErrors)
-		}
+	if len(errs) > 0 {
+		return e.NewValidationError(e.ErrAddAllValidation, errs...)
 	}
 
 	err := r.repo.AddAll(roles)
@@ -73,7 +67,7 @@ func (r *roleValidator) AddAll(roles *[]*m.Role) error {
 func (r *roleValidator) Edit(id int, newRole *m.Role) error {
 	err := r.service.Validate(newRole)
 	if err != nil {
-		return e.NewValidationError(e.ErrEditValidation, err.Error())
+		return e.NewValidationError(e.ErrEditValidation, err)
 	}
 
 	err = r.repo.Edit(id, newRole)

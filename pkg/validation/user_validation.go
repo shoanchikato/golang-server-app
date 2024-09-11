@@ -5,8 +5,6 @@ import (
 	e "app/pkg/errors"
 	m "app/pkg/model"
 	s "app/pkg/service"
-	"fmt"
-	"strings"
 )
 
 type UserValidator interface {
@@ -31,7 +29,7 @@ func NewUserValidator(encrypt en.UserEncryption, service s.ValidationService) Us
 func (v *userValidator) Add(user *m.User) error {
 	err := v.service.Validate(user)
 	if err != nil {
-		return e.NewValidationError(e.ErrAddValidation, err.Error())
+		return e.NewValidationError(e.ErrAddValidation, err)
 	}
 
 	err = v.encrypt.Add(user)
@@ -45,20 +43,16 @@ func (v *userValidator) Add(user *m.User) error {
 // AddAll
 func (v *userValidator) AddAll(users *[]*m.User) error {
 	newUsers := *users
-	errs := make([]string, len(newUsers))
+	errs := make([]error, 0, len(newUsers))
 	for i := range newUsers {
 		err := v.service.Validate(newUsers[i])
 		if err != nil {
-			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
-			errs[i] = errStr
+			errs = append(errs, err)
 		}
 	}
 
-	for i := len(newUsers) - 1; i > 0; i-- {
-		if errs[i] != "" {
-			newErrors := strings.Join(errs, "")
-			return e.NewValidationError(e.ErrAddAllValidation, newErrors)
-		}
+	if len(errs) > 0 {
+		return e.NewValidationError(e.ErrAddAllValidation, errs...)
 	}
 
 	err := v.encrypt.AddAll(users)
@@ -73,7 +67,7 @@ func (v *userValidator) AddAll(users *[]*m.User) error {
 func (v *userValidator) Edit(id int, newUser *m.EditUser) error {
 	err := v.service.Validate(newUser)
 	if err != nil {
-		return e.NewValidationError(e.ErrEditValidation, err.Error())
+		return e.NewValidationError(e.ErrEditValidation, err)
 	}
 
 	err = v.encrypt.Edit(id, newUser)

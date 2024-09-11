@@ -26,7 +26,7 @@ func NewAuthValidator(service en.AuthEncryption, validation s.ValidationService)
 func (a *authValidator) Login(credentials *m.Credentials) (userId *int, err error) {
 	err = a.validation.Validate(credentials)
 	if err != nil {
-		return nil, e.NewValidationError(e.ErrLoginValidation, err.Error())
+		return nil, e.NewValidationError(e.ErrLoginValidation, err)
 	}
 
 	return a.service.Login(*credentials)
@@ -35,11 +35,11 @@ func (a *authValidator) Login(credentials *m.Credentials) (userId *int, err erro
 // ResetPassword
 func (a *authValidator) ResetPassword(username, newPassword string) error {
 	if len(username) < c.USERNAME_LENGTH {
-		return e.NewValidationError(e.ErrResetPasswordValidation, e.ErrUsernameLength.Error())
+		return e.NewValidationError(e.ErrResetPasswordValidation, e.ErrUsernameLength)
 	}
 
 	if len(newPassword) < c.PASSWORD_LENGTH {
-		return e.NewValidationError(e.ErrResetPasswordValidation, e.ErrPasswordLength.Error())
+		return e.NewValidationError(e.ErrResetPasswordValidation, e.ErrPasswordLength)
 	}
 	return a.service.ResetPassword(username, newPassword)
 }

@@ -5,8 +5,6 @@ import (
 	m "app/pkg/model"
 	r "app/pkg/repo"
 	s "app/pkg/service"
-	"fmt"
-	"strings"
 )
 
 type BookValidator interface {
@@ -19,7 +17,7 @@ type BookValidator interface {
 }
 
 type bookValidator struct {
-	Repo r.BookRepo
+	Repo    r.BookRepo
 	service s.ValidationService
 }
 
@@ -31,7 +29,7 @@ func NewBookValidator(repo r.BookRepo, service s.ValidationService) BookValidato
 func (v *bookValidator) Add(book *m.Book) error {
 	err := v.service.Validate(book)
 	if err != nil {
-		return e.NewValidationError(e.ErrAddValidation, err.Error())
+		return e.NewValidationError(e.ErrAddValidation, err)
 	}
 
 	err = v.Repo.Add(book)
@@ -45,18 +43,16 @@ func (v *bookValidator) Add(book *m.Book) error {
 // AddAll
 func (v *bookValidator) AddAll(books *[]*m.Book) error {
 	newBooks := *books
-	errs := make([]string, len(newBooks))
+	errs := make([]error, 0, len(newBooks))
 	for i := range newBooks {
 		err := v.service.Validate(newBooks[i])
 		if err != nil {
-			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
-			errs[i] = errStr
+			errs = append(errs, err)
 		}
 	}
 
-	if errs[0] != "" {
-		newErrors := strings.Join(errs, "")
-		return e.NewValidationError(e.ErrAddAllValidation, newErrors)
+	if len(errs) > 0 {
+		return e.NewValidationError(e.ErrAddAllValidation, errs...)
 	}
 
 	err := v.Repo.AddAll(books)
@@ -71,7 +67,7 @@ func (v *bookValidator) AddAll(books *[]*m.Book) error {
 func (v *bookValidator) Edit(id int, newBook *m.Book) error {
 	err := v.service.Validate(newBook)
 	if err != nil {
-		return e.NewValidationError(e.ErrEditValidation, err.Error())
+		return e.NewValidationError(e.ErrEditValidation, err)
 	}
 
 	err = v.Repo.Edit(id, newBook)

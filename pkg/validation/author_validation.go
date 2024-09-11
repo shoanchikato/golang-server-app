@@ -5,8 +5,6 @@ import (
 	m "app/pkg/model"
 	r "app/pkg/repo"
 	s "app/pkg/service"
-	"fmt"
-	"strings"
 )
 
 type AuthorValidator interface {
@@ -19,7 +17,7 @@ type AuthorValidator interface {
 }
 
 type authorValidator struct {
-	Repo r.AuthorRepo
+	Repo    r.AuthorRepo
 	service s.ValidationService
 }
 
@@ -31,7 +29,7 @@ func NewAuthorValidator(repo r.AuthorRepo, service s.ValidationService) AuthorVa
 func (v *authorValidator) Add(author *m.Author) error {
 	err := v.service.Validate(author)
 	if err != nil {
-		return e.NewValidationError(e.ErrAddValidation, err.Error())
+		return e.NewValidationError(e.ErrAddValidation, err)
 	}
 
 	err = v.Repo.Add(author)
@@ -45,20 +43,16 @@ func (v *authorValidator) Add(author *m.Author) error {
 // AddAll
 func (v *authorValidator) AddAll(authors *[]*m.Author) error {
 	newAuthors := *authors
-	errs := make([]string, len(newAuthors))
+	errs := make([]error, 0, len(newAuthors))
 	for i := range newAuthors {
 		err := newAuthors[i].Validate()
 		if err != nil {
-			errStr := fmt.Sprintf("\n[%d] %s", i, err.Error())
-			errs[i] = errStr
+			errs = append(errs, err)
 		}
 	}
 
-	for i := len(newAuthors) - 1; i > 0; i-- {
-		if errs[i] != "" {
-			newErrors := strings.Join(errs, "")
-			return e.NewValidationError(e.ErrAddAllValidation, newErrors)
-		}
+	if len(errs) > 0 {
+		return e.NewValidationError(e.ErrAddAllValidation, errs...)
 	}
 
 	err := v.Repo.AddAll(authors)
@@ -73,7 +67,7 @@ func (v *authorValidator) AddAll(authors *[]*m.Author) error {
 func (v *authorValidator) Edit(id int, newAuthor *m.Author) error {
 	err := newAuthor.Validate()
 	if err != nil {
-		return e.NewValidationError(e.ErrEditValidation, err.Error())
+		return e.NewValidationError(e.ErrEditValidation, err)
 	}
 
 	err = v.Repo.Edit(id, newAuthor)

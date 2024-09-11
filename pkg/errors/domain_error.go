@@ -11,4 +11,5 @@ var (
 	ErrRoleDomain                 = errors.New("role: ")
 	ErrUserDomain                 = errors.New("user: ")
 	ErrPermissionManagementDomain = errors.New("permission management: ")
+	ErrRoleManagementDomain       = errors.New("role management: ")
 )

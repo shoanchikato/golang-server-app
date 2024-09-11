@@ -31,7 +31,7 @@ func NewRoleAuthorization(auth s.AuthorizationService, validator v.RoleValidator
 func (r *roleAuthorization) Add(userId int, role *m.Role) error {
 	err := r.auth.CheckForAuthorization(userId, p.RoleAdd.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnAdd, err)
+		return errors.Join(e.ErrRoleDomain, e.ErrOnAdd, err)
 	}
 
 	return r.validator.Add(role)
@@ -41,7 +41,7 @@ func (r *roleAuthorization) Add(userId int, role *m.Role) error {
 func (r *roleAuthorization) AddAll(userId int, roles *[]*m.Role) error {
 	err := r.auth.CheckForAuthorization(userId, p.RoleAddAll.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddAll, err)
+		return errors.Join(e.ErrRoleDomain, e.ErrOnAddAll, err)
 	}
 
 	return r.validator.AddAll(roles)
@@ -51,7 +51,7 @@ func (r *roleAuthorization) AddAll(userId int, roles *[]*m.Role) error {
 func (r *roleAuthorization) Edit(userId int, id int, newAuthor *m.Role) error {
 	err := r.auth.CheckForAuthorization(userId, p.RoleEdit.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnEdit, err)
+		return errors.Join(e.ErrRoleDomain, e.ErrOnEdit, err)
 	}
 
 	return r.validator.Edit(id, newAuthor)
@@ -61,7 +61,7 @@ func (r *roleAuthorization) Edit(userId int, id int, newAuthor *m.Role) error {
 func (r *roleAuthorization) GetAll(userId, lastId, limit int) (*[]m.Role, error) {
 	err := r.auth.CheckForAuthorization(userId, p.RoleGetAll.Name)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetAll, err)
+		return nil, errors.Join(e.ErrRoleDomain, e.ErrOnGetAll, err)
 	}
 
 	return r.validator.GetAll(lastId, limit)
@@ -71,7 +71,7 @@ func (r *roleAuthorization) GetAll(userId, lastId, limit int) (*[]m.Role, error)
 func (r *roleAuthorization) GetOne(userId int, id int) (*m.Role, error) {
 	err := r.auth.CheckForAuthorization(userId, p.RoleGetOne.Name)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetOne, err)
+		return nil, errors.Join(e.ErrRoleDomain, e.ErrOnGetOne, err)
 	}
 
 	return r.validator.GetOne(id)
@@ -81,7 +81,7 @@ func (r *roleAuthorization) GetOne(userId int, id int) (*m.Role, error) {
 func (r *roleAuthorization) Remove(userId int, id int) error {
 	err := r.auth.CheckForAuthorization(userId, p.RoleRemove.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnRemove, err)
+		return errors.Join(e.ErrRoleDomain, e.ErrOnRemove, err)
 	}
 
 	return r.validator.Remove(id)

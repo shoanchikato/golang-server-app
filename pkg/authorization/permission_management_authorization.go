@@ -38,7 +38,7 @@ func (pe *permissionManagementAuthorization) AddPermissionToRole(
 ) error {
 	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementAddPermissionToRole.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddAll, err)
+		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnAddPermissionToRole, err)
 	}
 
 	return pe.validator.AddPermissionToRole(permissionId, roleId)
@@ -52,7 +52,7 @@ func (pe *permissionManagementAuthorization) AddPermissionsToRole(
 ) error {
 	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementAddPermissionsToRole.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddPermissionToRole, err)
+		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnAddPermissionsToRole, err)
 	}
 
 	return pe.validator.AddPermissionsToRole(permissionIds, roleId)
@@ -65,7 +65,7 @@ func (pe *permissionManagementAuthorization) GetPermissionsByRoleId(
 ) (*[]m.Permission, error) {
 	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementGetPermissionsByRoleId.Name)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetPermissionsByRoleId, err)
+		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetPermissionsByRoleId, err)
 	}
 
 	return pe.validator.GetPermissionsByRoleId(roleId)
@@ -78,7 +78,7 @@ func (pe *permissionManagementAuthorization) GetPermissonsByUserId(
 ) (*[]m.Permission, error) {
 	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementGetPermissonsByUserId.Name)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetPermissonsByUserId, err)
+		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetPermissonsByUserId, err)
 	}
 
 	return pe.validator.GetPermissonsByUserId(userId)
@@ -92,7 +92,7 @@ func (pe *permissionManagementAuthorization) RemovePermissionFromRole(
 ) error {
 	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementRemovePermissionFromRole.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnRemovePermissionFromRole, err)
+		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnRemovePermissionFromRole, err)
 	}
 
 	return pe.validator.RemovePermissionFromRole(roleId, permissionId)
@@ -106,7 +106,7 @@ func (pe *permissionManagementAuthorization) RemovePermissionsFromRole(
 ) error {
 	err := pe.auth.CheckForAuthorization(adminId, p.PermissionManagementRemovePermissionsFromRole.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnRemovePermissionsFromRole, err)
+		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnRemovePermissionsFromRole, err)
 	}
 
 	return pe.validator.RemovePermissionsFromRole(roleId, permissionIds)

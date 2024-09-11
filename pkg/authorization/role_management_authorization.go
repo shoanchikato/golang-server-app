@@ -31,7 +31,7 @@ func NewRoleManagementAuthorization(
 func (r *roleManagementAuthorization) AddRoleToUser(adminId int, roleId int, userId int) error {
 	err := r.auth.CheckForAuthorization(adminId, p.RoleManagementAddRoleToUser.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddRoleToUser, err)
+		return errors.Join(e.ErrRoleManagementDomain, e.ErrOnAddRoleToUser, err)
 	}
 
 	return r.validator.AddRoleToUser(roleId, userId)
@@ -41,7 +41,7 @@ func (r *roleManagementAuthorization) AddRoleToUser(adminId int, roleId int, use
 func (r *roleManagementAuthorization) GetRoleByUserId(adminId int, userId int) (*m.Role, error) {
 	err := r.auth.CheckForAuthorization(adminId, p.RoleManagementGetRoleByUserId.Name)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetRoleByUserId, err)
+		return nil, errors.Join(e.ErrRoleManagementDomain, e.ErrOnGetRoleByUserId, err)
 	}
 
 	return r.validator.GetRoleByUserId(userId)
@@ -51,7 +51,7 @@ func (r *roleManagementAuthorization) GetRoleByUserId(adminId int, userId int) (
 func (r *roleManagementAuthorization) RemoveRoleFromUser(adminId int, roleId int, userId int) error {
 	err := r.auth.CheckForAuthorization(adminId, p.RoleManagementRemoveRoleFromUser.Name)
 	if err != nil {
-		return errors.Join(e.ErrAuthorDomain, e.ErrOnRemoveRoleFromUser, err)
+		return errors.Join(e.ErrRoleManagementDomain, e.ErrOnRemoveRoleFromUser, err)
 	}
 
 	return r.validator.RemoveRoleFromUser(roleId, userId)

@@ -35,7 +35,7 @@ func NewPermissionAuthorization(
 func (p *permissionAuthorization) Add(userId int, permission *m.Permission) error {
 	err := p.auth.CheckForAuthorization(userId, pe.PermissionAdd.Name)
 	if err != nil {
-		return errors.Join(e.ErrBookDomain, e.ErrOnAdd, err)
+		return errors.Join(e.ErrPermissionDomain, e.ErrOnAdd, err)
 	}
 
 	return p.validator.Add(permission)

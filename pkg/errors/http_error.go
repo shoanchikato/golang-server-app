@@ -32,16 +32,16 @@ func (h *HttpError) MarshalJSON() ([]byte, error) {
 		)
 	}
 
-	return json.Marshal(NewHttpErrorMap(h.Err.Error()))
+	return json.Marshal(NewHttpErrorMap(h.Err))
 }
 
 // HttpErrorMap
 type HttpErrorMap = map[string]map[string]string
 
-func NewHttpErrorMap(message string) *HttpErrorMap {
+func NewHttpErrorMap(err error) *HttpErrorMap {
 	return &HttpErrorMap{
 		"error": {
-			"message": message,
+			"message": err.Error(),
 		},
 	}
 }

@@ -33,12 +33,12 @@ func (p *permissionHandler) Add(c *fiber.Ctx) error {
 
 	err := c.BodyParser(&permission)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = p.service.Add(*userId, &permission)
@@ -57,12 +57,12 @@ func (p *permissionHandler) AddAll(c *fiber.Ctx) error {
 
 	err := c.BodyParser(&permissions)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	newPermissions := []*m.Permission{}
@@ -86,17 +86,17 @@ func (p *permissionHandler) Edit(c *fiber.Ctx) error {
 
 	err := c.BodyParser(&permission)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	id, err := getId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
 	}
 
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = p.service.Edit(*userId, *id, &permission)
@@ -113,7 +113,7 @@ func (p *permissionHandler) Edit(c *fiber.Ctx) error {
 func (p *permissionHandler) GetAll(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	users, err := p.service.GetAll(*userId, 0, 50)
@@ -130,12 +130,12 @@ func (p *permissionHandler) GetAll(c *fiber.Ctx) error {
 func (p *permissionHandler) GetOne(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	id, err := getId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
 	}
 
 	user, err := p.service.GetOne(*userId, *id)
@@ -152,12 +152,12 @@ func (p *permissionHandler) GetOne(c *fiber.Ctx) error {
 func (p *permissionHandler) Remove(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	id, err := getId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
 	}
 
 	err = p.service.Remove(*userId, *id)

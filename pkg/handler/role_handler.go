@@ -33,12 +33,12 @@ func (p *roleHandler) Add(c *fiber.Ctx) error {
 
 	err := c.BodyParser(&role)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = p.service.Add(*userId, &role)
@@ -57,12 +57,12 @@ func (p *roleHandler) AddAll(c *fiber.Ctx) error {
 
 	err := c.BodyParser(&roles)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	newRoles := []*m.Role{}
@@ -86,17 +86,17 @@ func (p *roleHandler) Edit(c *fiber.Ctx) error {
 
 	err := c.BodyParser(&role)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	id, err := getId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
 	}
 
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = p.service.Edit(*userId, *id, &role)
@@ -113,7 +113,7 @@ func (p *roleHandler) Edit(c *fiber.Ctx) error {
 func (p *roleHandler) GetAll(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	users, err := p.service.GetAll(*userId, 0, 50)
@@ -130,12 +130,12 @@ func (p *roleHandler) GetAll(c *fiber.Ctx) error {
 func (p *roleHandler) GetOne(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	id, err := getId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
 	}
 
 	user, err := p.service.GetOne(*userId, *id)
@@ -152,12 +152,12 @@ func (p *roleHandler) GetOne(c *fiber.Ctx) error {
 func (p *roleHandler) Remove(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	id, err := getId(c)
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId.Error()))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
 	}
 
 	err = p.service.Remove(*userId, *id)

@@ -52,7 +52,7 @@ func (p *bookRepo) AddAll(books *[]*m.Book) error {
 	for _, book := range *books {
 		err := p.Add(book)
 		if err != nil {
-			return err
+			return errors.Join(e.ErrBookDomain, e.ErrOnAddAll, err)
 		}
 	}
 

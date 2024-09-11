@@ -104,7 +104,7 @@ func (p *permissionRepo) GetAll(lastId, limit int) (*[]m.Permission, error) {
 	return &permissions, nil
 }
 
-// GetAll
+// GetByEntity
 func (p *permissionRepo) GetByEntity(entity string) (*[]m.Permission, error) {
 	p.rw.RLock()
 	defer p.rw.RUnlock()

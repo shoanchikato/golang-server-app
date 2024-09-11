@@ -47,7 +47,7 @@ func (p *roleRepo) AddAll(roles *[]*m.Role) error {
 	for _, role := range *roles {
 		err := p.Add(role)
 		if err != nil {
-			return err
+			return errors.Join(e.ErrRoleDomain, e.ErrOnAddAll, err)
 		}
 	}
 

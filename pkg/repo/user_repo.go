@@ -60,7 +60,7 @@ func (p *userRepo) AddAll(users *[]*m.User) error {
 	for _, user := range *users {
 		err := p.Add(user)
 		if err != nil {
-			return err
+			return errors.Join(e.ErrUserDomain, e.ErrOnAddAll, err)
 		}
 	}
 
@@ -141,7 +141,7 @@ func (p *userRepo) GetOne(id int) (*m.User, error) {
 		&user.Email,
 	)
 	if err == sql.ErrNoRows {
-		return nil, errors.Join(e.ErrUserDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("user id", strconv.Itoa(id)))
+		return nil, errors.Join(e.ErrUserDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("user id", strconv.Itoa(id)))
 	}
 
 	if err != nil {

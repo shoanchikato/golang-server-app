@@ -40,7 +40,7 @@ func NewAuthorRepo(db *sql.DB, rw *sync.RWMutex, dbU DBUtil) AuthorRepo {
 func (p *authorRepo) Add(author *m.Author) error {
 	id, err := p.dbU.Transaction(st.ADD_AUTHOR_STMT, author.FirstName, author.LastName)
 	if err != nil {
-		return errors.Join(e.ErrAuthDomain, e.ErrOnAdd, err)
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnAdd, err)
 	}
 
 	author.Id = int(id)
@@ -53,7 +53,7 @@ func (p *authorRepo) AddAll(authors *[]*m.Author) error {
 	for _, author := range *authors {
 		err := p.Add(author)
 		if err != nil {
-			return err
+			return errors.Join(e.ErrAuthorDomain, e.ErrOnAddAll, err)
 		}
 	}
 
@@ -64,7 +64,7 @@ func (p *authorRepo) AddAll(authors *[]*m.Author) error {
 func (p *authorRepo) Edit(id int, author *m.Author) error {
 	idx, err := p.dbU.Transaction(st.EDIT_AUTHOR_STMT, author.FirstName, author.LastName, id)
 	if err != nil {
-		return errors.Join(e.ErrAuthDomain, e.ErrOnEdit, err)
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnEdit, err)
 	}
 
 	author.Id = int(idx)
@@ -84,21 +84,21 @@ func (p *authorRepo) GetAll(lastId, limit int) (*[]m.Author, error) {
 
 	rows, err := p.db.Query(st.GET_ALL_AUTHOR_STMT, lastId, limit)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetAll, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.Scan(&author.Id, &author.FirstName, &author.LastName)
 		if err != nil {
-			return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 		}
 
 		authors = append(authors, author)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &authors, nil
@@ -114,11 +114,11 @@ func (p *authorRepo) GetOne(id int) (*m.Author, error) {
 	row := p.db.QueryRow(st.GET_ONE_AUTHOR_STMT, id)
 	err := row.Scan(&author.Id, &author.FirstName, &author.LastName)
 	if err == sql.ErrNoRows {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("author id", strconv.Itoa(id)))
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrRepoExecutingStmt, e.NewErrRepoNotFound("author id", strconv.Itoa(id)))
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &author, nil
@@ -130,7 +130,7 @@ func (p *authorRepo) GetMore(id int) (*m.Author, error) {
 
 	author, err := p.GetOne(id)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, err)
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetMore, err)
 	}
 
 	book := m.Book{}
@@ -138,21 +138,21 @@ func (p *authorRepo) GetMore(id int) (*m.Author, error) {
 
 	rows, err := p.db.Query(st.GET_BOOKS_BY_AUTHOR_ID_STMT, id)
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, e.ErrRepoPreparingStmt, err)
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetMore, e.ErrRepoPreparingStmt, err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err = rows.Scan(&book.Id, &book.Name, &book.Year, &book.AuthorId)
 		if err != nil {
-			return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, e.ErrRepoExecutingStmt, err)
+			return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetMore, e.ErrRepoExecutingStmt, err)
 		}
 
 		books = append(books, book)
 	}
 	err = rows.Err()
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetMore, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetMore, e.ErrRepoExecutingStmt, err)
 	}
 
 	author.Books = &books
@@ -164,7 +164,7 @@ func (p *authorRepo) GetMore(id int) (*m.Author, error) {
 func (p *authorRepo) Remove(id int) error {
 	_, err := p.dbU.Transaction(st.REMOVE_AUTHOR_STMT, id)
 	if err != nil {
-		return errors.Join(e.ErrAuthDomain, e.ErrOnRemove, err)
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnRemove, err)
 	}
 
 	return nil

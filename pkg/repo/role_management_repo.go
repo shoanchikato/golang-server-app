@@ -55,7 +55,7 @@ func (r *rMRepo) AddRoleToUser(roleId, userId int) error {
 
 	_, err = r.dbU.Transaction(st.ADD_ROLE_TO_USER_STMT, roleId, userId)
 	if err != nil {
-		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnAdd, err)
+		return errors.Join(e.ErrRoleManagementDomain, e.ErrOnAddRoleToUser, err)
 	}
 
 	return nil
@@ -72,14 +72,14 @@ func (r *rMRepo) GetRoleByUserId(userId int) (*m.Role, error) {
 	err := row.Scan(&role.Id, &role.Name)
 	if err == sql.ErrNoRows {
 		return nil, errors.Join(
-			e.ErrPermissionManagementDomain,
+			e.ErrRoleManagementDomain,
 			e.ErrRepoExecutingStmt,
 			e.NewErrRepoNotFound("user id", strconv.Itoa(userId)),
 		)
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrPermissionManagementDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrRoleManagementDomain, e.ErrOnGetRoleByUserId, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &role, nil
@@ -104,7 +104,7 @@ func (r *rMRepo) RemoveRoleFromUser(roleId int, userId int) error {
 
 	_, err = r.dbU.Transaction(st.REMOVE_ROLE_FROM_USER_STMT, roleId, userId)
 	if err != nil {
-		return errors.Join(e.ErrPermissionManagementDomain, e.ErrOnRemove, err)
+		return errors.Join(e.ErrRoleManagementDomain, e.ErrOnRemoveRoleFromUser, err)
 	}
 
 	return nil

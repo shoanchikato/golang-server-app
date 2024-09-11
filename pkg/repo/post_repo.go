@@ -52,7 +52,7 @@ func (p *postRepo) AddAll(posts *[]*m.Post) error {
 	for _, post := range *posts {
 		err := p.Add(post)
 		if err != nil {
-			return err
+			return errors.Join(e.ErrPostDomain, e.ErrOnAddAll, err)
 		}
 	}
 

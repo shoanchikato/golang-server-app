@@ -3,6 +3,7 @@ package handler
 import (
 	e "app/pkg/errors"
 	ef "app/pkg/httperrorfmt"
+	s "app/pkg/service"
 	"errors"
 	"net/http"
 
@@ -20,27 +21,28 @@ type PermissionManagementHandler interface {
 
 type permissionManagementHandler struct {
 	service ef.PermissionManagementHttpErrorFmt
+	logger  s.Logger
 }
 
-func NewPermissionManagementHandler(service ef.PermissionManagementHttpErrorFmt) PermissionManagementHandler {
-	return &permissionManagementHandler{service}
+func NewPermissionManagementHandler(service ef.PermissionManagementHttpErrorFmt, logger s.Logger) PermissionManagementHandler {
+	return &permissionManagementHandler{service, logger}
 }
 
 // AddPermissionToRole
 func (p *permissionManagementHandler) AddPermissionToRole(c *fiber.Ctx) error {
-	adminId, err := getAuthUserId(c)
+	adminId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	permissionId, err := getIntParam(c, "permissionId")
+	permissionId, err := getIntParam(c, p.logger, "permissionId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	roleId, err := getIntParam(c, "roleId")
+	roleId, err := getIntParam(c, p.logger, "roleId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = p.service.AddPermissionToRole(*adminId, *permissionId, *roleId)
@@ -54,7 +56,7 @@ func (p *permissionManagementHandler) AddPermissionToRole(c *fiber.Ctx) error {
 
 // AddPermissionsToRole
 func (p *permissionManagementHandler) AddPermissionsToRole(c *fiber.Ctx) error {
-	adminId, err := getAuthUserId(c)
+	adminId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
@@ -65,9 +67,9 @@ func (p *permissionManagementHandler) AddPermissionsToRole(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	roleId, err := getIntParam(c, "roleId")
+	roleId, err := getIntParam(c, p.logger, "roleId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = p.service.AddPermissionsToRole(*adminId, permissionIds, *roleId)
@@ -81,14 +83,14 @@ func (p *permissionManagementHandler) AddPermissionsToRole(c *fiber.Ctx) error {
 
 // GetPermissionsByRoleId
 func (p *permissionManagementHandler) GetPermissionsByRoleId(c *fiber.Ctx) error {
-	adminId, err := getAuthUserId(c)
+	adminId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	roleId, err := getIntParam(c, "roleId")
+	roleId, err := getIntParam(c, p.logger, "roleId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	permissions, err := p.service.GetPermissionsByRoleId(*adminId, *roleId)
@@ -102,14 +104,14 @@ func (p *permissionManagementHandler) GetPermissionsByRoleId(c *fiber.Ctx) error
 
 // GetPermissonsByUserId
 func (p *permissionManagementHandler) GetPermissionsByUserId(c *fiber.Ctx) error {
-	adminId, err := getAuthUserId(c)
+	adminId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	userId, err := getIntParam(c, "userId")
+	userId, err := getIntParam(c, p.logger, "userId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	permissions, err := p.service.GetPermissionsByUserId(*adminId, *userId)
@@ -123,19 +125,19 @@ func (p *permissionManagementHandler) GetPermissionsByUserId(c *fiber.Ctx) error
 
 // RemovePermissionFromRole
 func (p *permissionManagementHandler) RemovePermissionFromRole(c *fiber.Ctx) error {
-	adminId, err := getAuthUserId(c)
+	adminId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	roleId, err := getIntParam(c, "roleId")
+	roleId, err := getIntParam(c, p.logger, "roleId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	permissionId, err := getIntParam(c, "permissionId")
+	permissionId, err := getIntParam(c, p.logger, "permissionId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = p.service.RemovePermissionFromRole(*adminId, *roleId, *permissionId)
@@ -149,7 +151,7 @@ func (p *permissionManagementHandler) RemovePermissionFromRole(c *fiber.Ctx) err
 
 // RemovePermissionsFromRole
 func (p *permissionManagementHandler) RemovePermissionsFromRole(c *fiber.Ctx) error {
-	adminId, err := getAuthUserId(c)
+	adminId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
@@ -160,9 +162,9 @@ func (p *permissionManagementHandler) RemovePermissionsFromRole(c *fiber.Ctx) er
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	roleId, err := getIntParam(c, "roleId")
+	roleId, err := getIntParam(c, p.logger, "roleId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = p.service.RemovePermissionsFromRole(*adminId, *roleId, permissionIds)

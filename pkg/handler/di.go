@@ -17,16 +17,16 @@ type Handlers struct {
 	Post                 PostHandler
 }
 
-func HandlerDi(httpErrorFmts *ef.HttpErrorFmts, jwt s.JWTService) *Handlers {
+func HandlerDi(httpErrorFmts *ef.HttpErrorFmts, jwt s.JWTService, logger s.Logger) *Handlers {
 	auth := NewAuthHandler(httpErrorFmts.Auth, jwt)
-	user := NewUserHandler(httpErrorFmts.User)
-	role := NewRoleHandler(httpErrorFmts.Role)
-	roleManagement := NewRoleManagementHandler(httpErrorFmts.RoleManagement)
-	permission := NewPermissionHandler(httpErrorFmts.Permission)
-	permissionManagement := NewPermissionManagementHandler(httpErrorFmts.PermissionManagement)
-	author := NewAuthorHandler(httpErrorFmts.Author)
-	book := NewBookHandler(httpErrorFmts.Book)
-	post := NewPostHandler(httpErrorFmts.Post)
+	user := NewUserHandler(httpErrorFmts.User, logger)
+	role := NewRoleHandler(httpErrorFmts.Role, logger)
+	roleManagement := NewRoleManagementHandler(httpErrorFmts.RoleManagement, logger)
+	permission := NewPermissionHandler(httpErrorFmts.Permission, logger)
+	permissionManagement := NewPermissionManagementHandler(httpErrorFmts.PermissionManagement, logger)
+	author := NewAuthorHandler(httpErrorFmts.Author, logger)
+	book := NewBookHandler(httpErrorFmts.Book, logger)
+	post := NewPostHandler(httpErrorFmts.Post, logger)
 
 	return &Handlers{auth, user, role, roleManagement, permission, permissionManagement, author, book, post}
 }

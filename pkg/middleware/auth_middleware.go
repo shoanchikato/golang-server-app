@@ -17,12 +17,13 @@ type AuthMiddleware interface {
 type authMiddleware struct {
 	auth         s.JWTService
 	httpErrorFmt s.HttpErrorFmt
+	logger       s.Logger
 }
 
 type UserContextKey string
 
-func NewAuthMiddleware(jwt s.JWTService, httpErrorFmt s.HttpErrorFmt) AuthMiddleware {
-	return &authMiddleware{jwt, httpErrorFmt}
+func NewAuthMiddleware(jwt s.JWTService, httpErrorFmt s.HttpErrorFmt, logger s.Logger) AuthMiddleware {
+	return &authMiddleware{jwt, httpErrorFmt, logger}
 }
 
 // JWTParser
@@ -30,7 +31,8 @@ func (a *authMiddleware) JWTParser(c *fiber.Ctx) error {
 	value := c.Get("Authorization")
 	if value == "" {
 		// TODO: assign to default userId with default set permissions
-		return c.SendStatus(http.StatusUnauthorized)
+		a.logger.Error(e.ErrMissingAuthorizationHeader.Error())
+		return c.Status(http.StatusUnauthorized).JSON(e.NewHttpErrorMap(e.ErrMissingAuthorizationHeader))
 	}
 
 	tokenStr := value
@@ -38,6 +40,7 @@ func (a *authMiddleware) JWTParser(c *fiber.Ctx) error {
 
 	httpErr := &e.HttpError{}
 	if err = a.httpErrorFmt.GetError(err); errors.As(err, &httpErr) {
+		a.logger.Error(httpErr.Error())
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 

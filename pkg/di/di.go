@@ -10,6 +10,8 @@ import (
 	rt "app/pkg/route"
 	s "app/pkg/service"
 	v "app/pkg/validation"
+	"log/slog"
+	"os"
 
 	"database/sql"
 	"log"
@@ -66,15 +68,20 @@ func Di() DI {
 	auth := s.NewAuthorizationService(repos.PermissionManagement)
 	authorizations := a.AuthorizationDi(auth, validators)
 
+	// logger
+	jsonHandler := slog.NewJSONHandler(os.Stdout, nil)
+	slogLogger := slog.New(jsonHandler)
+	logger := s.NewLogger(slogLogger)
+
 	// HttpErrorFmt
-	httpErrorFmt := s.NewHttpErrorFmt()
+	httpErrorFmt := s.NewHttpErrorFmt(logger)
 	httpErrorFmts := ef.HttpErrorFmtDi(httpErrorFmt, jwt, authorizations)
 
 	// Handlers
-	handlers := h.HandlerDi(httpErrorFmts, jwt)
+	handlers := h.HandlerDi(httpErrorFmts, jwt, logger)
 
 	// Middleware
-	authMiddleware := mi.NewAuthMiddleware(jwt, httpErrorFmt)
+	authMiddleware := mi.NewAuthMiddleware(jwt, httpErrorFmt, logger)
 
 	// Fiber app
 	app := fiber.New()

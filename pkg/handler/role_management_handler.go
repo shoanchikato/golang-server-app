@@ -3,6 +3,7 @@ package handler
 import (
 	e "app/pkg/errors"
 	ef "app/pkg/httperrorfmt"
+	s "app/pkg/service"
 	"errors"
 	"net/http"
 
@@ -17,27 +18,28 @@ type RoleManagementHandler interface {
 
 type roleManagementHandler struct {
 	service ef.RoleManagementHttpErrorFmt
+	logger  s.Logger
 }
 
-func NewRoleManagementHandler(service ef.RoleManagementHttpErrorFmt) RoleManagementHandler {
-	return &roleManagementHandler{service}
+func NewRoleManagementHandler(service ef.RoleManagementHttpErrorFmt, logger s.Logger) RoleManagementHandler {
+	return &roleManagementHandler{service, logger}
 }
 
 // AddRoleToUser
 func (r *roleManagementHandler) AddRoleToUser(c *fiber.Ctx) error {
-	adminId, err := getAuthUserId(c)
+	adminId, err := getAuthUserId(c, r.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	roleId, err := getIntParam(c, "roleId")
+	roleId, err := getIntParam(c, r.logger, "roleId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	userId, err := getIntParam(c, "userId")
+	userId, err := getIntParam(c, r.logger, "userId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = r.service.AddRoleToUser(*adminId, *roleId, *userId)
@@ -51,14 +53,14 @@ func (r *roleManagementHandler) AddRoleToUser(c *fiber.Ctx) error {
 
 // GetRoleByUserId
 func (r *roleManagementHandler) GetRoleByUserId(c *fiber.Ctx) error {
-	adminId, err := getAuthUserId(c)
+	adminId, err := getAuthUserId(c, r.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	userId, err := getIntParam(c, "userId")
+	userId, err := getIntParam(c, r.logger, "userId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	role, err := r.service.GetRoleByUserId(*adminId, *userId)
@@ -72,19 +74,19 @@ func (r *roleManagementHandler) GetRoleByUserId(c *fiber.Ctx) error {
 
 // RemoveRoleFromUser
 func (r *roleManagementHandler) RemoveRoleFromUser(c *fiber.Ctx) error {
-	adminId, err := getAuthUserId(c)
+	adminId, err := getAuthUserId(c, r.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	roleId, err := getIntParam(c, "roleId")
+	roleId, err := getIntParam(c, r.logger, "roleId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	userId, err := getIntParam(c, "userId")
+	userId, err := getIntParam(c, r.logger, "userId")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = r.service.RemoveRoleFromUser(*adminId, *roleId, *userId)

@@ -1,41 +1,37 @@
 package handler
 
 import (
+	e "app/pkg/errors"
 	mi "app/pkg/middleware"
+	s "app/pkg/service"
 	"errors"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func getId(c *fiber.Ctx) (*int, error) {
-	idStr := c.Params("id")
-
-	intValue, err := strconv.Atoi(idStr)
-	if err != nil {
-		return nil, err
-	}
-
-	return &intValue, nil
-}
-
-func getIntParam(c *fiber.Ctx, name string) (*int, error) {
+func getIntParam(c *fiber.Ctx, logger s.Logger, name string) (*int, error) {
 	strValue := c.Params(name)
 
 	intValue, err := strconv.Atoi(strValue)
 	if err != nil {
-		return nil, err
+
+		logger.Error(e.NewIntParamError(name, strValue).Error())
+		return nil, e.NewIntParamError(name, strValue)
 	}
 
 	return &intValue, nil
 }
 
-func getAuthUserId(c *fiber.Ctx) (*int, error) {
+func getAuthUserId(c *fiber.Ctx, logger s.Logger) (*int, error) {
 	ctx := c.UserContext()
 	userIdKey := mi.UserContextKey("userId")
 	userId := ctx.Value(userIdKey).(int)
 	if userId == 0 {
-		return nil, errors.New("user not authorized: user unknown")
+
+		err := errors.New("user not authorized: user unknown")
+		logger.Error(err.Error())
+		return nil, err
 	}
 
 	return &userId, nil

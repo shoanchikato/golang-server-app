@@ -4,6 +4,7 @@ import (
 	e "app/pkg/errors"
 	ef "app/pkg/httperrorfmt"
 	m "app/pkg/model"
+	s "app/pkg/service"
 	"errors"
 	"net/http"
 
@@ -21,10 +22,11 @@ type BookHandler interface {
 
 type bookHandler struct {
 	service ef.BookHttpErrorFmt
+	logger  s.Logger
 }
 
-func NewBookHandler(service ef.BookHttpErrorFmt) BookHandler {
-	return &bookHandler{service}
+func NewBookHandler(service ef.BookHttpErrorFmt, logger s.Logger) BookHandler {
+	return &bookHandler{service, logger}
 }
 
 // Add
@@ -36,7 +38,7 @@ func (p *bookHandler) Add(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
@@ -60,7 +62,7 @@ func (p *bookHandler) AddAll(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
@@ -89,12 +91,12 @@ func (p *bookHandler) Edit(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	id, err := getId(c)
+	id, err := getIntParam(c, p.logger, "id")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
@@ -111,7 +113,7 @@ func (p *bookHandler) Edit(c *fiber.Ctx) error {
 
 // GetAll
 func (p *bookHandler) GetAll(c *fiber.Ctx) error {
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
@@ -128,14 +130,14 @@ func (p *bookHandler) GetAll(c *fiber.Ctx) error {
 
 // GetOne
 func (p *bookHandler) GetOne(c *fiber.Ctx) error {
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	id, err := getId(c)
+	id, err := getIntParam(c, p.logger, "id")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	user, err := p.service.GetOne(*userId, *id)
@@ -150,14 +152,14 @@ func (p *bookHandler) GetOne(c *fiber.Ctx) error {
 
 // Remove
 func (p *bookHandler) Remove(c *fiber.Ctx) error {
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	id, err := getId(c)
+	id, err := getIntParam(c, p.logger, "id")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = p.service.Remove(*userId, *id)

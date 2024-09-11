@@ -4,19 +4,19 @@ import (
 	e "app/pkg/errors"
 	"errors"
 	"fmt"
-	"log/slog"
 	"net/http"
-	"os"
 )
 
 type HttpErrorFmt interface {
 	GetError(err error) error
 }
 
-type httpErrorFmt struct{}
+type httpErrorFmt struct {
+	logger Logger
+}
 
-func NewHttpErrorFmt() HttpErrorFmt {
-	return &httpErrorFmt{}
+func NewHttpErrorFmt(logger Logger) HttpErrorFmt {
+	return &httpErrorFmt{logger}
 }
 
 // GetError
@@ -28,21 +28,18 @@ func (er *httpErrorFmt) GetError(err error) error {
 		notFoundErr := &e.RepoNotFoundError{}
 		duplicateErr := &e.RepoDuplicateError{}
 
-		jsonHandler := slog.NewJSONHandler(os.Stdout, nil)
-		logger := slog.New(jsonHandler)
-
 		switch {
 		case errors.Is(err, e.ErrIncorrectCredentials):
-			logger.Error(err.Error())
+			er.logger.Error(err.Error())
 			return e.NewHttpError(http.StatusUnauthorized, e.ErrIncorrectCredentials)
 		case errors.Is(err, e.ErrNotAuthorized):
-			logger.Error(err.Error())
+			er.logger.Error(err.Error())
 			return e.NewHttpError(http.StatusUnauthorized, e.ErrNotAuthorized)
 		case errors.Is(err, e.ErrInvalidToken):
-			logger.Error(err.Error())
+			er.logger.Error(err.Error())
 			return e.NewHttpError(http.StatusUnauthorized, e.ErrInvalidToken)
 		case errors.Is(err, e.ErrTokenExpired):
-			logger.Error(err.Error())
+			er.logger.Error(err.Error())
 			return e.NewHttpError(http.StatusUnauthorized, e.ErrTokenExpired)
 		case errors.As(err, &validationErr):
 			return e.NewHttpError(http.StatusBadRequest, validationErr)
@@ -51,7 +48,7 @@ func (er *httpErrorFmt) GetError(err error) error {
 		case errors.As(err, &notFoundErr):
 			return e.NewHttpError(http.StatusNotFound, notFoundErr)
 		default:
-			logger.Error(fmt.Sprintf("Server error: %v", err))
+			er.logger.Error(fmt.Sprintf("Server error: %v", err))
 			return e.NewHttpError(http.StatusInternalServerError, errors.New("server error"))
 		}
 	}

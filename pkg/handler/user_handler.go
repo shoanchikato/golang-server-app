@@ -4,6 +4,7 @@ import (
 	e "app/pkg/errors"
 	ef "app/pkg/httperrorfmt"
 	m "app/pkg/model"
+	s "app/pkg/service"
 	"errors"
 	"net/http"
 
@@ -21,10 +22,11 @@ type UserHandler interface {
 
 type userHandler struct {
 	service ef.UserHttpErrorFmt
+	logger  s.Logger
 }
 
-func NewUserHandler(service ef.UserHttpErrorFmt) UserHandler {
-	return &userHandler{service}
+func NewUserHandler(service ef.UserHttpErrorFmt, logger s.Logger) UserHandler {
+	return &userHandler{service, logger}
 }
 
 // Add
@@ -36,7 +38,7 @@ func (u *userHandler) Add(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, u.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
@@ -60,7 +62,7 @@ func (u *userHandler) AddAll(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, u.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
@@ -89,12 +91,12 @@ func (u *userHandler) Edit(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	id, err := getId(c)
+	id, err := getIntParam(c, u.logger, "id")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, u.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
@@ -111,7 +113,7 @@ func (u *userHandler) Edit(c *fiber.Ctx) error {
 
 // GetAll
 func (u *userHandler) GetAll(c *fiber.Ctx) error {
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, u.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
@@ -128,14 +130,14 @@ func (u *userHandler) GetAll(c *fiber.Ctx) error {
 
 // GetOne
 func (u *userHandler) GetOne(c *fiber.Ctx) error {
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, u.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	id, err := getId(c)
+	id, err := getIntParam(c, u.logger, "id")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	user, err := u.service.GetOne(*userId, *id)
@@ -150,14 +152,14 @@ func (u *userHandler) GetOne(c *fiber.Ctx) error {
 
 // Remove
 func (u *userHandler) Remove(c *fiber.Ctx) error {
-	userId, err := getAuthUserId(c)
+	userId, err := getAuthUserId(c, u.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	id, err := getId(c)
+	id, err := getIntParam(c, u.logger, "id")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(e.ErrProvideNumericId))
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
 	err = u.service.Remove(*userId, *id)

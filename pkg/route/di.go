@@ -14,4 +14,7 @@ func Routes(app *fiber.App, handlers *h.Handlers, authMiddleware mi.AuthMiddlewa
 	NewRoleManagementRoutes(app, handlers.RoleManagement, authMiddleware)
 	NewPermissionRoutes(app, handlers.Permission, authMiddleware)
 	NewPermissionManagementRoutes(app, handlers.PermissionManagement, authMiddleware)
+	NewAuthorRoutes(app, handlers.Author, authMiddleware)
+	NewBookRoutes(app, handlers.Book, authMiddleware)
+	NewPostRoutes(app, handlers.Post, authMiddleware)
 }

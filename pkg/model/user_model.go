@@ -30,7 +30,7 @@ func (u *User) Validate() error {
 		valid.Field(&u.FirstName, valid.Required.Error("first_name is required")),
 		valid.Field(&u.LastName, valid.Required.Error("last_name is required")),
 		valid.Field(&u.Username, valid.Required.Error("username is required")),
-		valid.Field(&u.Email, valid.Required.Error("email is required"),),
+		valid.Field(&u.Email, valid.Required.Error("email is required")),
 		valid.Field(&u.Password, valid.Required.Error("password is required")),
 	)
 }
@@ -52,6 +52,6 @@ func (e *EditUser) Validate() error {
 		valid.Field(&e.FirstName, valid.Required.Error("first_name is required")),
 		valid.Field(&e.LastName, valid.Required.Error("last_name is required")),
 		valid.Field(&e.Username, valid.Required.Error("username is required")),
-		valid.Field(&e.Email, valid.Required.Error("email is required"),),
+		valid.Field(&e.Email, valid.Required.Error("email is required")),
 	)
 }

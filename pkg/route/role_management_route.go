@@ -1,8 +1,8 @@
 package route
 
 import (
-	mi "app/pkg/middleware"
 	h "app/pkg/handler"
+	mi "app/pkg/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )

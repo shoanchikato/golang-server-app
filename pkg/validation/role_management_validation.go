@@ -13,7 +13,7 @@ type RoleManagementValidator interface {
 }
 
 type rMValidator struct {
-	repo r.RoleManagementRepo
+	repo    r.RoleManagementRepo
 	service s.ValidationService
 }
 

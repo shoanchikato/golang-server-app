@@ -11,7 +11,7 @@ var (
 )
 
 type HttpError struct {
-	Errs    []error
+	Errs       []error
 	HTTPStatus int
 }
 
@@ -28,5 +28,4 @@ func (h *HttpError) Error() string {
 	}
 
 	return strings.Join(errStrs, "")
-
 }

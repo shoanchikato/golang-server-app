@@ -8,7 +8,7 @@ type ValidationService interface {
 	Validate(model ValidateModel) error
 }
 
-type validationService struct {}
+type validationService struct{}
 
 func NewValidationService() ValidationService {
 	return &validationService{}

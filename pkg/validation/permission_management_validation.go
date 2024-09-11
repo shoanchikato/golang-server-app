@@ -16,7 +16,7 @@ type PermissionManagementValidator interface {
 }
 
 type pMValidator struct {
-	repo r.PermissionManagementRepo
+	repo    r.PermissionManagementRepo
 	service s.ValidationService
 }
 

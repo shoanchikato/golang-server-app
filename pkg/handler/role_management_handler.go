@@ -11,7 +11,7 @@ import (
 
 type RoleManagementHandler interface {
 	AddRoleToUser(c *fiber.Ctx) error
-	GetRoleByUserId(c *fiber.Ctx) error 
+	GetRoleByUserId(c *fiber.Ctx) error
 	RemoveRoleFromUser(c *fiber.Ctx) error
 }
 
@@ -50,7 +50,7 @@ func (r *roleManagementHandler) AddRoleToUser(c *fiber.Ctx) error {
 }
 
 // GetRoleByUserId
-func (r *roleManagementHandler) GetRoleByUserId(c *fiber.Ctx) error  {
+func (r *roleManagementHandler) GetRoleByUserId(c *fiber.Ctx) error {
 	adminId, err := getAuthUserId(c)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).SendString(err.Error())

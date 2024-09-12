@@ -16,6 +16,9 @@ lint:
 tidy:
 	go mod tidy
 
+t:
+	go test ./...
+
 build:
 	go build -o app cmd/server/*.go
 

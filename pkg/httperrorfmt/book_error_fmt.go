@@ -9,7 +9,7 @@ import (
 type BookHttpErrorFmt interface {
 	Add(userId int, book *m.Book) error
 	AddAll(userId int, books *[]*m.Book) error
-	Edit(userId int, id int, newAuthor *m.Book) error
+	Edit(userId int, id int, newBook *m.Book) error
 	GetAll(userId, lastId, limit int) (*[]m.Book, error)
 	GetOne(userId int, id int) (*m.Book, error)
 	Remove(userId int, id int) error
@@ -45,8 +45,8 @@ func (r *bookHttpErrorFmt) AddAll(userId int, books *[]*m.Book) error {
 }
 
 // Edit
-func (r *bookHttpErrorFmt) Edit(userId int, id int, newAuthor *m.Book) error {
-	err := r.authorization.Edit(userId, id, newAuthor)
+func (r *bookHttpErrorFmt) Edit(userId int, id int, newBook *m.Book) error {
+	err := r.authorization.Edit(userId, id, newBook)
 	if err != nil {
 		return r.service.GetError(err)
 	}

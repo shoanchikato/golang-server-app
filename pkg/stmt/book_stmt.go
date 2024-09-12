@@ -6,8 +6,8 @@ const (
 		INSERT INTO authors_books (author_id, book_id) VALUES ($3, LAST_INSERT_ROWId());
 	`
 	EDIT_BOOK_STMT = `
-		UPDATE books SET	name = $1, year = $2 WHERE id = $4;
-		INSERT INTO authors_books (author_id, book_id) VALUES ($3, $4);
+		UPDATE books SET name = $1, year = $2 WHERE id = $3;
+		UPDATE authors_books SET author_id = $4 WHERE book_id = $5;
 	`
 	GET_ALL_BOOK_STMT = `
 		SELECT 

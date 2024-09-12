@@ -15,6 +15,7 @@ var (
 
 	ErrOnLogin         = errors.New("login: ")
 	ErrOnResetPassword = errors.New("reset password: ")
+	ErrOnGetByUsername = errors.New("get by username: ")
 
 	ErrOnAddPermissionToRole       = errors.New("add permission to role: ")
 	ErrOnAddPermissionsToRole      = errors.New("add permissions to role: ")

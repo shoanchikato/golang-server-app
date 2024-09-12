@@ -4,14 +4,15 @@ import (
 	m "app/pkg/model"
 	pe "app/pkg/permission"
 	v "app/pkg/validation"
+	"fmt"
 )
 
 func Data() (
+	[]*m.Permission,
 	[]*m.Author,
 	[]*m.Book,
 	[]*m.Post,
 	[]*m.User,
-	[]*m.Permission,
 ) {
 	posts := []*m.Post{
 		m.NewPost("one", "one body", 1),
@@ -99,20 +100,47 @@ func Data() (
 		pe.RoleManagementRemoveRoleFromUser,
 	}
 
-	return authors, books, posts, users, permissions
+	return permissions, authors, books, posts, users
 }
 
-func AddSuperUser(validators v.Validators) {
-	user := m.NewUser("John", "Doe", "john_doe", "john@doe.com", "password1")
-	validators.User.Add(user)
-
-	role := m.NewRole("admin")
-	validators.Role.Add(role)
-
-	permissions, _ := validators.Permission.GetAll(0, 50)
-	for i := range *permissions {
-		validators.PermissionManagement.AddPermissionToRole(i, 1)
+func AddAdminUser(validators v.Validators) {
+	// Add Permissions
+	permissions, _, _, _, _ := Data()
+	err := validators.Permission.AddAll(&permissions)
+	if err != nil {
+		fmt.Println("fail to add permissions in add admin user", err)
+		return
 	}
 
-	validators.RoleManagement.AddRoleToUser(1, 1)
+	// Add admin user details
+	user := m.NewUser("John", "Doe", "john_doe", "john@doe.com", "password1")
+	err = validators.User.Add(user)
+	if err != nil {
+		fmt.Println("fail to add user in add admin user", err)
+		return
+	}
+
+	// Add admin role
+	role := m.NewRole("admin")
+	err = validators.Role.Add(role)
+	if err != nil {
+		fmt.Println("fail to add role in add admin user", err)
+		return
+	}
+
+	// Add permissions to the role
+	for _, p := range permissions {
+		err := validators.PermissionManagement.AddPermissionToRole(p.Id, 1)
+		if err != nil {
+			fmt.Println("fail to add permission to role in add admin user", err)
+			break
+		}
+	}
+
+	// Add role to the admin user
+	err = validators.RoleManagement.AddRoleToUser(1, 1)
+	if err != nil {
+		fmt.Println("fail to add role to the admin user in add admin user", err)
+		return
+	}
 }

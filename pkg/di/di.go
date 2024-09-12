@@ -88,7 +88,7 @@ func Di(
 	return DI{
 		App:           app,
 		DB:            db,
-		Validators: *validators,
+		Validators:    *validators,
 		HttpErrorFmts: httpErrorFmts,
 	}
 }

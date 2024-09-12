@@ -38,7 +38,7 @@ func (a *authRepo) GetByUsername(username string) (*m.Auth, error) {
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetOne, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrAuthDomain, e.ErrOnGetByUsername, e.ErrRepoExecutingStmt, err)
 	}
 
 	return &auth, nil
@@ -46,9 +46,13 @@ func (a *authRepo) GetByUsername(username string) (*m.Auth, error) {
 
 // ResetPassword
 func (a *authRepo) ResetPassword(username string, newPassword string) error {
-	_, err := a.dbU.Transaction(st.RESET_PASSWORD, newPassword, username)
+	_, err := a.GetByUsername(username)
 	if err != nil {
 		return err
+	}
+	_, err = a.dbU.Transaction(st.RESET_PASSWORD, newPassword, username)
+	if err != nil {
+		return errors.Join(e.ErrAuthDomain, e.ErrOnResetPassword, e.ErrRepoExecutingStmt, err)
 	}
 
 	return nil

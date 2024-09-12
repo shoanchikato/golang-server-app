@@ -43,12 +43,12 @@ type EditUser struct {
 	Email     string `json:"email" validate:"email~is not a valid email,required~email is required"`
 }
 
-func (e EditUser) ToUser() *User {
+func (e *EditUser) ToUser() *User {
 	return &User{e.Id, e.FirstName, e.LastName, e.Username, e.Email, ""}
 }
 
 func (e *EditUser) Validate() error {
-	return valid.ValidateStruct(&e,
+	return valid.ValidateStruct(e,
 		valid.Field(&e.FirstName, valid.Required.Error("first_name is required")),
 		valid.Field(&e.LastName, valid.Required.Error("last_name is required")),
 		valid.Field(&e.Username, valid.Required.Error("username is required")),

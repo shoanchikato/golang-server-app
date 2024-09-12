@@ -19,7 +19,7 @@ func NewBook(name string, year, authorId int) *Book {
 
 func (b Book) String() string {
 	return fmt.Sprintf(
-		`%d, "%s", %d, %d`,
+		`{%d, "%s", %d, %d}`,
 		b.Id, b.Name, b.Year, b.AuthorId,
 	)
 }

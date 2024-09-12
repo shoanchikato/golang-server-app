@@ -10,8 +10,8 @@ import (
 	rt "app/pkg/route"
 	s "app/pkg/service"
 	v "app/pkg/validation"
+	"io"
 	"log/slog"
-	"os"
 
 	"database/sql"
 	"log"
@@ -19,31 +19,26 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
 )
 
 type DI struct {
-	App *fiber.App
-	DB  *sql.DB
+	App           *fiber.App
+	DB            *sql.DB
+	HttpErrorFmts *ef.HttpErrorFmts
 }
 
-func Di() DI {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	env, err := godotenv.Read()
-	if err != nil {
-		log.Fatal("error loading env map")
-	}
-
-	db, err := sql.Open(env["DB_DRIVER"], env["DB_CONN"])
+func Di(
+	dbDriver string,
+	dbConn string,
+	secret string,
+	logWriter io.Writer,
+) DI {
+	db, err := sql.Open(dbDriver, dbConn)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	signingSecret := env["SECRET"]
+	signingSecret := secret
 	jwt := s.NewJWTService(
 		&signingSecret,
 		time.Duration(20*time.Minute),
@@ -69,7 +64,7 @@ func Di() DI {
 	authorizations := a.AuthorizationDi(auth, validators)
 
 	// logger
-	jsonHandler := slog.NewJSONHandler(os.Stdout, nil)
+	jsonHandler := slog.NewJSONHandler(logWriter, nil)
 	slogLogger := slog.New(jsonHandler)
 	logger := s.NewLogger(slogLogger)
 
@@ -90,7 +85,8 @@ func Di() DI {
 	rt.Routes(app, handlers, authMiddleware)
 
 	return DI{
-		App: app,
-		DB:  db,
+		App:           app,
+		DB:            db,
+		HttpErrorFmts: httpErrorFmts,
 	}
 }

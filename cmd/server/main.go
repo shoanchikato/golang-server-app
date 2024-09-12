@@ -8,11 +8,27 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	app := d.Di()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	env, err := godotenv.Read()
+	if err != nil {
+		log.Fatal("error loading env map")
+	}
+
+	app := d.Di(
+		env["DB_CONN"],
+		env["DB_DRIVER"],
+		env["SECRET"],
+		os.Stdout,
+	)
 	defer app.DB.Close()
 
 	go func() {

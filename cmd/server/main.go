@@ -24,8 +24,8 @@ func main() {
 	}
 
 	app := d.Di(
-		env["DB_CONN"],
 		env["DB_DRIVER"],
+		env["DB_CONN"],
 		env["SECRET"],
 		os.Stdout,
 	)

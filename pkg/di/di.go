@@ -24,6 +24,7 @@ import (
 type DI struct {
 	App           *fiber.App
 	DB            *sql.DB
+	Validators    v.Validators
 	HttpErrorFmts *ef.HttpErrorFmts
 }
 
@@ -87,6 +88,7 @@ func Di(
 	return DI{
 		App:           app,
 		DB:            db,
+		Validators: *validators,
 		HttpErrorFmts: httpErrorFmts,
 	}
 }

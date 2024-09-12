@@ -8,15 +8,6 @@ import (
 	"testing"
 )
 
-type PermissionManagementHttpErrorFmt interface {
-	AddPermissionToRole(adminId int, permissionId, roleId int) error
-	AddPermissionsToRole(adminId int, permissionIds []int, roleId int) error
-	GetPermissionsByRoleId(adminId int, roleId int) (*[]m.Permission, error)
-	GetPermissionsByUserId(adminId int, userId int) (*[]m.Permission, error)
-	RemovePermissionFromRole(adminId int, roleId, permissionId int) error
-	RemovePermissionsFromRole(adminId int, roleId int, permissionIds []int) error
-}
-
 func addNewRole(t *testing.T, validation v.Validators) {
 	role := m.NewRole("default user")
 	err := validation.Role.Add(role)

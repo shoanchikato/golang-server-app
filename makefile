@@ -17,7 +17,10 @@ tidy:
 	go mod tidy
 
 t:
-	go test ./...
+	go test ./test/...
+
+tv:
+	go test -count=1 -v ./test/...
 
 build:
 	go build -o app cmd/server/*.go

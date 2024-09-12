@@ -6,11 +6,9 @@ import (
 	"app/test/setup"
 	"reflect"
 	"testing"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
-func TestRole(t *testing.T) {
+func TestPositiveRole(t *testing.T) {
 	app := setup.Run()
 	t.Cleanup(func() {
 		setup.CleanUp(app)
@@ -23,13 +21,15 @@ func TestRole(t *testing.T) {
 		// act
 		roles, err := app.HttpErrorFmts.Role.GetAll(1, 0, 50)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 		got := len(*roles)
 
 		// assert
 		if got != expect {
 			t.Errorf("expected %v, got %v", expect, got)
+			return
 		}
 	})
 
@@ -40,12 +40,14 @@ func TestRole(t *testing.T) {
 		// act
 		got, err := app.HttpErrorFmts.Role.GetOne(1, 1)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 
 		// assert
 		if *got != expect {
 			t.Errorf("expected %v, got %v", expect, got)
+			return
 		}
 	})
 
@@ -57,12 +59,14 @@ func TestRole(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Role.Add(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 
 		// assert
 		if *got != expect {
 			t.Errorf("expected %v, got %v", expect, got)
+			return
 		}
 	})
 
@@ -74,12 +78,14 @@ func TestRole(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Role.Edit(1, 49, got)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 
 		// assert
 		if *got != expect {
 			t.Errorf("expected %v, got %v", expect, got)
+			return
 		}
 	})
 
@@ -90,7 +96,8 @@ func TestRole(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Role.Remove(1, 2)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 		_, got := app.HttpErrorFmts.Role.GetOne(1, 2)
 		if got == nil {
@@ -101,6 +108,7 @@ func TestRole(t *testing.T) {
 		// assert
 		if !(got.Error() == expect.Error()) {
 			t.Errorf("expected %v, got %v", expect, got)
+			return
 		}
 	})
 
@@ -118,7 +126,8 @@ func TestRole(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Role.AddAll(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 
 		// assert

@@ -7,11 +7,9 @@ import (
 	"app/test/setup"
 	"reflect"
 	"testing"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
-func TestPermission(t *testing.T) {
+func TestPositivePermission(t *testing.T) {
 	app := setup.Run()
 	t.Cleanup(func() {
 		setup.CleanUp(app)
@@ -24,13 +22,15 @@ func TestPermission(t *testing.T) {
 		// act
 		permissions, err := app.HttpErrorFmts.Permission.GetAll(1, 0, 50)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 		got := len(*permissions)
 
 		// assert
 		if got != expect {
 			t.Errorf("expected %v, got %v", expect, got)
+			return
 		}
 	})
 
@@ -44,7 +44,8 @@ func TestPermission(t *testing.T) {
 		// act
 		got, err := app.HttpErrorFmts.Permission.GetOne(1, 1)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 
 		// assert
@@ -61,12 +62,14 @@ func TestPermission(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Permission.Add(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 
 		// assert
 		if *got != expect {
 			t.Errorf("expected %v, got %v", expect, got)
+			return
 		}
 	})
 
@@ -78,12 +81,14 @@ func TestPermission(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Permission.Edit(1, 49, got)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 
 		// assert
 		if *got != expect {
 			t.Errorf("expected %v, got %v", expect, got)
+			return
 		}
 	})
 
@@ -94,7 +99,8 @@ func TestPermission(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Permission.Remove(1, 49)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 		_, got := app.HttpErrorFmts.Permission.GetOne(1, 49)
 		if got == nil {
@@ -105,6 +111,7 @@ func TestPermission(t *testing.T) {
 		// assert
 		if !(got.Error() == expect.Error()) {
 			t.Errorf("expected %v, got %v", expect, got)
+			return
 		}
 	})
 
@@ -122,7 +129,8 @@ func TestPermission(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Permission.AddAll(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 
 		// assert
@@ -142,7 +150,8 @@ func TestPermission(t *testing.T) {
 		// act
 		got, err := app.HttpErrorFmts.Permission.GetByEntity(1, "auth")
 		if err != nil {
-			t.Error("got unexpected error in test", err)
+			t.Error("got unexpected error in test:", err)
+			return
 		}
 
 		// assert

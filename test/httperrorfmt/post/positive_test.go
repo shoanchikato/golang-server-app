@@ -33,7 +33,7 @@ func TestPositivePost(t *testing.T) {
 		// act
 		posts, err := app.HttpErrorFmts.Post.GetAll(1, 0, 50)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 		got := len(*posts)
@@ -52,7 +52,7 @@ func TestPositivePost(t *testing.T) {
 		// act
 		got, err := app.HttpErrorFmts.Post.GetOne(1, 1)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -71,7 +71,7 @@ func TestPositivePost(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Post.Add(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -90,7 +90,7 @@ func TestPositivePost(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Post.Edit(1, 2, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -108,7 +108,7 @@ func TestPositivePost(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Post.Remove(1, 2)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 		_, got := app.HttpErrorFmts.Post.GetOne(1, 2)
@@ -138,7 +138,7 @@ func TestPositivePost(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Post.AddAll(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 

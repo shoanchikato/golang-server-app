@@ -19,7 +19,7 @@ func TestPositiveAuth(t *testing.T) {
 		// act
 		token, err := app.HttpErrorFmts.Auth.Login(credentials)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -37,13 +37,13 @@ func TestPositiveAuth(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Auth.ResetPassword(credentials.Username, credentials.Password)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		token, err := app.HttpErrorFmts.Auth.Login(credentials)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 

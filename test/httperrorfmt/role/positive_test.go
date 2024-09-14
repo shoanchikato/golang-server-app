@@ -21,7 +21,7 @@ func TestPositiveRole(t *testing.T) {
 		// act
 		roles, err := app.HttpErrorFmts.Role.GetAll(1, 0, 50)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 		got := len(*roles)
@@ -40,7 +40,7 @@ func TestPositiveRole(t *testing.T) {
 		// act
 		got, err := app.HttpErrorFmts.Role.GetOne(1, 1)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -59,7 +59,7 @@ func TestPositiveRole(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Role.Add(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -78,7 +78,7 @@ func TestPositiveRole(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Role.Edit(1, 49, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -96,7 +96,7 @@ func TestPositiveRole(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Role.Remove(1, 2)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 		_, got := app.HttpErrorFmts.Role.GetOne(1, 2)
@@ -126,7 +126,7 @@ func TestPositiveRole(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Role.AddAll(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 

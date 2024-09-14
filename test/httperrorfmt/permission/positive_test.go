@@ -22,7 +22,7 @@ func TestPositivePermission(t *testing.T) {
 		// act
 		permissions, err := app.HttpErrorFmts.Permission.GetAll(1, 0, 50)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 		got := len(*permissions)
@@ -44,7 +44,7 @@ func TestPositivePermission(t *testing.T) {
 		// act
 		got, err := app.HttpErrorFmts.Permission.GetOne(1, 1)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -62,7 +62,7 @@ func TestPositivePermission(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Permission.Add(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -81,7 +81,7 @@ func TestPositivePermission(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Permission.Edit(1, 49, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -99,7 +99,7 @@ func TestPositivePermission(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Permission.Remove(1, 49)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 		_, got := app.HttpErrorFmts.Permission.GetOne(1, 49)
@@ -129,7 +129,7 @@ func TestPositivePermission(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Permission.AddAll(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -150,7 +150,7 @@ func TestPositivePermission(t *testing.T) {
 		// act
 		got, err := app.HttpErrorFmts.Permission.GetByEntity(1, "auth")
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 

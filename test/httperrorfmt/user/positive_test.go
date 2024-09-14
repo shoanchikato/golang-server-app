@@ -21,7 +21,7 @@ func TestPositiveUser(t *testing.T) {
 		// act
 		users, err := app.HttpErrorFmts.User.GetAll(1, 0, 50)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 		got := len(*users)
@@ -40,7 +40,7 @@ func TestPositiveUser(t *testing.T) {
 		// act
 		got, err := app.HttpErrorFmts.User.GetOne(1, 1)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -59,7 +59,7 @@ func TestPositiveUser(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.User.Add(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -78,7 +78,7 @@ func TestPositiveUser(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.User.Edit(1, 1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -96,7 +96,7 @@ func TestPositiveUser(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.User.Remove(1, 2)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 		_, got := app.HttpErrorFmts.User.GetOne(1, 2)
@@ -126,7 +126,7 @@ func TestPositiveUser(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.User.AddAll(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 

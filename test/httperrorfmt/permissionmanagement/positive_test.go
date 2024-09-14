@@ -32,13 +32,13 @@ func TestPositivePermissionManagement(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.PermissionManagement.AddPermissionToRole(1, permissionId, roleId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		permissions, err := app.HttpErrorFmts.PermissionManagement.GetPermissionsByRoleId(1, roleId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -57,13 +57,13 @@ func TestPositivePermissionManagement(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.PermissionManagement.RemovePermissionFromRole(1, roleId, permissionId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		permissions, err := app.HttpErrorFmts.PermissionManagement.GetPermissionsByRoleId(1, roleId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -82,13 +82,13 @@ func TestPositivePermissionManagement(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.PermissionManagement.AddPermissionsToRole(1, permissionIds, roleId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		permissions, err := app.HttpErrorFmts.PermissionManagement.GetPermissionsByRoleId(1, roleId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -110,7 +110,7 @@ func TestPositivePermissionManagement(t *testing.T) {
 		// act
 		permissions, err := app.HttpErrorFmts.PermissionManagement.GetPermissionsByRoleId(1, roleId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -134,7 +134,7 @@ func TestPositivePermissionManagement(t *testing.T) {
 		// act
 		permissions, err := app.HttpErrorFmts.PermissionManagement.GetPermissionsByUserId(1, userId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -155,13 +155,13 @@ func TestPositivePermissionManagement(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.PermissionManagement.RemovePermissionsFromRole(1, roleId, permissionIds)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		permissions, err := app.HttpErrorFmts.PermissionManagement.GetPermissionsByRoleId(1, roleId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 

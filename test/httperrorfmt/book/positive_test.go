@@ -41,7 +41,7 @@ func TestPositiveBook(t *testing.T) {
 		// act
 		books, err := app.HttpErrorFmts.Book.GetAll(1, 0, 50)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 		got := len(*books)
@@ -60,7 +60,7 @@ func TestPositiveBook(t *testing.T) {
 		// act
 		got, err := app.HttpErrorFmts.Book.GetOne(1, 1)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -79,7 +79,7 @@ func TestPositiveBook(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Book.Add(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -98,7 +98,7 @@ func TestPositiveBook(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Book.Edit(1, 2, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -116,7 +116,7 @@ func TestPositiveBook(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Book.Remove(1, 2)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 		_, got := app.HttpErrorFmts.Book.GetOne(1, 2)
@@ -146,7 +146,7 @@ func TestPositiveBook(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.Book.AddAll(1, got)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 

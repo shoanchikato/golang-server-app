@@ -41,13 +41,13 @@ func TestPositiveRoleManagement(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.RoleManagement.AddRoleToUser(1, roleId, userId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		got, err := app.HttpErrorFmts.RoleManagement.GetRoleByUserId(1, userId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -66,7 +66,7 @@ func TestPositiveRoleManagement(t *testing.T) {
 		// act
 		got, err := app.HttpErrorFmts.RoleManagement.GetRoleByUserId(1, userId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
@@ -86,7 +86,7 @@ func TestPositiveRoleManagement(t *testing.T) {
 		// act
 		err := app.HttpErrorFmts.RoleManagement.RemoveRoleFromUser(1, roleId, userId)
 		if err != nil {
-			t.Error("got unexpected error in test:", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 

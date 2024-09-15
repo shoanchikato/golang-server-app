@@ -68,8 +68,8 @@ func (p *permissionHandler) AddAll(c *fiber.Ctx) error {
 	}
 
 	newPermissions := []*m.Permission{}
-	for _, permission := range permissions {
-		newPermissions = append(newPermissions, &permission)
+	for i := range permissions {
+		newPermissions = append(newPermissions, &permissions[i])
 	}
 
 	err = p.service.AddAll(*userId, &newPermissions)

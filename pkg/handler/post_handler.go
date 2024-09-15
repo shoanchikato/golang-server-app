@@ -69,7 +69,7 @@ func (p *postHandler) AddAll(c *fiber.Ctx) error {
 
 	newPosts := []*m.Post{}
 	for i := range posts {
-		newPosts[i] = &posts[i]
+		newPosts = append(newPosts, &posts[i])
 	}
 
 	err = p.service.AddAll(*userId, &newPosts)

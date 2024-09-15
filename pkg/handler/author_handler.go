@@ -69,7 +69,7 @@ func (p *authorHandler) AddAll(c *fiber.Ctx) error {
 
 	newAuthors := []*m.Author{}
 	for i := range authors {
-		newAuthors[i] = &authors[i]
+		newAuthors = append(newAuthors, &authors[i])
 	}
 
 	err = p.service.AddAll(*userId, &newAuthors)

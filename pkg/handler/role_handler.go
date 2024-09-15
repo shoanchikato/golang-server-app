@@ -69,7 +69,7 @@ func (p *roleHandler) AddAll(c *fiber.Ctx) error {
 
 	newRoles := []*m.Role{}
 	for i := range roles {
-		newRoles[i] = &roles[i]
+		newRoles = append(newRoles, &roles[i])
 	}
 
 	err = p.service.AddAll(*userId, &newRoles)

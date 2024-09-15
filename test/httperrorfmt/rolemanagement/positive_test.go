@@ -25,7 +25,7 @@ func addNewRole(t *testing.T, validation v.Validators) {
 	}
 }
 
-func TestPositiveRoleManagement(t *testing.T) {
+func Test_Role_Management_Positive_Test(t *testing.T) {
 	app := setup.Run()
 	addNewRole(t, app.Validators)
 	t.Cleanup(func() {

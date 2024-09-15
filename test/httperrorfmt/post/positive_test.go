@@ -19,7 +19,7 @@ func addPost(t *testing.T, validation v.Validators) {
 	}
 }
 
-func TestPositivePost(t *testing.T) {
+func Test_Post_Positive_Test(t *testing.T) {
 	app := setup.Run()
 	addPost(t, app.Validators)
 	t.Cleanup(func() {

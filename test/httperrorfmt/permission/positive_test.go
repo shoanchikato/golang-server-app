@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestPositivePermission(t *testing.T) {
+func Test_Permission_Positive_Test(t *testing.T) {
 	app := setup.Run()
 	t.Cleanup(func() {
 		setup.CleanUp(app)
@@ -76,10 +76,10 @@ func TestPositivePermission(t *testing.T) {
 	t.Run("Edit", func(t *testing.T) {
 		// arrange
 		got := m.NewPermission("name1", "entity1", "operation1")
-		expect := m.Permission{Id: 49, Name: "name1", Entity: "entity1", Operation: "operation1"}
+		expect := m.Permission{Id: 5, Name: "name1", Entity: "entity1", Operation: "operation1"}
 
 		// act
-		err := app.HttpErrorFmts.Permission.Edit(1, 49, got)
+		err := app.HttpErrorFmts.Permission.Edit(1, 5, got)
 		if err != nil {
 			t.Error(setup.UnexpectedErrorMsg, err)
 			return

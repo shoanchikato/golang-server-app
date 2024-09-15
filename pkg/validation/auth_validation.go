@@ -29,7 +29,7 @@ func (a *authValidator) Login(credentials *m.Credentials) (userId *int, err erro
 		return nil, e.NewValidationError(e.ErrLoginValidation, err)
 	}
 
-	return a.service.Login(*credentials)
+	return a.service.Login(credentials)
 }
 
 // ResetPassword

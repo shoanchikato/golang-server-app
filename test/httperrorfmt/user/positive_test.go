@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestPositiveUser(t *testing.T) {
+func Test_User_Positive_Test(t *testing.T) {
 	app := setup.Run()
 	t.Cleanup(func() {
 		setup.CleanUp(app)

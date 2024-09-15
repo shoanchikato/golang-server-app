@@ -9,7 +9,7 @@ import (
 )
 
 type AuthEncryption interface {
-	Login(credentials m.Credentials) (userId *int, err error)
+	Login(credentials *m.Credentials) (userId *int, err error)
 	ResetPassword(username, newPassword string) error
 }
 
@@ -23,7 +23,7 @@ func NewAuthEncryption(repo r.AuthRepo, encrypt s.EncryptionService) AuthEncrypt
 }
 
 // Login
-func (a *authEncryption) Login(credentials m.Credentials) (userId *int, err error) {
+func (a *authEncryption) Login(credentials *m.Credentials) (userId *int, err error) {
 	authDetails, err := a.repo.GetByUsername(credentials.Username)
 	if err != nil {
 		return nil, errors.Join(e.ErrIncorrectCredentials, err)

@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestPositiveAuth(t *testing.T) {
+func Test_Auth_Positive_Tests(t *testing.T) {
 	app := setup.Run()
 	t.Cleanup(func() {
 		setup.CleanUp(app)

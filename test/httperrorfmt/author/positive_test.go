@@ -19,7 +19,7 @@ func addAuthor(t *testing.T, validation v.Validators) {
 	}
 }
 
-func TestPositiveAuthor(t *testing.T) {
+func Test_Author_Positive_Test(t *testing.T) {
 	app := setup.Run()
 	addAuthor(t, app.Validators)
 	t.Cleanup(func() {

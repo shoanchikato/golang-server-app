@@ -62,12 +62,12 @@ func (p *permissionRepo) AddAll(permissions *[]*m.Permission) error {
 
 // Edit
 func (p *permissionRepo) Edit(id int, permission *m.Permission) error {
-	idx, err := p.dbU.Transaction(st.EDIT_PERMISSION_STMT, permission.Name, permission.Entity, permission.Operation, id)
+	_, err := p.dbU.Transaction(st.EDIT_PERMISSION_STMT, permission.Name, permission.Entity, permission.Operation, id)
 	if err != nil {
 		return errors.Join(e.ErrPermissionDomain, e.ErrOnEdit, err)
 	}
 
-	permission.Id = int(idx)
+	permission.Id = id
 
 	return nil
 }

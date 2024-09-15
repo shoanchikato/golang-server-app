@@ -68,8 +68,8 @@ func (p *permissionHandler) AddAll(c *fiber.Ctx) error {
 	}
 
 	newPermissions := []*m.Permission{}
-	for i := range permissions {
-		newPermissions[i] = &permissions[i]
+	for _, permission := range permissions {
+		newPermissions = append(newPermissions, &permission)
 	}
 
 	err = p.service.AddAll(*userId, &newPermissions)
@@ -125,7 +125,7 @@ func (p *permissionHandler) GetAll(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.Status(http.StatusCreated).JSON(users)
+	return c.Status(http.StatusOK).JSON(users)
 }
 
 // GetOne
@@ -147,7 +147,7 @@ func (p *permissionHandler) GetOne(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.Status(http.StatusCreated).JSON(user)
+	return c.Status(http.StatusOK).JSON(user)
 }
 
 // Remove
@@ -169,5 +169,5 @@ func (p *permissionHandler) Remove(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.SendStatus(http.StatusAccepted)
+	return c.SendStatus(http.StatusNoContent)
 }

@@ -62,12 +62,12 @@ func (p *authorRepo) AddAll(authors *[]*m.Author) error {
 
 // Edit
 func (p *authorRepo) Edit(id int, author *m.Author) error {
-	idx, err := p.dbU.Transaction(st.EDIT_AUTHOR_STMT, author.FirstName, author.LastName, id)
+	_, err := p.dbU.Transaction(st.EDIT_AUTHOR_STMT, author.FirstName, author.LastName, id)
 	if err != nil {
 		return errors.Join(e.ErrAuthorDomain, e.ErrOnEdit, err)
 	}
 
-	author.Id = int(idx)
+	author.Id = id
 
 	return nil
 }

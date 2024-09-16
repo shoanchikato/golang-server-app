@@ -67,12 +67,12 @@ func (p *postRepo) AddAll(posts *[]*m.Post) error {
 
 // Edit
 func (p *postRepo) Edit(id int, post *m.Post) error {
-	idx, err := p.dbU.Transaction(st.EDIT_POST_STMT, post.Title, post.Body, post.UserId, id)
+	_, err := p.dbU.Transaction(st.EDIT_POST_STMT, post.Title, post.Body, post.UserId, id)
 	if err != nil {
 		return errors.Join(e.ErrPostDomain, e.ErrOnEdit, err)
 	}
 
-	post.Id = int(idx)
+	post.Id = id
 
 	return nil
 }

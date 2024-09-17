@@ -12,13 +12,6 @@ import (
 	v "app/pkg/validation"
 )
 
-// roleManagement := app.Group("/role-management")
-// 	roleManagement.Use(middleware.JWTParser)
-// 	roleManagement.Post("/:roleId/:userId", handler.AddRoleToUser)
-// 	roleManagement.Get("/:userId", handler.GetRoleByUserId)
-// 	roleManagement.Delete("/:roleId/:userId", handler.RemoveRoleFromUser)
-// }
-
 func addRole(t *testing.T, validation v.Validators) {
 	role := m.NewRole("default user")
 	err := validation.Role.Add(role)
@@ -63,9 +56,9 @@ func Test_Role_Management_Endpoint__Positive_Test(t *testing.T) {
 		}
 	})
 
-	t.Run("GetRoleByUserId", func(t *testing.T) {
+	t.Run("GetRolesByUserId", func(t *testing.T) {
 		// arrange
-		got := &m.Role{}
+		got := &[]m.Role{}
 		expect := m.Role{Id: 1, Name: "admin"}
 		expectStatus := http.StatusOK
 

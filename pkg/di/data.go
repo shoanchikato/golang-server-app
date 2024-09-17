@@ -96,7 +96,7 @@ func Data() (
 		pe.PermissionManagementRemovePermissionsFromRole,
 
 		pe.RoleManagementAddRoleToUser,
-		pe.RoleManagementGetRoleByUserId,
+		pe.RoleManagementGetRolesByUserId,
 		pe.RoleManagementRemoveRoleFromUser,
 	}
 

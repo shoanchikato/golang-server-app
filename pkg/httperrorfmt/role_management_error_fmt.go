@@ -8,7 +8,7 @@ import (
 
 type RoleManagementHttpErrorFmt interface {
 	AddRoleToUser(adminId int, roleId, userId int) error
-	GetRoleByUserId(adminId int, userId int) (*m.Role, error)
+	GetRolesByUserId(adminId int, userId int) (*[]m.Role, error)
 	RemoveRoleFromUser(adminId int, roleId, userId int) error
 }
 
@@ -30,13 +30,13 @@ func (r *roleManagementHttpErrorFmt) AddRoleToUser(adminId int, roleId, userId i
 	return nil
 }
 
-func (r *roleManagementHttpErrorFmt) GetRoleByUserId(adminId int, userId int) (*m.Role, error) {
-	role, err := r.authorization.GetRoleByUserId(adminId, userId)
+func (r *roleManagementHttpErrorFmt) GetRolesByUserId(adminId int, userId int) (*[]m.Role, error) {
+	roles, err := r.authorization.GetRolesByUserId(adminId, userId)
 	if err != nil {
 		return nil, r.service.GetError(err)
 	}
 
-	return role, nil
+	return roles, nil
 }
 
 func (r *roleManagementHttpErrorFmt) RemoveRoleFromUser(adminId int, roleId, userId int) error {

@@ -11,7 +11,7 @@ import (
 
 type RoleManagementAuthorization interface {
 	AddRoleToUser(adminId int, roleId, userId int) error
-	GetRoleByUserId(adminId int, userId int) (*m.Role, error)
+	GetRolesByUserId(adminId int, userId int) (*[]m.Role, error)
 	RemoveRoleFromUser(adminId int, roleId, userId int) error
 }
 
@@ -37,14 +37,14 @@ func (r *roleManagementAuthorization) AddRoleToUser(adminId int, roleId int, use
 	return r.validator.AddRoleToUser(roleId, userId)
 }
 
-// GetRoleByUserId
-func (r *roleManagementAuthorization) GetRoleByUserId(adminId int, userId int) (*m.Role, error) {
-	err := r.auth.CheckForAuthorization(adminId, p.RoleManagementGetRoleByUserId.Name)
+// GetRolesByUserId
+func (r *roleManagementAuthorization) GetRolesByUserId(adminId int, userId int) (*[]m.Role, error) {
+	err := r.auth.CheckForAuthorization(adminId, p.RoleManagementGetRolesByUserId.Name)
 	if err != nil {
-		return nil, errors.Join(e.ErrRoleManagementDomain, e.ErrOnGetRoleByUserId, err)
+		return nil, errors.Join(e.ErrRoleManagementDomain, e.ErrOnGetRolesByUserId, err)
 	}
 
-	return r.validator.GetRoleByUserId(userId)
+	return r.validator.GetRolesByUserId(userId)
 }
 
 // RemoveRoleFromUser

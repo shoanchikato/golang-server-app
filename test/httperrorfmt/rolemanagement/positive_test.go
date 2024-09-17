@@ -2,9 +2,9 @@ package rolemanagement
 
 import (
 	"app/test/setup"
+	"reflect"
 	"testing"
 
-	e "app/pkg/errors"
 	m "app/pkg/model"
 	v "app/pkg/validation"
 )
@@ -36,7 +36,7 @@ func Test_Role_Management_Positive_Test(t *testing.T) {
 		// arrange
 		roleId := 2
 		userId := 2
-		expect := m.Role{Id: 2, Name: "super user"}
+		expect := []m.Role{{Id: 2, Name: "super user"}}
 
 		// act
 		err := app.HttpErrorFmts.RoleManagement.AddRoleToUser(1, roleId, userId)
@@ -45,33 +45,33 @@ func Test_Role_Management_Positive_Test(t *testing.T) {
 			return
 		}
 
-		got, err := app.HttpErrorFmts.RoleManagement.GetRoleByUserId(1, userId)
+		got, err := app.HttpErrorFmts.RoleManagement.GetRolesByUserId(1, userId)
 		if err != nil {
 			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		// assert
-		if expect != *got {
+		if reflect.DeepEqual(expect, *got) {
 			t.Errorf("expected %v, got %v", expect, *got)
 			return
 		}
 	})
 
-	t.Run("GetRoleByUserId", func(t *testing.T) {
+	t.Run("GetRolesByUserId", func(t *testing.T) {
 		// arrange
-		expect := m.Role{Id: 2, Name: "super user"}
+		expect := []m.Role{{Id: 2, Name: "super user"}}
 		userId := 2
 
 		// act
-		got, err := app.HttpErrorFmts.RoleManagement.GetRoleByUserId(1, userId)
+		got, err := app.HttpErrorFmts.RoleManagement.GetRolesByUserId(1, userId)
 		if err != nil {
 			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		// assert
-		if *got != expect {
+		if reflect.DeepEqual(expect, *got) {
 			t.Errorf("expected %v, got %v", expect, *got)
 			return
 		}
@@ -81,8 +81,7 @@ func Test_Role_Management_Positive_Test(t *testing.T) {
 		// arrange
 		roleId := 2
 		userId := 2
-		expect := e.NewErrRepoNotFound("role id", "2")
-
+		expect := 0
 		// act
 		err := app.HttpErrorFmts.RoleManagement.RemoveRoleFromUser(1, roleId, userId)
 		if err != nil {
@@ -90,11 +89,15 @@ func Test_Role_Management_Positive_Test(t *testing.T) {
 			return
 		}
 
-		_, got := app.HttpErrorFmts.RoleManagement.GetRoleByUserId(1, userId)
+		got, err := app.HttpErrorFmts.RoleManagement.GetRolesByUserId(1, userId)
+		if err != nil {
+			t.Error(setup.UnexpectedErrorMsg, err)
+			return
+		}
 
 		// assert
-		if expect.Error() != got.Error() {
-			t.Errorf("expected %v, got %v", expect, got)
+		if len(*got) != 0 {
+			t.Errorf("expected %v, got %v", expect, len(*got))
 			return
 		}
 	})

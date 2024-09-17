@@ -13,16 +13,6 @@ import (
 	v "app/pkg/validation"
 )
 
-// permissionManagement := app.Group("/permission-management")
-// 	permissionManagement.Use(middleware.JWTParser)
-// 	permissionManagement.Get("/role/:roleId", handler.GetPermissionsByRoleId)
-// 	permissionManagement.Get("/user/:userId", handler.GetPermissionsByUserId)
-// 	permissionManagement.Post("role/:roleId", handler.AddPermissionsToRole)
-// 	permissionManagement.Post("/:permissionId/:roleId", handler.AddPermissionToRole)
-// 	permissionManagement.Delete("role/:roleId", handler.RemovePermissionsFromRole)
-// 	permissionManagement.Delete(":permissionId/:roleId", handler.RemovePermissionFromRole)
-// }
-
 func addRole(t *testing.T, validation v.Validators) {
 	role := m.NewRole("default user")
 	err := validation.Role.Add(role)

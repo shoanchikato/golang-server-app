@@ -8,12 +8,12 @@ import (
 
 func GetErrorResponse(t *testing.T, resp *http.Response) *map[string]any {
 	value := &map[string]any{}
-	
+
 	err := json.NewDecoder(resp.Body).Decode(value)
 	if err == nil {
 		return value
 	}
-	
+
 	stringValue := ""
 
 	switch {

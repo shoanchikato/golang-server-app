@@ -6,13 +6,12 @@ import (
 	st "app/pkg/stmt"
 	"database/sql"
 	"errors"
-	"strconv"
 	"sync"
 )
 
 type RoleManagementRepo interface {
 	AddRoleToUser(roleId, userId int) error
-	GetRoleByUserId(userId int) (*m.Role, error)
+	GetRolesByUserId(userId int) (*[]m.Role, error)
 	RemoveRoleFromUser(roleId int, permissionId int) error
 }
 
@@ -38,11 +37,6 @@ func NewRoleManagementRepo(
 
 // AddRoleToUser
 func (r *rMRepo) AddRoleToUser(roleId, userId int) error {
-	role, _ := r.GetRoleByUserId(userId)
-	if role != nil {
-		return nil
-	}
-
 	_, err := r.ur.GetOne(userId)
 	if err != nil {
 		return err
@@ -61,28 +55,34 @@ func (r *rMRepo) AddRoleToUser(roleId, userId int) error {
 	return nil
 }
 
-// GetRoleByUserId
-func (r *rMRepo) GetRoleByUserId(userId int) (*m.Role, error) {
+// GetRolesByUserId
+func (r *rMRepo) GetRolesByUserId(userId int) (*[]m.Role, error) {
 	r.rw.RLock()
 	defer r.rw.RUnlock()
 
+	roles := []m.Role{}
 	role := m.Role{}
 
-	row := r.db.QueryRow(st.GET_ROLE_BY_USER_ID_STMT, userId)
-	err := row.Scan(&role.Id, &role.Name)
-	if err == sql.ErrNoRows {
-		return nil, errors.Join(
-			e.ErrRoleManagementDomain,
-			e.ErrRepoExecutingStmt,
-			e.NewErrRepoNotFound("role id", strconv.Itoa(userId)),
-		)
+	rows, err := r.db.Query(st.GET_ROLES_BY_USER_ID_STMT, userId)
+	if err != nil {
+		return nil, errors.Join(e.ErrRoleManagementDomain, e.ErrOnGetRolesByUserId, e.ErrRepoPreparingStmt, err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		err = rows.Scan(&role.Id, &role.Name)
+		if err != nil {
+			return nil, errors.Join(e.ErrPostDomain, e.ErrOnGetAll, e.ErrRepoExecutingStmt, err)
+		}
+
+		roles = append(roles, role)
 	}
 
 	if err != nil {
-		return nil, errors.Join(e.ErrRoleManagementDomain, e.ErrOnGetRoleByUserId, e.ErrRepoExecutingStmt, err)
+		return nil, errors.Join(e.ErrRoleManagementDomain, e.ErrOnGetRolesByUserId, e.ErrRepoExecutingStmt, err)
 	}
 
-	return &role, nil
+	return &roles, nil
 }
 
 // RemoveRoleFromUser
@@ -97,7 +97,7 @@ func (r *rMRepo) RemoveRoleFromUser(roleId int, userId int) error {
 		return err
 	}
 
-	_, err = r.GetRoleByUserId(userId)
+	_, err = r.GetRolesByUserId(userId)
 	if err != nil {
 		return err
 	}

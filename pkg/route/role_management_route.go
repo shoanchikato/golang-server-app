@@ -11,6 +11,6 @@ func NewRoleManagementRoutes(app *fiber.App, handler h.RoleManagementHandler, mi
 	roleManagement := app.Group("/role-management")
 	roleManagement.Use(middleware.JWTParser)
 	roleManagement.Post("/:roleId/:userId", handler.AddRoleToUser)
-	roleManagement.Get("/user/:userId", handler.GetRoleByUserId)
+	roleManagement.Get("/user/:userId", handler.GetRolesByUserId)
 	roleManagement.Delete("/:roleId/:userId", handler.RemoveRoleFromUser)
 }

@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	m "app/pkg/model"
+	v "app/pkg/validation"
 	"app/test/setup"
 	"encoding/json"
 	"net/http"
@@ -9,7 +10,6 @@ import (
 	"reflect"
 	"strings"
 	"testing"
-	v "app/pkg/validation"
 )
 
 func addAuthor(t *testing.T, validation v.Validators) {

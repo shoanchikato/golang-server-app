@@ -22,7 +22,7 @@ var (
 	ErrOnAddRoleToUser             = errors.New("add role to user: ")
 	ErrOnGetPermissionsByRoleId    = errors.New("get permissions by role id: ")
 	ErrOnGetPermissonsByUserId     = errors.New("get permissons by user id: ")
-	ErrOnGetRoleByUserId           = errors.New("get role by user id: ")
+	ErrOnGetRolesByUserId          = errors.New("get role by user id: ")
 	ErrOnRemovePermissionFromRole  = errors.New("remove permission from role: ")
 	ErrOnRemovePermissionsFromRole = errors.New("remove permissions from role: ")
 	ErrOnRemoveRoleFromUser        = errors.New("remove role from user: ")

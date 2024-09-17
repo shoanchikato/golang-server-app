@@ -8,7 +8,7 @@ import (
 
 type RoleManagementValidator interface {
 	AddRoleToUser(roleId, userId int) error
-	GetRoleByUserId(userId int) (*m.Role, error)
+	GetRolesByUserId(userId int) (*[]m.Role, error)
 	RemoveRoleFromUser(roleId, userId int) error
 }
 
@@ -26,9 +26,9 @@ func (r *rMValidator) AddRoleToUser(roleId int, userId int) error {
 	return r.repo.AddRoleToUser(roleId, userId)
 }
 
-// GetRoleByUserId
-func (r *rMValidator) GetRoleByUserId(userId int) (*m.Role, error) {
-	return r.repo.GetRoleByUserId(userId)
+// GetRolesByUserId
+func (r *rMValidator) GetRolesByUserId(userId int) (*[]m.Role, error) {
+	return r.repo.GetRolesByUserId(userId)
 }
 
 // RemoveRoleFromUser

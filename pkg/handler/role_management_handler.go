@@ -12,7 +12,7 @@ import (
 
 type RoleManagementHandler interface {
 	AddRoleToUser(c *fiber.Ctx) error
-	GetRoleByUserId(c *fiber.Ctx) error
+	GetRolesByUserId(c *fiber.Ctx) error
 	RemoveRoleFromUser(c *fiber.Ctx) error
 }
 
@@ -51,8 +51,8 @@ func (r *roleManagementHandler) AddRoleToUser(c *fiber.Ctx) error {
 	return c.SendStatus(http.StatusNoContent)
 }
 
-// GetRoleByUserId
-func (r *roleManagementHandler) GetRoleByUserId(c *fiber.Ctx) error {
+// GetRolesByUserId
+func (r *roleManagementHandler) GetRolesByUserId(c *fiber.Ctx) error {
 	adminId, err := getAuthUserId(c, r.logger)
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
@@ -63,13 +63,13 @@ func (r *roleManagementHandler) GetRoleByUserId(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
 	}
 
-	role, err := r.service.GetRoleByUserId(*adminId, *userId)
+	roles, err := r.service.GetRolesByUserId(*adminId, *userId)
 	httpErr := &e.HttpError{}
 	if errors.As(err, &httpErr) {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.Status(http.StatusOK).JSON(role)
+	return c.Status(http.StatusOK).JSON(roles)
 }
 
 // RemoveRoleFromUser

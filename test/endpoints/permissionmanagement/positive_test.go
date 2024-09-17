@@ -1,122 +1,63 @@
-package endpoints
+package permissionmanagement
 
 import (
-	m "app/pkg/model"
 	"app/test/setup"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"strings"
 	"testing"
+
+	m "app/pkg/model"
+	v "app/pkg/validation"
 )
 
-func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
+// permissionManagement := app.Group("/permission-management")
+// 	permissionManagement.Use(middleware.JWTParser)
+// 	permissionManagement.Get("/role/:roleId", handler.GetPermissionsByRoleId)
+// 	permissionManagement.Get("/user/:userId", handler.GetPermissionsByUserId)
+// 	permissionManagement.Post("role/:roleId", handler.AddPermissionsToRole)
+// 	permissionManagement.Post("/:permissionId/:roleId", handler.AddPermissionToRole)
+// 	permissionManagement.Delete("role/:roleId", handler.RemovePermissionsFromRole)
+// 	permissionManagement.Delete(":permissionId/:roleId", handler.RemovePermissionFromRole)
+// }
+
+func addRole(t *testing.T, validation v.Validators) {
+	role := m.NewRole("default user")
+	err := validation.Role.Add(role)
+	if err != nil {
+		t.Errorf(setup.UnexpectedErrorMsg)
+		return
+	}
+}
+
+func Test_Permission_Management_Endpoint__Positive_Test(t *testing.T) {
 	di := setup.Run()
 	app := di.App
+	validation := di.Validators
+	addRole(t, validation)
 
 	tokens, err := setup.GetAuthTokens(app)
 	if err != nil {
-		t.Error(setup.UnexpectedErrorMsg, err)
+		t.Error("unexpected error", err)
 		return
 	}
 
-	t.Run("Add", func(t *testing.T) {
+	t.Run("AddPermissionsToRole", func(t *testing.T) {
 		// arrange
-		value := `{"name":"name", "entity":"entity", "operation":"operation"}`
+		value := `[1, 2, 3]`
 		reader := strings.NewReader(value)
-		expect := &m.Permission{Id: 49, Name: "name", Entity: "entity", Operation: "operation"}
-		got := &m.Permission{}
-		expectStatus := http.StatusCreated
-
-		// act
-		req := httptest.NewRequest(http.MethodPost, "/permissions", reader)
-		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("Authorization", tokens.Access)
-
-		resp, err := app.Test(req)
-		if err != nil {
-			t.Error(setup.UnexpectedErrorMsg, err)
-			return
-		}
-
-		// assert
-		if resp.StatusCode != expectStatus {
-			errResp := setup.GetErrorResponse(t, resp)
-			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
-			return
-		}
-
-		err = json.NewDecoder(resp.Body).Decode(got)
-		if err != nil {
-			t.Error(setup.UnexpectedErrorMsg, err)
-			return
-		}
-
-		if !reflect.DeepEqual(expect, got) {
-			t.Errorf("expected %v, but got %v", expect, got)
-			return
-		}
-	})
-
-	t.Run("AddAll", func(t *testing.T) {
-		// arrange
-		value := `
-			[
-				{"name":"name1", "entity":"entity1", "operation":"operation1"}, 
-				{"name":"name2", "entity":"entity2", "operation":"operation2"}
-			]
-		`
-		reader := strings.NewReader(value)
-		expect := &[]m.Permission{
-			{Id: 50, Name: "name1", Entity: "entity1", Operation: "operation1"},
-			{Id: 51, Name: "name2", Entity: "entity2", Operation: "operation2"},
-		}
-		got := &[]m.Permission{}
-		expectStatus := http.StatusCreated
-
-		// act
-		req := httptest.NewRequest(http.MethodPost, "/permissions/all", reader)
-		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("Authorization", tokens.Access)
-
-		resp, err := app.Test(req)
-		if err != nil {
-			t.Error(setup.UnexpectedErrorMsg, err)
-			return
-		}
-
-		// assert
-		if resp.StatusCode != expectStatus {
-			errResp := setup.GetErrorResponse(t, resp)
-			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
-			return
-		}
-
-		err = json.NewDecoder(resp.Body).Decode(got)
-		if err != nil {
-			t.Error(setup.UnexpectedErrorMsg, err)
-			return
-		}
-
-		if !reflect.DeepEqual(expect, got) {
-			t.Errorf("expected %v, but got %v", expect, got)
-			return
-		}
-	})
-
-	t.Run("Remove", func(t *testing.T) {
-		// arrange
 		expectStatus := http.StatusNoContent
 
 		// act
-		req := httptest.NewRequest(http.MethodDelete, "/permissions/51", nil)
+		req := httptest.NewRequest(http.MethodPost, "/permission-management/role/2", reader)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
 		resp, err := app.Test(req)
 		if err != nil {
-			t.Error(setup.UnexpectedErrorMsg, err)
+			t.Error("unexpected error", err)
 			return
 		}
 
@@ -128,20 +69,95 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 		}
 	})
 
-	t.Run("GetAll", func(t *testing.T) {
+	t.Run("RemovePermissionsFromRole", func(t *testing.T) {
 		// arrange
-		expect := 50
-		got := &[]m.Permission{}
-		expectStatus := http.StatusOK
+		value := `[1, 2, 3]`
+		reader := strings.NewReader(value)
+		expectStatus := http.StatusNoContent
 
 		// act
-		req := httptest.NewRequest(http.MethodGet, "/permissions", nil)
+		req := httptest.NewRequest(http.MethodDelete, "/permission-management/role/2", reader)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
 		resp, err := app.Test(req)
 		if err != nil {
-			t.Error(setup.UnexpectedErrorMsg, err)
+			t.Error("unexpected error", err)
+			return
+		}
+
+		// assert
+		if resp.StatusCode != expectStatus {
+			errResp := setup.GetErrorResponse(t, resp)
+			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
+			return
+		}
+	})
+
+	t.Run("AddPermissionToRole", func(t *testing.T) {
+		// arrange
+		roleId := 2
+		permissionId := 4
+		expectStatus := http.StatusNoContent
+
+		// act
+		req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/permission-management/%d/%d", permissionId, roleId), nil)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", tokens.Access)
+
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Error("unexpected error", err)
+			return
+		}
+
+		// assert
+		if resp.StatusCode != expectStatus {
+			errResp := setup.GetErrorResponse(t, resp)
+			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
+			return
+		}
+	})
+
+	t.Run("RemovePermissionFromRole", func(t *testing.T) {
+		// arrange
+		roleId := 2
+		permissionId := 4
+		expectStatus := http.StatusNoContent
+
+		// act
+		req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/permission-management/%d/%d", permissionId, roleId), nil)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", tokens.Access)
+
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Error("unexpected error", err)
+			return
+		}
+
+		// assert
+		if resp.StatusCode != expectStatus {
+			errResp := setup.GetErrorResponse(t, resp)
+			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
+			return
+		}
+	})
+
+	t.Run("GetPermissionsByRoleId", func(t *testing.T) {
+		// arrange
+		got := &[]m.Permission{}
+		expect := 0
+		expectStatus := http.StatusOK
+
+		// act
+		req := httptest.NewRequest(http.MethodGet, "/permission-management/role/2", nil)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", tokens.Access)
+
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Error("unexpected error", err)
 			return
 		}
 
@@ -164,20 +180,20 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 		}
 	})
 
-	t.Run("GetOne", func(t *testing.T) {
+	t.Run("GetPermissionsByUserId", func(t *testing.T) {
 		// arrange
-		expect := &m.Permission{Id: 50, Name: "name1", Entity: "entity1", Operation: "operation1"}
-		got := &m.Permission{}
+		got := &[]m.Permission{}
+		expect := 48
 		expectStatus := http.StatusOK
 
 		// act
-		req := httptest.NewRequest(http.MethodGet, "/permissions/50", nil)
+		req := httptest.NewRequest(http.MethodGet, "/permission-management/user/1", nil)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
 		resp, err := app.Test(req)
 		if err != nil {
-			t.Error(setup.UnexpectedErrorMsg, err)
+			t.Error("unexpected error", err)
 			return
 		}
 
@@ -194,47 +210,10 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 			return
 		}
 
-		if !reflect.DeepEqual(expect, got) {
-			t.Errorf("expected %v, but got %v", expect, got)
+		if expect != len(*got) {
+			t.Errorf("expected %v, but go %v", expect, len(*got))
 			return
 		}
 	})
 
-	t.Run("Edit", func(t *testing.T) {
-		// arrange
-		value := `{"name":"name3", "entity":"entity3", "operation":"operation3"}`
-		reader := strings.NewReader(value)
-		expect := &m.Permission{Id: 1, Name: "name3", Entity: "entity3", Operation: "operation3"}
-		got := &m.Permission{}
-		expectStatus := http.StatusCreated
-
-		// act
-		req := httptest.NewRequest(http.MethodPut, "/permissions/1", reader)
-		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("Authorization", tokens.Access)
-
-		resp, err := app.Test(req)
-		if err != nil {
-			t.Error(setup.UnexpectedErrorMsg, err)
-			return
-		}
-
-		// assert
-		if resp.StatusCode != expectStatus {
-			errResp := setup.GetErrorResponse(t, resp)
-			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
-			return
-		}
-
-		err = json.NewDecoder(resp.Body).Decode(got)
-		if err != nil {
-			t.Error(setup.UnexpectedErrorMsg, err)
-			return
-		}
-
-		if !reflect.DeepEqual(expect, got) {
-			t.Errorf("expected %v, but got %v", expect, got)
-			return
-		}
-	})
 }

@@ -9,11 +9,23 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	v "app/pkg/validation"
 )
 
-func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
+func addAuthor(t *testing.T, validation v.Validators) {
+	author := m.NewAuthor("John", "Doe")
+	err := validation.Author.Add(author)
+	if err != nil {
+		t.Error(setup.UnexpectedErrorMsg, err)
+		return
+	}
+}
+
+func Test_Book_Endpoint__Positive_Test(t *testing.T) {
 	di := setup.Run()
 	app := di.App
+	validation := di.Validators
+	addAuthor(t, validation)
 
 	tokens, err := setup.GetAuthTokens(app)
 	if err != nil {
@@ -23,14 +35,14 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 
 	t.Run("Add", func(t *testing.T) {
 		// arrange
-		value := `{"name":"name", "entity":"entity", "operation":"operation"}`
+		value := `{"name":"book one", "year":2012, "author_id":1}`
 		reader := strings.NewReader(value)
-		expect := &m.Permission{Id: 49, Name: "name", Entity: "entity", Operation: "operation"}
-		got := &m.Permission{}
+		expect := &m.Book{Id: 1, Name: "book one", Year: 2012, AuthorId: 1}
+		got := &m.Book{}
 		expectStatus := http.StatusCreated
 
 		// act
-		req := httptest.NewRequest(http.MethodPost, "/permissions", reader)
+		req := httptest.NewRequest(http.MethodPost, "/books", reader)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -63,20 +75,20 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 		// arrange
 		value := `
 			[
-				{"name":"name1", "entity":"entity1", "operation":"operation1"}, 
-				{"name":"name2", "entity":"entity2", "operation":"operation2"}
+				{"name":"book two", "year":2012, "author_id":1},
+				{"name":"book three", "year":2013, "author_id":1}
 			]
 		`
 		reader := strings.NewReader(value)
-		expect := &[]m.Permission{
-			{Id: 50, Name: "name1", Entity: "entity1", Operation: "operation1"},
-			{Id: 51, Name: "name2", Entity: "entity2", Operation: "operation2"},
+		expect := &[]m.Book{
+			{Id: 2, Name: "book two", Year: 2012, AuthorId: 1},
+			{Id: 3, Name: "book three", Year: 2013, AuthorId: 1},
 		}
-		got := &[]m.Permission{}
+		got := &[]m.Book{}
 		expectStatus := http.StatusCreated
 
 		// act
-		req := httptest.NewRequest(http.MethodPost, "/permissions/all", reader)
+		req := httptest.NewRequest(http.MethodPost, "/books/all", reader)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -110,7 +122,7 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 		expectStatus := http.StatusNoContent
 
 		// act
-		req := httptest.NewRequest(http.MethodDelete, "/permissions/51", nil)
+		req := httptest.NewRequest(http.MethodDelete, "/books/2", nil)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -130,12 +142,12 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 
 	t.Run("GetAll", func(t *testing.T) {
 		// arrange
-		expect := 50
-		got := &[]m.Permission{}
+		expect := 2
+		got := &[]m.Book{}
 		expectStatus := http.StatusOK
 
 		// act
-		req := httptest.NewRequest(http.MethodGet, "/permissions", nil)
+		req := httptest.NewRequest(http.MethodGet, "/books", nil)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -166,12 +178,12 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 
 	t.Run("GetOne", func(t *testing.T) {
 		// arrange
-		expect := &m.Permission{Id: 50, Name: "name1", Entity: "entity1", Operation: "operation1"}
-		got := &m.Permission{}
+		expect := &m.Book{Id: 1, Name: "book one", Year: 2012, AuthorId: 1}
+		got := &m.Book{}
 		expectStatus := http.StatusOK
 
 		// act
-		req := httptest.NewRequest(http.MethodGet, "/permissions/50", nil)
+		req := httptest.NewRequest(http.MethodGet, "/books/1", nil)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -202,14 +214,14 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 
 	t.Run("Edit", func(t *testing.T) {
 		// arrange
-		value := `{"name":"name3", "entity":"entity3", "operation":"operation3"}`
+		value := `{"name":"book three", "year":2023, "author_id":1}`
 		reader := strings.NewReader(value)
-		expect := &m.Permission{Id: 1, Name: "name3", Entity: "entity3", Operation: "operation3"}
-		got := &m.Permission{}
+		expect := &m.Book{Id: 1, Name: "book three", Year: 2023, AuthorId: 1}
+		got := &m.Book{}
 		expectStatus := http.StatusCreated
 
 		// act
-		req := httptest.NewRequest(http.MethodPut, "/permissions/1", reader)
+		req := httptest.NewRequest(http.MethodPut, "/books/1", reader)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 

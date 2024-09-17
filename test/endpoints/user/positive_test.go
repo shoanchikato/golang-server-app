@@ -17,7 +17,7 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 
 	tokens, err := setup.GetAuthTokens(app)
 	if err != nil {
-		t.Error("unexpected error", err)
+		t.Error(setup.UnexpectedErrorMsg, err)
 		return
 	}
 
@@ -34,10 +34,10 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 		`
 		reader := strings.NewReader(value)
 		expect := &m.User{
-			Id: 2, FirstName: "James", 
-			LastName: "Doe", 
-			Username: "james_doe", 
-			Email: "james@doe.com",
+			Id: 2, FirstName: "James",
+			LastName: "Doe",
+			Username: "james_doe",
+			Email:    "james@doe.com",
 		}
 		got := &m.User{}
 		expectStatus := http.StatusCreated
@@ -49,13 +49,13 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 
 		resp, err := app.Test(req)
 		if err != nil {
-			t.Error("unexpected error", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		// assert
 		if resp.StatusCode != expectStatus {
-			errResp := setup.GetErrorResponse(t, resp.Body)
+			errResp := setup.GetErrorResponse(t, resp)
 			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
 			return
 		}
@@ -95,16 +95,16 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 		reader := strings.NewReader(value)
 		expect := &[]m.User{
 			{
-				Id: 3, FirstName: "Joe", 
-				LastName: "Doe", 
-				Username: "joe_doe", 
-				Email: "joe@doe.com",
+				Id: 3, FirstName: "Joe",
+				LastName: "Doe",
+				Username: "joe_doe",
+				Email:    "joe@doe.com",
 			},
 			{
-				Id: 4, FirstName: "Jamie", 
-				LastName: "Doe", 
-				Username: "jamie_doe", 
-				Email: "jamie@doe.com",
+				Id: 4, FirstName: "Jamie",
+				LastName: "Doe",
+				Username: "jamie_doe",
+				Email:    "jamie@doe.com",
 			},
 		}
 		got := &[]m.User{}
@@ -117,13 +117,13 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 
 		resp, err := app.Test(req)
 		if err != nil {
-			t.Error("unexpected error", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		// assert
 		if resp.StatusCode != expectStatus {
-			errResp := setup.GetErrorResponse(t, resp.Body)
+			errResp := setup.GetErrorResponse(t, resp)
 			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
 			return
 		}
@@ -151,13 +151,13 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 
 		resp, err := app.Test(req)
 		if err != nil {
-			t.Error("unexpected error", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		// assert
 		if resp.StatusCode != expectStatus {
-			errResp := setup.GetErrorResponse(t, resp.Body)
+			errResp := setup.GetErrorResponse(t, resp)
 			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
 			return
 		}
@@ -176,13 +176,13 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 
 		resp, err := app.Test(req)
 		if err != nil {
-			t.Error("unexpected error", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		// assert
 		if resp.StatusCode != expectStatus {
-			errResp := setup.GetErrorResponse(t, resp.Body)
+			errResp := setup.GetErrorResponse(t, resp)
 			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
 			return
 		}
@@ -194,7 +194,7 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 		}
 
 		if expect != len(*got) {
-			t.Errorf("expected %v, but got %v", expect, got)
+			t.Errorf("expected %v, but got %v", expect, len(*got))
 			return
 		}
 	})
@@ -202,10 +202,10 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 	t.Run("GetOne", func(t *testing.T) {
 		// arrange
 		expect := &m.User{
-			Id: 2, FirstName: "James", 
-			LastName: "Doe", 
-			Username: "james_doe", 
-			Email: "james@doe.com",
+			Id: 2, FirstName: "James",
+			LastName: "Doe",
+			Username: "james_doe",
+			Email:    "james@doe.com",
 		}
 		got := &m.User{}
 		expectStatus := http.StatusOK
@@ -217,13 +217,13 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 
 		resp, err := app.Test(req)
 		if err != nil {
-			t.Error("unexpected error", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		// assert
 		if resp.StatusCode != expectStatus {
-			errResp := setup.GetErrorResponse(t, resp.Body)
+			errResp := setup.GetErrorResponse(t, resp)
 			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
 			return
 		}
@@ -252,10 +252,10 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 		`
 		reader := strings.NewReader(value)
 		expect := &m.User{
-			Id: 2, FirstName: "James1", 
-			LastName: "Doe1", 
-			Username: "james_doe1", 
-			Email: "james@doe.com1",
+			Id: 2, FirstName: "James1",
+			LastName: "Doe1",
+			Username: "james_doe1",
+			Email:    "james@doe.com1",
 		}
 		got := &m.User{}
 		expectStatus := http.StatusCreated
@@ -267,13 +267,13 @@ func Test_User_Endpoint__Positive_Test(t *testing.T) {
 
 		resp, err := app.Test(req)
 		if err != nil {
-			t.Error("unexpected error", err)
+			t.Error(setup.UnexpectedErrorMsg, err)
 			return
 		}
 
 		// assert
 		if resp.StatusCode != expectStatus {
-			errResp := setup.GetErrorResponse(t, resp.Body)
+			errResp := setup.GetErrorResponse(t, resp)
 			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
 			return
 		}

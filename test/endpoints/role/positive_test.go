@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
+func Test_Role_Endpoint__Positive_Test(t *testing.T) {
 	di := setup.Run()
 	app := di.App
 
@@ -23,14 +23,14 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 
 	t.Run("Add", func(t *testing.T) {
 		// arrange
-		value := `{"name":"name", "entity":"entity", "operation":"operation"}`
+		value := `{"name":"default user"}`
 		reader := strings.NewReader(value)
-		expect := &m.Permission{Id: 49, Name: "name", Entity: "entity", Operation: "operation"}
-		got := &m.Permission{}
+		expect := &m.Role{Id: 2, Name: "default user"}
+		got := &m.Role{}
 		expectStatus := http.StatusCreated
 
 		// act
-		req := httptest.NewRequest(http.MethodPost, "/permissions", reader)
+		req := httptest.NewRequest(http.MethodPost, "/roles", reader)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -63,20 +63,20 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 		// arrange
 		value := `
 			[
-				{"name":"name1", "entity":"entity1", "operation":"operation1"}, 
-				{"name":"name2", "entity":"entity2", "operation":"operation2"}
+				{"name":"name1"}, 
+				{"name":"name2"}
 			]
 		`
 		reader := strings.NewReader(value)
-		expect := &[]m.Permission{
-			{Id: 50, Name: "name1", Entity: "entity1", Operation: "operation1"},
-			{Id: 51, Name: "name2", Entity: "entity2", Operation: "operation2"},
+		expect := &[]m.Role{
+			{Id: 3, Name: "name1"},
+			{Id: 4, Name: "name2"},
 		}
-		got := &[]m.Permission{}
+		got := &[]m.Role{}
 		expectStatus := http.StatusCreated
 
 		// act
-		req := httptest.NewRequest(http.MethodPost, "/permissions/all", reader)
+		req := httptest.NewRequest(http.MethodPost, "/roles/all", reader)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -110,7 +110,7 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 		expectStatus := http.StatusNoContent
 
 		// act
-		req := httptest.NewRequest(http.MethodDelete, "/permissions/51", nil)
+		req := httptest.NewRequest(http.MethodDelete, "/roles/4", nil)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -130,12 +130,12 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 
 	t.Run("GetAll", func(t *testing.T) {
 		// arrange
-		expect := 50
-		got := &[]m.Permission{}
+		expect := 3
+		got := &[]m.Role{}
 		expectStatus := http.StatusOK
 
 		// act
-		req := httptest.NewRequest(http.MethodGet, "/permissions", nil)
+		req := httptest.NewRequest(http.MethodGet, "/roles", nil)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -166,12 +166,12 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 
 	t.Run("GetOne", func(t *testing.T) {
 		// arrange
-		expect := &m.Permission{Id: 50, Name: "name1", Entity: "entity1", Operation: "operation1"}
-		got := &m.Permission{}
+		expect := &m.Role{Id: 2, Name: "default user"}
+		got := &m.Role{}
 		expectStatus := http.StatusOK
 
 		// act
-		req := httptest.NewRequest(http.MethodGet, "/permissions/50", nil)
+		req := httptest.NewRequest(http.MethodGet, "/roles/2", nil)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -202,14 +202,14 @@ func Test_Permission_Endpoint__Positive_Test(t *testing.T) {
 
 	t.Run("Edit", func(t *testing.T) {
 		// arrange
-		value := `{"name":"name3", "entity":"entity3", "operation":"operation3"}`
+		value := `{"name":"name3"}`
 		reader := strings.NewReader(value)
-		expect := &m.Permission{Id: 1, Name: "name3", Entity: "entity3", Operation: "operation3"}
-		got := &m.Permission{}
+		expect := &m.Role{Id: 2, Name: "name3"}
+		got := &m.Role{}
 		expectStatus := http.StatusCreated
 
 		// act
-		req := httptest.NewRequest(http.MethodPut, "/permissions/1", reader)
+		req := httptest.NewRequest(http.MethodPut, "/roles/2", reader)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 

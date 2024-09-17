@@ -73,10 +73,10 @@ func Test_Role_Positive_Test(t *testing.T) {
 	t.Run("Edit", func(t *testing.T) {
 		// arrange
 		got := m.NewRole("name1")
-		expect := m.Role{Id: 2, Name: "name1"}
+		expect := m.Role{Id: 4, Name: "name1"}
 
 		// act
-		err := app.HttpErrorFmts.Role.Edit(1, 49, got)
+		err := app.HttpErrorFmts.Role.Edit(1, 4, got)
 		if err != nil {
 			t.Error(setup.UnexpectedErrorMsg, err)
 			return

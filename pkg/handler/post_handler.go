@@ -125,7 +125,7 @@ func (p *postHandler) GetAll(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.Status(http.StatusCreated).JSON(users)
+	return c.Status(http.StatusOK).JSON(users)
 }
 
 // GetOne
@@ -147,7 +147,7 @@ func (p *postHandler) GetOne(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.Status(http.StatusCreated).JSON(user)
+	return c.Status(http.StatusOK).JSON(user)
 }
 
 // Remove
@@ -169,5 +169,5 @@ func (p *postHandler) Remove(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.SendStatus(http.StatusAccepted)
+	return c.SendStatus(http.StatusNoContent)
 }

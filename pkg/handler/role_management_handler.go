@@ -48,7 +48,7 @@ func (r *roleManagementHandler) AddRoleToUser(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.SendStatus(http.StatusAccepted)
+	return c.SendStatus(http.StatusNoContent)
 }
 
 // GetRoleByUserId
@@ -95,5 +95,5 @@ func (r *roleManagementHandler) RemoveRoleFromUser(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.SendStatus(http.StatusAccepted)
+	return c.SendStatus(http.StatusNoContent)
 }

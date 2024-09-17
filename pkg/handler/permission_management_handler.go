@@ -51,7 +51,7 @@ func (p *permissionManagementHandler) AddPermissionToRole(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.SendStatus(http.StatusAccepted)
+	return c.SendStatus(http.StatusNoContent)
 }
 
 // AddPermissionsToRole
@@ -78,7 +78,7 @@ func (p *permissionManagementHandler) AddPermissionsToRole(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.SendStatus(http.StatusAccepted)
+	return c.SendStatus(http.StatusNoContent)
 }
 
 // GetPermissionsByRoleId
@@ -146,7 +146,7 @@ func (p *permissionManagementHandler) RemovePermissionFromRole(c *fiber.Ctx) err
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.SendStatus(http.StatusAccepted)
+	return c.SendStatus(http.StatusNoContent)
 }
 
 // RemovePermissionsFromRole
@@ -173,5 +173,5 @@ func (p *permissionManagementHandler) RemovePermissionsFromRole(c *fiber.Ctx) er
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.SendStatus(http.StatusAccepted)
+	return c.SendStatus(http.StatusNoContent)
 }

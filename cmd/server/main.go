@@ -33,7 +33,7 @@ func main() {
 
 	go func() {
 		if err := app.App.Listen(":3000"); err != nil {
-			log.Fatal("App stopped", err)
+			log.Fatal("App stopped with an error: ", err)
 		}
 	}()
 

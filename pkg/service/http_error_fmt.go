@@ -47,6 +47,8 @@ func (er *httpErrorFmt) GetError(err error) error {
 			return e.NewHttpError(http.StatusBadRequest, duplicateErr)
 		case errors.As(err, &notFoundErr):
 			return e.NewHttpError(http.StatusNotFound, notFoundErr)
+		case errors.Is(err, e.ErrRepoUserAlreadyHasRole):
+			return e.NewHttpError(http.StatusBadRequest, e.ErrRepoUserAlreadyHasRole)
 		default:
 			er.logger.Error(fmt.Sprintf("Server error: %v", err))
 			return e.NewHttpError(http.StatusInternalServerError, errors.New("server error"))

@@ -47,6 +47,17 @@ func (r *rMRepo) AddRoleToUser(roleId, userId int) error {
 		return err
 	}
 
+	roles, err := r.GetRolesByUserId(userId)
+	if err != nil {
+		return err
+	}
+
+	for _, role := range *roles {
+		if role.Id == roleId {
+			return errors.Join(e.ErrRoleManagementDomain, e.ErrOnAddRoleToUser, e.ErrRepoUserAlreadyHasRole)
+		}
+	}
+
 	_, err = r.dbU.Transaction(st.ADD_ROLE_TO_USER_STMT, roleId, userId)
 	if err != nil {
 		return errors.Join(e.ErrRoleManagementDomain, e.ErrOnAddRoleToUser, err)
@@ -57,6 +68,11 @@ func (r *rMRepo) AddRoleToUser(roleId, userId int) error {
 
 // GetRolesByUserId
 func (r *rMRepo) GetRolesByUserId(userId int) (*[]m.Role, error) {
+	_, err := r.ur.GetOne(userId)
+	if err != nil {
+		return nil, err
+	}
+
 	r.rw.RLock()
 	defer r.rw.RUnlock()
 

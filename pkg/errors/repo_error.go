@@ -15,6 +15,8 @@ var (
 
 	ErrRepoNotFound  = errors.New("repo: not found")
 	ErrRepoDuplicate = errors.New("repo: duplicate entry")
+
+	ErrRepoUserAlreadyHasRole = errors.New("user already has this role")
 )
 
 // RepoNotFoundError

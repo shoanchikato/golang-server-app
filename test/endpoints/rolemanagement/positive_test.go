@@ -3,6 +3,7 @@ package rolemanagement
 import (
 	"app/test/setup"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -35,10 +36,37 @@ func Test_Role_Management_Endpoint__Positive_Test(t *testing.T) {
 
 	t.Run("AddRoleToUser", func(t *testing.T) {
 		// arrange
+		roleId := 2
+		userId := 1
 		expectStatus := http.StatusNoContent
 
 		// act
-		req := httptest.NewRequest(http.MethodPost, "/role-management/2/1", nil)
+		req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/role-management/%d/%d", roleId, userId), nil)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", tokens.Access)
+
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Error(setup.UnexpectedErrorMsg, err)
+			return
+		}
+
+		// assert
+		if resp.StatusCode != expectStatus {
+			errResp := setup.GetErrorResponse(t, resp)
+			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
+			return
+		}
+	})
+
+	t.Run("RemoveRoleFromUser", func(t *testing.T) {
+		// arrange
+		roleId := 2
+		userId := 1
+		expectStatus := http.StatusNoContent
+
+		// act
+		req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/role-management/%d/%d", roleId, userId), nil)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
@@ -59,7 +87,7 @@ func Test_Role_Management_Endpoint__Positive_Test(t *testing.T) {
 	t.Run("GetRolesByUserId", func(t *testing.T) {
 		// arrange
 		got := &[]m.Role{}
-		expect := m.Role{Id: 1, Name: "admin"}
+		expect := []m.Role{{Id: 1, Name: "admin"}}
 		expectStatus := http.StatusOK
 
 		// act
@@ -86,31 +114,8 @@ func Test_Role_Management_Endpoint__Positive_Test(t *testing.T) {
 			return
 		}
 
-		if reflect.DeepEqual(expect, got) {
+		if !reflect.DeepEqual(expect, *got) {
 			t.Errorf("expected %v, but got %v", expect, *got)
-			return
-		}
-	})
-
-	t.Run("RemoveRoleFromUser", func(t *testing.T) {
-		// arrange
-		expectStatus := http.StatusNoContent
-
-		// act
-		req := httptest.NewRequest(http.MethodPost, "/role-management/2/1", nil)
-		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("Authorization", tokens.Access)
-
-		resp, err := app.Test(req)
-		if err != nil {
-			t.Error(setup.UnexpectedErrorMsg, err)
-			return
-		}
-
-		// assert
-		if resp.StatusCode != expectStatus {
-			errResp := setup.GetErrorResponse(t, resp)
-			t.Errorf("expected %v, but got %v, response %v", expectStatus, resp.StatusCode, errResp)
 			return
 		}
 	})

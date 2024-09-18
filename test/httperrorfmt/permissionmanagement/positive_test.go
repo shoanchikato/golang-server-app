@@ -104,7 +104,7 @@ func Test_Permission_Management_Positive_Test(t *testing.T) {
 
 	t.Run("GetPermissionsByRoleId", func(t *testing.T) {
 		// arrange
-		expect := []int{1, 2, 3}
+		expect := [3]int{1, 2, 3}
 		roleId := 2
 
 		// act
@@ -120,7 +120,7 @@ func Test_Permission_Management_Positive_Test(t *testing.T) {
 		}
 
 		// assert
-		if reflect.DeepEqual(got, expect) {
+		if !reflect.DeepEqual(got, expect) {
 			t.Errorf("expected %v, got %v", expect, got)
 			return
 		}

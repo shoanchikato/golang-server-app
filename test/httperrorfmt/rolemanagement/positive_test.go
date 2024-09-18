@@ -52,7 +52,7 @@ func Test_Role_Management_Positive_Test(t *testing.T) {
 		}
 
 		// assert
-		if reflect.DeepEqual(expect, *got) {
+		if !reflect.DeepEqual(expect, *got) {
 			t.Errorf("expected %v, got %v", expect, *got)
 			return
 		}
@@ -71,7 +71,7 @@ func Test_Role_Management_Positive_Test(t *testing.T) {
 		}
 
 		// assert
-		if reflect.DeepEqual(expect, *got) {
+		if !reflect.DeepEqual(expect, *got) {
 			t.Errorf("expected %v, got %v", expect, *got)
 			return
 		}

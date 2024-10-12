@@ -29,7 +29,20 @@ func NewAuthorHandler(service ef.AuthorHttpErrorFmt, logger s.Logger) AuthorHand
 	return &authorHandler{service, logger}
 }
 
-// Add
+// Add godoc
+//
+//	@Description	add an author
+//	@Tags			Author
+//	@Accept			json
+//	@Param			author			body	model.Author	true	"Author Details"
+//	@Param			Authorization	header	string			true	"Access token"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/authors [post]
 func (p *authorHandler) Add(c *fiber.Ctx) error {
 	author := m.Author{}
 
@@ -53,7 +66,20 @@ func (p *authorHandler) Add(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(author)
 }
 
-// AddAll
+// Add All godoc
+//
+//	@Description	add an array of authors
+//	@Tags			Author
+//	@Accept			json
+//	@Param			authors			body	[]model.Author	true	"Authors' Details"
+//	@Param			Authorization	header	string			true	"Access token"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/authors/all [post]
 func (p *authorHandler) AddAll(c *fiber.Ctx) error {
 	authors := []m.Author{}
 
@@ -82,7 +108,21 @@ func (p *authorHandler) AddAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(newAuthors)
 }
 
-// Edit
+// Edit godoc
+//
+//	@Description	edit an author
+//	@Tags			Author
+//	@Accept			json
+//	@Param			author			body	model.Author	true	"Author Details"
+//	@Param			id				path	int				true	"Author Id"
+//	@Param			Authorization	header	string			true	"Access token"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/authors/{id} [put]
 func (p *authorHandler) Edit(c *fiber.Ctx) error {
 	author := m.Author{}
 
@@ -111,7 +151,19 @@ func (p *authorHandler) Edit(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(author)
 }
 
-// GetAll
+// Get All godoc
+//
+//	@Description	get all authors
+//	@Tags			Author
+//	@Accept			json
+//	@Param			Authorization	header	string	true	"Access token"
+//	@Produce		json
+//	@Success		200	{object}	[]model.Author
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/authors [get]
 func (p *authorHandler) GetAll(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
@@ -128,7 +180,20 @@ func (p *authorHandler) GetAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(users)
 }
 
-// GetOne
+// Get One godoc
+//
+//	@Description	get one author
+//	@Tags			Author
+//	@Accept			json
+//	@Param			Authorization	header	string	true	"Access token"
+//	@Param			id				path	int		true	"Author Id"
+//	@Produce		json
+//	@Success		200	{object} model.Author
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/authors/{id} [get]
 func (p *authorHandler) GetOne(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
@@ -150,7 +215,20 @@ func (p *authorHandler) GetOne(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(user)
 }
 
-// Remove
+// Delete Author godoc
+//
+//	@Description	delete an author
+//	@Tags			Author
+//	@Accept			json
+//	@Param			Authorization	header	string	true	"Access token"
+//	@Param			id				path	int		true	"Author Id"
+//	@Produce		json
+//	@Success		204	
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/authors/{id} [delete]
 func (p *authorHandler) Remove(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {

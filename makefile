@@ -1,4 +1,4 @@
-run-r: build
+run-r: build doc
 	./app
 
 run:
@@ -28,5 +28,8 @@ build:
 release:
 	go build -o app -ldflags "-s -w" cmd/server/*.go
 
-doc:
+doc: doc-fmt
 	swag init -g cmd/server/main.go
+
+doc-fmt:
+	swag fmt -g cmd/server/main.go

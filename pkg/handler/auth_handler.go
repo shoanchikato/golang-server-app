@@ -26,13 +26,14 @@ func NewAuthHandler(service ef.AuthHttpErrorFmt, jwt s.JWTService) AuthHandler {
 }
 
 // Login godoc
-//	@Description	login using username and password
+//
+//	@Description	log in using username and password
 //	@Tags			Auth
 //	@Accept			json
 //	@Param			credentials	body	model.Credentials	true	"User Credentials"
 //	@Produce		json
-//	@Success		200	{object}	model.Tokens		"Access and Refresh Tokens"
-//	@Failure		400	{object}	errors.HttpErrorMap	
+//	@Success		200	{object}	model.Tokens	"Access and Refresh Tokens"
+//	@Failure		400	{object}	errors.HttpErrorMap
 //	@Failure		401	{object}	errors.HttpErrorMap
 //	@Failure		404	{object}	errors.HttpErrorMap
 //	@Failure		500	{object}	errors.HttpErrorMap
@@ -56,18 +57,18 @@ func (a *authHandler) Login(c *fiber.Ctx) error {
 }
 
 // ResetPassword godoc
-//	@Description	resetting password
+//
+//	@Description	reset password
 //	@Tags			Auth
 //	@Accept			json
-//	@Param			credentials	body	model.Credentials	true	"User Credentials"
-//  @Param Authorization header string true "Bearer token"
+//	@Param			credentials		body	model.Credentials	true	"User Credentials"
+//	@Param			Authorization	header	string				true	"Access token"
 //	@Produce		json
 //	@Success		201	{string}	created
-//	@Failure		400	{object}	errors.HttpErrorMap	
+//	@Failure		400	{object}	errors.HttpErrorMap
 //	@Failure		401	{object}	errors.HttpErrorMap
 //	@Failure		404	{object}	errors.HttpErrorMap
 //	@Failure		500	{object}	errors.HttpErrorMap
-// @securityDefinitions.bearer  BearerAuth
 //	@Router			/reset-password [post]
 func (a *authHandler) ResetPassword(c *fiber.Ctx) error {
 	credentials := m.Credentials{}

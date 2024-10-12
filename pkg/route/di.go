@@ -10,10 +10,8 @@ import (
 	swagger "github.com/gofiber/swagger"
 )
 
-//	@title			Swagger Golang Server App API
-//	@version		1.0
-//	@description	This is a sample server celler server.
-
+//	@title		Swagger Golang Server App API
+//	@version	2.0
 //	@host		localhost:3000
 //	@BasePath	/
 func Routes(app *fiber.App, handlers *h.Handlers, authMiddleware mi.AuthMiddleware) {

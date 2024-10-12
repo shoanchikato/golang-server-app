@@ -27,3 +27,6 @@ build:
 
 release:
 	go build -o app -ldflags "-s -w" cmd/server/*.go
+
+doc:
+	swag init -g cmd/server/main.go

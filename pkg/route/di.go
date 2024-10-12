@@ -5,9 +5,19 @@ import (
 	mi "app/pkg/middleware"
 
 	"github.com/gofiber/fiber/v2"
+
+	_ "app/docs"
+	swagger "github.com/gofiber/swagger"
 )
 
+//	@title			Swagger Golang Server App API
+//	@version		1.0
+//	@description	This is a sample server celler server.
+
+//	@host		localhost:3000
+//	@BasePath	/
 func Routes(app *fiber.App, handlers *h.Handlers, authMiddleware mi.AuthMiddleware) {
+	app.Get("/swagger/*", swagger.HandlerDefault)
 	NewAuthRoutes(app, handlers.Auth, authMiddleware)
 	NewUserRoutes(app, handlers.User, authMiddleware)
 	NewRoleRoutes(app, handlers.Role, authMiddleware)

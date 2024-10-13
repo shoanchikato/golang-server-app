@@ -61,8 +61,8 @@ func (a *authHandler) Login(c *fiber.Ctx) error {
 //	@Description	reset password
 //	@Tags			Auth
 //	@Accept			json
-//	@Param			credentials		body	model.Credentials	true	"User Credentials"
-//	@Param			Authorization	header	string				true	"Access token"
+//	@Security		BearerAuth
+//	@Param			credentials	body	model.Credentials	true	"User Credentials"
 //	@Produce		json
 //	@Success		201	{string}	created
 //	@Failure		400	{object}	errors.HttpErrorMap

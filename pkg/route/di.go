@@ -10,10 +10,6 @@ import (
 	swagger "github.com/gofiber/swagger"
 )
 
-//	@title		Swagger Golang Server App API
-//	@version	2.0
-//	@host		localhost:3000
-//	@BasePath	/
 func Routes(app *fiber.App, handlers *h.Handlers, authMiddleware mi.AuthMiddleware) {
 	app.Get("/swagger/*", swagger.HandlerDefault)
 	NewAuthRoutes(app, handlers.Auth, authMiddleware)

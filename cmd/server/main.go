@@ -12,6 +12,14 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+//	@title						Swagger Golang Server App API
+//	@version					2.0
+//	@securityDefinitions.apikey	BearerAuth
+//	@type						api_key
+//	@name						Authorization
+//	@in							header
+//	@host						localhost:3000
+//	@BasePath					/
 func main() {
 	err := godotenv.Load()
 	if err != nil {

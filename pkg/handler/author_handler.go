@@ -34,8 +34,8 @@ func NewAuthorHandler(service ef.AuthorHttpErrorFmt, logger s.Logger) AuthorHand
 //	@Description	add an author
 //	@Tags			Author
 //	@Accept			json
-//	@Param			author			body	model.Author	true	"Author Details"
-//	@Param			Authorization	header	string			true	"Access token"
+//	@Security		BearerAuth
+//	@Param			author	body	model.Author	true	"Author Details"
 //	@Produce		json
 //	@Success		201	{string}	created
 //	@Failure		400	{object}	errors.HttpErrorMap
@@ -71,8 +71,8 @@ func (p *authorHandler) Add(c *fiber.Ctx) error {
 //	@Description	add an array of authors
 //	@Tags			Author
 //	@Accept			json
-//	@Param			authors			body	[]model.Author	true	"Authors' Details"
-//	@Param			Authorization	header	string			true	"Access token"
+//	@Security		BearerAuth
+//	@Param			authors	body	[]model.Author	true	"Authors' Details"
 //	@Produce		json
 //	@Success		201	{string}	created
 //	@Failure		400	{object}	errors.HttpErrorMap
@@ -113,9 +113,9 @@ func (p *authorHandler) AddAll(c *fiber.Ctx) error {
 //	@Description	edit an author
 //	@Tags			Author
 //	@Accept			json
-//	@Param			author			body	model.Author	true	"Author Details"
-//	@Param			id				path	int				true	"Author Id"
-//	@Param			Authorization	header	string			true	"Access token"
+//	@Security		BearerAuth
+//	@Param			author	body	model.Author	true	"Author Details"
+//	@Param			id		path	int				true	"Author Id"
 //	@Produce		json
 //	@Success		201	{string}	created
 //	@Failure		400	{object}	errors.HttpErrorMap
@@ -156,7 +156,7 @@ func (p *authorHandler) Edit(c *fiber.Ctx) error {
 //	@Description	get all authors
 //	@Tags			Author
 //	@Accept			json
-//	@Param			Authorization	header	string	true	"Access token"
+//	@Security		BearerAuth
 //	@Produce		json
 //	@Success		200	{object}	[]model.Author
 //	@Failure		400	{object}	errors.HttpErrorMap
@@ -185,10 +185,10 @@ func (p *authorHandler) GetAll(c *fiber.Ctx) error {
 //	@Description	get one author
 //	@Tags			Author
 //	@Accept			json
-//	@Param			Authorization	header	string	true	"Access token"
-//	@Param			id				path	int		true	"Author Id"
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Author Id"
 //	@Produce		json
-//	@Success		200	{object} model.Author
+//	@Success		200	{object}	model.Author
 //	@Failure		400	{object}	errors.HttpErrorMap
 //	@Failure		401	{object}	errors.HttpErrorMap
 //	@Failure		404	{object}	errors.HttpErrorMap
@@ -220,8 +220,8 @@ func (p *authorHandler) GetOne(c *fiber.Ctx) error {
 //	@Description	delete an author
 //	@Tags			Author
 //	@Accept			json
-//	@Param			Authorization	header	string	true	"Access token"
-//	@Param			id				path	int		true	"Author Id"
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Author Id"
 //	@Produce		json
 //	@Success		204	
 //	@Failure		400	{object}	errors.HttpErrorMap

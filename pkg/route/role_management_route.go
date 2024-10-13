@@ -10,7 +10,7 @@ import (
 func NewRoleManagementRoutes(app *fiber.App, handler h.RoleManagementHandler, middleware mi.AuthMiddleware) {
 	roleManagement := app.Group("/role-management")
 	roleManagement.Use(middleware.JWTParser)
-	roleManagement.Post("/:roleId/:userId", handler.AddRoleToUser)
+	roleManagement.Post("/role/:roleId/user/:userId", handler.AddRoleToUser)
 	roleManagement.Get("/user/:userId", handler.GetRolesByUserId)
-	roleManagement.Delete("/:roleId/:userId", handler.RemoveRoleFromUser)
+	roleManagement.Delete("/role/:roleId/user/:userId", handler.RemoveRoleFromUser)
 }

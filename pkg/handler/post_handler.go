@@ -29,7 +29,20 @@ func NewPostHandler(service ef.PostHttpErrorFmt, logger s.Logger) PostHandler {
 	return &postHandler{service, logger}
 }
 
-// Add
+// Add godoc
+//
+//	@Description	add a post
+//	@Tags			Posts
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			post	body	model.Post	true	"Post Details"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/posts [post]
 func (p *postHandler) Add(c *fiber.Ctx) error {
 	post := m.Post{}
 
@@ -53,7 +66,20 @@ func (p *postHandler) Add(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(post)
 }
 
-// AddAll
+// Add All godoc
+//
+//	@Description	add an array of posts
+//	@Tags			Posts
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			post	body	[]model.Post	true	"Posts' Details"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/posts/all [post]
 func (p *postHandler) AddAll(c *fiber.Ctx) error {
 	posts := []m.Post{}
 
@@ -82,7 +108,21 @@ func (p *postHandler) AddAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(newPosts)
 }
 
-// Edit
+// Edit godoc
+//
+//	@Description	edit a post
+//	@Tags			Posts
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			post	body	model.Post	true	"Post Details"
+//	@Param			id		path	int			true	"Post Id"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/posts/{id} [put]
 func (p *postHandler) Edit(c *fiber.Ctx) error {
 	post := m.Post{}
 
@@ -111,7 +151,19 @@ func (p *postHandler) Edit(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(post)
 }
 
-// GetAll
+// Get All godoc
+//
+//	@Description	get all posts
+//	@Tags			Posts
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Produce		json
+//	@Success		200	{object}	[]model.Post
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/posts [get]
 func (p *postHandler) GetAll(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
@@ -128,7 +180,20 @@ func (p *postHandler) GetAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(users)
 }
 
-// GetOne
+// Get One godoc
+//
+//	@Description	get one post
+//	@Tags			Posts
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Post Id"
+//	@Produce		json
+//	@Success		200	{object}	model.Post
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/posts/{id} [get]
 func (p *postHandler) GetOne(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
@@ -150,7 +215,20 @@ func (p *postHandler) GetOne(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(user)
 }
 
-// Remove
+// Remove Post godoc
+//
+//	@Description	delete a post
+//	@Tags			Posts
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Post Id"
+//	@Produce		json
+//	@Success		204	
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/posts/{id} [delete]
 func (p *postHandler) Remove(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {

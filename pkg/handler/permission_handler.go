@@ -29,7 +29,20 @@ func NewPermissionHandler(service ef.PermissionHttpErrorFmt, logger s.Logger) Pe
 	return &permissionHandler{service, logger}
 }
 
-// Add
+// Add godoc
+//
+//	@Description	add a permission
+//	@Tags			Permissions
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			permission	body	model.Permission	true	"Permission Details"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/permissions [post]
 func (p *permissionHandler) Add(c *fiber.Ctx) error {
 	permission := m.Permission{}
 
@@ -53,7 +66,20 @@ func (p *permissionHandler) Add(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(permission)
 }
 
-// AddAll
+// Add All godoc
+//
+//	@Description	add an array of permissions
+//	@Tags			Permissions
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			permission	body	[]model.Permission	true	"Permissions' Details"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/permissions/all [post]
 func (p *permissionHandler) AddAll(c *fiber.Ctx) error {
 	permissions := []m.Permission{}
 
@@ -82,7 +108,21 @@ func (p *permissionHandler) AddAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(newPermissions)
 }
 
-// Edit
+// Edit godoc
+//
+//	@Description	edit a permission
+//	@Tags			Permissions
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			permission	body	model.Permission	true	"Permission Details"
+//	@Param			id			path	int					true	"Permission Id"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/permissions/{id} [put]
 func (p *permissionHandler) Edit(c *fiber.Ctx) error {
 	permission := m.Permission{}
 
@@ -111,7 +151,19 @@ func (p *permissionHandler) Edit(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(permission)
 }
 
-// GetAll
+// Get All godoc
+//
+//	@Description	get all permissions
+//	@Tags			Permissions
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Produce		json
+//	@Success		200	{object}	[]model.Permission
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/permissions [get]
 func (p *permissionHandler) GetAll(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
@@ -128,7 +180,20 @@ func (p *permissionHandler) GetAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(users)
 }
 
-// GetOne
+// Get One godoc
+//
+//	@Description	get one permission
+//	@Tags			Permissions
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Permission Id"
+//	@Produce		json
+//	@Success		200	{object}	model.Permission
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/permissions/{id} [get]
 func (p *permissionHandler) GetOne(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
@@ -150,7 +215,20 @@ func (p *permissionHandler) GetOne(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(user)
 }
 
-// Remove
+// Remove Permission godoc
+//
+//	@Description	delete a permission
+//	@Tags			Permissions
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Permission Id"
+//	@Produce		json
+//	@Success		204	
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/permissions/{id} [delete]
 func (p *permissionHandler) Remove(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {

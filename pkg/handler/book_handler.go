@@ -29,7 +29,20 @@ func NewBookHandler(service ef.BookHttpErrorFmt, logger s.Logger) BookHandler {
 	return &bookHandler{service, logger}
 }
 
-// Add
+// Add godoc
+//
+//	@Description	add a book
+//	@Tags			Books
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			book	body	model.Book	true	"Book Details"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/books [post]
 func (p *bookHandler) Add(c *fiber.Ctx) error {
 	book := m.Book{}
 
@@ -53,7 +66,20 @@ func (p *bookHandler) Add(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(book)
 }
 
-// AddAll
+// Add All godoc
+//
+//	@Description	add an array of books
+//	@Tags			Books
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			book	body	[]model.Book	true	"Books' Details"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/books/all [post]
 func (p *bookHandler) AddAll(c *fiber.Ctx) error {
 	books := []m.Book{}
 
@@ -82,7 +108,21 @@ func (p *bookHandler) AddAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(newBooks)
 }
 
-// Edit
+// Edit godoc
+//
+//	@Description	edit a book
+//	@Tags			Books
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			book	body	model.Book	true	"Book Details"
+//	@Param			id		path	int			true	"Book Id"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/books/{id} [put]
 func (p *bookHandler) Edit(c *fiber.Ctx) error {
 	book := m.Book{}
 
@@ -111,7 +151,19 @@ func (p *bookHandler) Edit(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(book)
 }
 
-// GetAll
+// Get All godoc
+//
+//	@Description	get all books
+//	@Tags			Books
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Produce		json
+//	@Success		200	{object}	[]model.Book
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/books [get]
 func (p *bookHandler) GetAll(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
@@ -128,7 +180,20 @@ func (p *bookHandler) GetAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(users)
 }
 
-// GetOne
+// Get One godoc
+//
+//	@Description	get one book
+//	@Tags			Books
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Book Id"
+//	@Produce		json
+//	@Success		200	{object}	model.Book
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/books/{id} [get]
 func (p *bookHandler) GetOne(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
@@ -150,7 +215,20 @@ func (p *bookHandler) GetOne(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(user)
 }
 
-// Remove
+// Remove Book godoc
+//
+//	@Description	delete a book
+//	@Tags			Books
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Book Id"
+//	@Produce		json
+//	@Success		204	
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/books/{id} [delete]
 func (p *bookHandler) Remove(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {

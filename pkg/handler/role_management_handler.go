@@ -25,7 +25,21 @@ func NewRoleManagementHandler(service ef.RoleManagementHttpErrorFmt, logger s.Lo
 	return &roleManagementHandler{service, logger}
 }
 
-// AddRoleToUser
+// Add Role To User godoc
+//
+//	@Description	add a role to a user
+//	@Tags			Roles Management
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			roleId	path	int	true	"Role Id"
+//	@Param			userId	path	int	true	"User Id"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/role-management/role/{roleId}/user/{userId} [post]
 func (r *roleManagementHandler) AddRoleToUser(c *fiber.Ctx) error {
 	adminId, err := getAuthUserId(c, r.logger)
 	if err != nil {
@@ -51,7 +65,20 @@ func (r *roleManagementHandler) AddRoleToUser(c *fiber.Ctx) error {
 	return c.SendStatus(http.StatusNoContent)
 }
 
-// GetRolesByUserId
+// Get Roles By User Id godoc
+//
+//	@Description	get roles by user id
+//	@Tags			Roles Management
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			userId	path	int	true	"User Id"
+//	@Produce		json
+//	@Success		200	{object}	model.Role
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/role-management/user/{userId} [get]
 func (r *roleManagementHandler) GetRolesByUserId(c *fiber.Ctx) error {
 	adminId, err := getAuthUserId(c, r.logger)
 	if err != nil {
@@ -72,7 +99,21 @@ func (r *roleManagementHandler) GetRolesByUserId(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(roles)
 }
 
-// RemoveRoleFromUser
+// Remove Role From User godoc
+//
+//	@Description	remove a role from a user
+//	@Tags			Roles Management
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			roleId	path	int	true	"Role Id"
+//	@Param			userId	path	int	true	"User Id"
+//	@Produce		json
+//	@Success		204	
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/role-management/role/{roleId}/user/{userId} [delete]
 func (r *roleManagementHandler) RemoveRoleFromUser(c *fiber.Ctx) error {
 	adminId, err := getAuthUserId(c, r.logger)
 	if err != nil {

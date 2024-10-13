@@ -29,7 +29,20 @@ func NewRoleHandler(service ef.RoleHttpErrorFmt, logger s.Logger) RoleHandler {
 	return &roleHandler{service, logger}
 }
 
-// Add
+// Add godoc
+//
+//	@Description	add a role
+//	@Tags			Roles
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			role	body	model.Role	true	"Role Details"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/roles [post]
 func (p *roleHandler) Add(c *fiber.Ctx) error {
 	role := m.Role{}
 
@@ -53,7 +66,20 @@ func (p *roleHandler) Add(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(role)
 }
 
-// AddAll
+// Add All godoc
+//
+//	@Description	add an array of roles
+//	@Tags			Roles
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			role	body	[]model.Role	true	"Roles' Details"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/roles/all [post]
 func (p *roleHandler) AddAll(c *fiber.Ctx) error {
 	roles := []m.Role{}
 
@@ -82,7 +108,21 @@ func (p *roleHandler) AddAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(newRoles)
 }
 
-// Edit
+// Edit godoc
+//
+//	@Description	edit a role
+//	@Tags			Roles
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			role	body	model.Role	true	"Role Details"
+//	@Param			id		path	int			true	"Role Id"
+//	@Produce		json
+//	@Success		201	{string}	created
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/roles/{id} [put]
 func (p *roleHandler) Edit(c *fiber.Ctx) error {
 	role := m.Role{}
 
@@ -111,7 +151,19 @@ func (p *roleHandler) Edit(c *fiber.Ctx) error {
 	return c.Status(http.StatusCreated).JSON(role)
 }
 
-// GetAll
+// Get All godoc
+//
+//	@Description	get all roles
+//	@Tags			Roles
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Produce		json
+//	@Success		200	{object}	[]model.Role
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/roles [get]
 func (p *roleHandler) GetAll(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
@@ -128,7 +180,20 @@ func (p *roleHandler) GetAll(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(users)
 }
 
-// GetOne
+// Get One godoc
+//
+//	@Description	get one role
+//	@Tags			Roles
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Role Id"
+//	@Produce		json
+//	@Success		200	{object}	model.Role
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/roles/{id} [get]
 func (p *roleHandler) GetOne(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {
@@ -150,7 +215,20 @@ func (p *roleHandler) GetOne(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(user)
 }
 
-// Remove
+// Remove Role godoc
+//
+//	@Description	delete a role
+//	@Tags			Roles
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Role Id"
+//	@Produce		json
+//	@Success		204	
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/roles/{id} [delete]
 func (p *roleHandler) Remove(c *fiber.Ctx) error {
 	userId, err := getAuthUserId(c, p.logger)
 	if err != nil {

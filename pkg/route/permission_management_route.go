@@ -13,7 +13,7 @@ func NewPermissionManagementRoutes(app *fiber.App, handler h.PermissionManagemen
 	permissionManagement.Get("/role/:roleId", handler.GetPermissionsByRoleId)
 	permissionManagement.Get("/user/:userId", handler.GetPermissionsByUserId)
 	permissionManagement.Post("/role/:roleId", handler.AddPermissionsToRole)
-	permissionManagement.Post("/:permissionId/:roleId", handler.AddPermissionToRole)
+	permissionManagement.Post("/permission/:permissionId/role/:roleId", handler.AddPermissionToRole)
 	permissionManagement.Delete("role/:roleId", handler.RemovePermissionsFromRole)
-	permissionManagement.Delete(":permissionId/:roleId", handler.RemovePermissionFromRole)
+	permissionManagement.Delete("/permission/:permissionId/role/:roleId", handler.RemovePermissionFromRole)
 }

@@ -1,5 +1,5 @@
-run-r: build doc
-	./app
+run-r: doc build
+	./bin/app
 
 run:
 	go run cmd/server/*.go
@@ -23,10 +23,13 @@ tv:
 	go test -count=1 -v ./test/...
 
 build:
-	go build -o app cmd/server/*.go
+	go build -o ./bin/app cmd/server/*.go
 
 release:
-	go build -o app -ldflags "-s -w" cmd/server/*.go
+	go build -o ./bin/app -ldflags "-s -w" cmd/server/*.go
+
+clean:
+	rm -rf ./bin ./docs
 
 doc: doc-fmt
 	swag init -g cmd/server/main.go

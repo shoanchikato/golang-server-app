@@ -32,7 +32,7 @@ func NewAuthorHandler(service ef.AuthorHttpErrorFmt, logger s.Logger) AuthorHand
 // Add godoc
 //
 //	@Description	add an author
-//	@Tags			Author
+//	@Tags			Authors
 //	@Accept			json
 //	@Security		BearerAuth
 //	@Param			author	body	model.Author	true	"Author Details"
@@ -69,7 +69,7 @@ func (p *authorHandler) Add(c *fiber.Ctx) error {
 // Add All godoc
 //
 //	@Description	add an array of authors
-//	@Tags			Author
+//	@Tags			Authors
 //	@Accept			json
 //	@Security		BearerAuth
 //	@Param			authors	body	[]model.Author	true	"Authors' Details"
@@ -111,7 +111,7 @@ func (p *authorHandler) AddAll(c *fiber.Ctx) error {
 // Edit godoc
 //
 //	@Description	edit an author
-//	@Tags			Author
+//	@Tags			Authors
 //	@Accept			json
 //	@Security		BearerAuth
 //	@Param			author	body	model.Author	true	"Author Details"
@@ -154,7 +154,7 @@ func (p *authorHandler) Edit(c *fiber.Ctx) error {
 // Get All godoc
 //
 //	@Description	get all authors
-//	@Tags			Author
+//	@Tags			Authors
 //	@Accept			json
 //	@Security		BearerAuth
 //	@Produce		json
@@ -183,7 +183,7 @@ func (p *authorHandler) GetAll(c *fiber.Ctx) error {
 // Get One godoc
 //
 //	@Description	get one author
-//	@Tags			Author
+//	@Tags			Authors
 //	@Accept			json
 //	@Security		BearerAuth
 //	@Param			id	path	int	true	"Author Id"
@@ -215,10 +215,10 @@ func (p *authorHandler) GetOne(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(user)
 }
 
-// Delete Author godoc
+// Remove Author godoc
 //
 //	@Description	delete an author
-//	@Tags			Author
+//	@Tags			Authors
 //	@Accept			json
 //	@Security		BearerAuth
 //	@Param			id	path	int	true	"Author Id"

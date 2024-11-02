@@ -11,6 +11,7 @@ type AuthorHttpErrorFmt interface {
 	AddAll(userId int, authors *[]*m.Author) error
 	Edit(userId int, id int, newAuthor *m.Author) error
 	GetAll(userId, lastId, limit int) (*[]m.Author, error)
+	GetMore(userId int, id int) (*m.Author, error)
 	GetOne(userId int, id int) (*m.Author, error)
 	Remove(userId int, id int) error
 }
@@ -57,6 +58,16 @@ func (r *authorHttpErrorFmt) Edit(userId int, id int, newAuthor *m.Author) error
 // GetAll
 func (r *authorHttpErrorFmt) GetAll(userId int, lastId int, limit int) (*[]m.Author, error) {
 	authors, err := r.authorization.GetAll(userId, lastId, limit)
+	if err != nil {
+		return nil, r.service.GetError(err)
+	}
+
+	return authors, nil
+}
+
+// GetMore
+func (r *authorHttpErrorFmt) GetMore(userId int, id int) (*m.Author, error) {
+	authors, err := r.authorization.GetMore(userId, id)
 	if err != nil {
 		return nil, r.service.GetError(err)
 	}

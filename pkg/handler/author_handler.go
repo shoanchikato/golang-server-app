@@ -16,6 +16,7 @@ type AuthorHandler interface {
 	AddAll(c *fiber.Ctx) error
 	Edit(c *fiber.Ctx) error
 	GetAll(c *fiber.Ctx) error
+	GetMore(c *fiber.Ctx) error
 	GetOne(c *fiber.Ctx) error
 	Remove(c *fiber.Ctx) error
 }
@@ -178,6 +179,41 @@ func (p *authorHandler) GetAll(c *fiber.Ctx) error {
 	}
 
 	return c.Status(http.StatusOK).JSON(users)
+}
+
+// Get More godoc
+//
+//	@Description	get one author
+//	@Tags			Authors
+//	@Accept			json
+//	@Security		BearerAuth
+//	@Param			id	path	int	true	"Author Id"
+//	@Produce		json
+//	@Success		200	{object}	model.Author
+//	@Failure		400	{object}	errors.HttpErrorMap
+//	@Failure		401	{object}	errors.HttpErrorMap
+//	@Failure		404	{object}	errors.HttpErrorMap
+//	@Failure		500	{object}	errors.HttpErrorMap
+//	@Router			/authors/{id}/more [get]
+func (p *authorHandler) GetMore(c *fiber.Ctx) error {
+	userId, err := getAuthUserId(c, p.logger)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
+	}
+
+	id, err := getIntParam(c, p.logger, "id")
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(e.NewHttpErrorMap(err))
+	}
+
+	user, err := p.service.GetMore(*userId, *id)
+
+	httpErr := &e.HttpError{}
+	if errors.As(err, &httpErr) {
+		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
+	}
+
+	return c.Status(http.StatusOK).JSON(user)
 }
 
 // Get One godoc

@@ -14,6 +14,7 @@ type AuthorAuthorization interface {
 	AddAll(userId int, authors *[]*m.Author) error
 	Edit(userId int, id int, newAuthor *m.Author) error
 	GetAll(userId, lastId, limit int) (*[]m.Author, error)
+	GetMore(userId int, id int) (*m.Author, error)
 	GetOne(userId int, id int) (*m.Author, error)
 	Remove(userId int, id int) error
 }
@@ -65,6 +66,16 @@ func (a *authorAuthorization) GetAll(userId, lastId, limit int) (*[]m.Author, er
 	}
 
 	return a.validator.GetAll(lastId, limit)
+}
+
+// GetMore
+func (a *authorAuthorization) GetMore(userId int, id int) (*m.Author, error) {
+	err := a.auth.CheckForAuthorization(userId, p.AuthorGetMore.Name)
+	if err != nil {
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetMore, err)
+	}
+
+	return a.validator.GetMore(id)
 }
 
 // GetOne

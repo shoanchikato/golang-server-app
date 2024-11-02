@@ -14,6 +14,7 @@ func NewAuthorRoutes(app *fiber.App, handler h.AuthorHandler, middleware mi.Auth
 	author.Post("/all", handler.AddAll)
 	author.Get("/", handler.GetAll)
 	author.Get("/:id", handler.GetOne)
+	author.Get("/:id/more", handler.GetMore)
 	author.Put("/:id", handler.Edit)
 	author.Delete("/:id", handler.Remove)
 }

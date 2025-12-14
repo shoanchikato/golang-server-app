@@ -88,7 +88,7 @@ func Test_Permission_Management_Endpoint__Positive_Test(t *testing.T) {
 		// arrange
 		roleId := 2
 		permissionId := 4
-		expectStatus := http.StatusNoContent
+		expectStatus := http.StatusCreated
 
 		// act
 		req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/permission-management/permission/%d/role/%d", permissionId, roleId), nil)

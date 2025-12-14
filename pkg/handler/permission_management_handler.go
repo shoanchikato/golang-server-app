@@ -77,7 +77,7 @@ func (p *permissionManagementHandler) AddPermissionToRole(c *fiber.Ctx) error {
 //	@Param			roleId		path	int		true	"Role Id"
 //	@Param			permissions	body	[]int	true	"Permission Ids"
 //	@Produce		json
-//	@Success		201	{string}	created
+//	@Success		204	{string}	deleted
 //	@Failure		400	{object}	errors.HttpErrorMap
 //	@Failure		401	{object}	errors.HttpErrorMap
 //	@Failure		404	{object}	errors.HttpErrorMap
@@ -106,7 +106,7 @@ func (p *permissionManagementHandler) AddPermissionsToRole(c *fiber.Ctx) error {
 		return c.Status(httpErr.HTTPStatus).JSON(httpErr)
 	}
 
-	return c.SendStatus(http.StatusCreated)
+	return c.SendStatus(http.StatusNoContent)
 }
 
 // Get Permissions By Role Id godoc

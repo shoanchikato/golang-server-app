@@ -3,8 +3,8 @@ package model
 import valid "github.com/go-ozzo/ozzo-validation/v4"
 
 type Credentials struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `json:"username" example:"john_doe"`
+	Password string `json:"password" example:"password1"`
 }
 
 func NewCredentials(username, password string) *Credentials {

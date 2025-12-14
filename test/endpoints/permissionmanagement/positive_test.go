@@ -116,7 +116,7 @@ func Test_Permission_Management_Endpoint__Positive_Test(t *testing.T) {
 		expectStatus := http.StatusNoContent
 
 		// act
-		req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/permission-management/%d/%d", permissionId, roleId), nil)
+		req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/permission-management/permission/%d/role/%d", permissionId, roleId), nil)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 

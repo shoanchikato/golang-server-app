@@ -1,7 +1,7 @@
 run-r: doc build
 	./bin/app
 
-run:
+run: doc
 	go run cmd/server/*.go
 
 get:

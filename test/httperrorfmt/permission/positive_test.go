@@ -1,9 +1,9 @@
 package permission
 
 import (
-	"app/pkg/di"
-	e "app/pkg/errors"
-	m "app/pkg/model"
+	"app/internal/di"
+	e "app/internal/errors"
+	m "app/internal/model"
 	"app/test/setup"
 	"reflect"
 	"testing"

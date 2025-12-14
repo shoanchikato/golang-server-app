@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	m "app/pkg/model"
-	v "app/pkg/validation"
+	m "app/internal/model"
+	v "app/internal/validation"
 )
 
 func addNewRole(t *testing.T, validation v.Validators) {

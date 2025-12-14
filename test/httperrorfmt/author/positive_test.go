@@ -1,9 +1,9 @@
 package author
 
 import (
-	e "app/pkg/errors"
-	m "app/pkg/model"
-	v "app/pkg/validation"
+	e "app/internal/errors"
+	m "app/internal/model"
+	v "app/internal/validation"
 	"app/test/setup"
 	"reflect"
 	"testing"

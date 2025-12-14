@@ -1,0 +1,99 @@
+package authorization
+
+import (
+	e "app/internal/errors"
+	m "app/internal/model"
+	p "app/internal/permission"
+	s "app/internal/service"
+	v "app/internal/validation"
+	"errors"
+)
+
+type AuthorAuthorization interface {
+	Add(userId int, author *m.Author) error
+	AddAll(userId int, authors *[]*m.Author) error
+	Edit(userId int, id int, newAuthor *m.Author) error
+	GetAll(userId, lastId, limit int) (*[]m.Author, error)
+	GetMore(userId int, id int) (*m.Author, error)
+	GetOne(userId int, id int) (*m.Author, error)
+	Remove(userId int, id int) error
+}
+
+type authorAuthorization struct {
+	auth      s.AuthorizationService
+	validator v.AuthorValidator
+}
+
+func NewAuthorAuthorization(auth s.AuthorizationService, validator v.AuthorValidator) AuthorAuthorization {
+	return &authorAuthorization{auth, validator}
+}
+
+// Add
+func (a *authorAuthorization) Add(userId int, author *m.Author) error {
+	err := a.auth.CheckForAuthorization(userId, p.AuthorAdd.Name)
+	if err != nil {
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnAdd, err)
+	}
+
+	return a.validator.Add(author)
+}
+
+// AddAll
+func (a *authorAuthorization) AddAll(userId int, authors *[]*m.Author) error {
+	err := a.auth.CheckForAuthorization(userId, p.AuthorAddAll.Name)
+	if err != nil {
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnAddAll, err)
+	}
+
+	return a.validator.AddAll(authors)
+}
+
+// Edit
+func (a *authorAuthorization) Edit(userId int, id int, newAuthor *m.Author) error {
+	err := a.auth.CheckForAuthorization(userId, p.AuthorEdit.Name)
+	if err != nil {
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnEdit, err)
+	}
+
+	return a.validator.Edit(id, newAuthor)
+}
+
+// GetAll
+func (a *authorAuthorization) GetAll(userId, lastId, limit int) (*[]m.Author, error) {
+	err := a.auth.CheckForAuthorization(userId, p.AuthorGetAll.Name)
+	if err != nil {
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetAll, err)
+	}
+
+	return a.validator.GetAll(lastId, limit)
+}
+
+// GetMore
+func (a *authorAuthorization) GetMore(userId int, id int) (*m.Author, error) {
+	err := a.auth.CheckForAuthorization(userId, p.AuthorGetMore.Name)
+	if err != nil {
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetMore, err)
+	}
+
+	return a.validator.GetMore(id)
+}
+
+// GetOne
+func (a *authorAuthorization) GetOne(userId int, id int) (*m.Author, error) {
+	err := a.auth.CheckForAuthorization(userId, p.AuthorGetOne.Name)
+	if err != nil {
+		return nil, errors.Join(e.ErrAuthorDomain, e.ErrOnGetOne, err)
+	}
+
+	return a.validator.GetOne(id)
+}
+
+// Remove
+func (a *authorAuthorization) Remove(userId int, id int) error {
+	err := a.auth.CheckForAuthorization(userId, p.AuthorRemove.Name)
+	if err != nil {
+		return errors.Join(e.ErrAuthorDomain, e.ErrOnRemove, err)
+	}
+
+	return a.validator.Remove(id)
+}

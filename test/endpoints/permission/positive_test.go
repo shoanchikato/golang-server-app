@@ -1,7 +1,7 @@
 package endpoints
 
 import (
-	m "app/pkg/model"
+	m "app/internal/model"
 	"app/test/setup"
 	"encoding/json"
 	"net/http"

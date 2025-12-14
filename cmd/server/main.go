@@ -1,7 +1,7 @@
 package main
 
 import (
-	d "app/pkg/di"
+	d "app/internal/di"
 	"fmt"
 	"log"
 	"os"

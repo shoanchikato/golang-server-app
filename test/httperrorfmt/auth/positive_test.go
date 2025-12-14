@@ -1,7 +1,7 @@
 package auth
 
 import (
-	m "app/pkg/model"
+	m "app/internal/model"
 	"app/test/setup"
 	"testing"
 )

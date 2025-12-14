@@ -1,8 +1,8 @@
 package endpoints
 
 import (
-	m "app/pkg/model"
-	v "app/pkg/validation"
+	m "app/internal/model"
+	v "app/internal/validation"
 	"app/test/setup"
 	"encoding/json"
 	"net/http"

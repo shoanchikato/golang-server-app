@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 
-	m "app/pkg/model"
+	m "app/internal/model"
 
 	"github.com/gofiber/fiber/v2"
 )

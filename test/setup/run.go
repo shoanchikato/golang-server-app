@@ -1,7 +1,7 @@
 package setup
 
 import (
-	d "app/pkg/di"
+	d "app/internal/di"
 	"log"
 	"os"
 

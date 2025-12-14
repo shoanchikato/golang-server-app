@@ -1,8 +1,8 @@
 package user
 
 import (
-	e "app/pkg/errors"
-	m "app/pkg/model"
+	e "app/internal/errors"
+	m "app/internal/model"
 	"app/test/setup"
 	"reflect"
 	"testing"

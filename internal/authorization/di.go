@@ -1,7 +1,7 @@
 package authorization
 
 import (
-	s "app/internal/service"
+	s "app/internal/shared"
 	v "app/internal/validation"
 )
 

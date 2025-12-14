@@ -3,7 +3,7 @@ package handler
 import (
 	e "app/internal/errors"
 	mi "app/internal/middleware"
-	s "app/internal/service"
+	s "app/internal/shared"
 	"errors"
 	"strconv"
 

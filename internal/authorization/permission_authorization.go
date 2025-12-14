@@ -4,7 +4,7 @@ import (
 	e "app/internal/errors"
 	m "app/internal/model"
 	pe "app/internal/permission"
-	s "app/internal/service"
+	s "app/internal/shared"
 	v "app/internal/validation"
 	"errors"
 )

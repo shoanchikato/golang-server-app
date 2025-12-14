@@ -3,7 +3,7 @@ package validation
 import (
 	en "app/internal/encrypt"
 	r "app/internal/repo"
-	s "app/internal/service"
+	s "app/internal/shared"
 )
 
 type Validators struct {

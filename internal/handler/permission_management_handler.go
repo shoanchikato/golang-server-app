@@ -3,7 +3,7 @@ package handler
 import (
 	e "app/internal/errors"
 	ef "app/internal/httperrorfmt"
-	s "app/internal/service"
+	s "app/internal/shared"
 	"errors"
 	"net/http"
 
@@ -186,7 +186,7 @@ func (p *permissionManagementHandler) GetPermissionsByUserId(c *fiber.Ctx) error
 //	@Param			permissionId	path	int	true	"Permission Id"
 //	@Param			roleId			path	int	true	"Role Id"
 //	@Produce		json
-//	@Success		204 
+//	@Success		204
 //	@Failure		400	{object}	errors.HttpErrorMap
 //	@Failure		401	{object}	errors.HttpErrorMap
 //	@Failure		404	{object}	errors.HttpErrorMap

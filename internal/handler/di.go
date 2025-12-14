@@ -2,7 +2,7 @@ package handler
 
 import (
 	ef "app/internal/httperrorfmt"
-	s "app/internal/service"
+	s "app/internal/shared"
 )
 
 type Handlers struct {

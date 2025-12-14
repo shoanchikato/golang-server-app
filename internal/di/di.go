@@ -8,7 +8,7 @@ import (
 	mi "app/internal/middleware"
 	r "app/internal/repo"
 	rt "app/internal/route"
-	s "app/internal/service"
+	s "app/internal/shared"
 	v "app/internal/validation"
 	"io"
 	"log/slog"

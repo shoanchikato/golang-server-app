@@ -4,7 +4,7 @@ import (
 	e "app/internal/errors"
 	ef "app/internal/httperrorfmt"
 	m "app/internal/model"
-	s "app/internal/service"
+	s "app/internal/shared"
 	"errors"
 	"net/http"
 

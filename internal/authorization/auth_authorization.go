@@ -2,7 +2,7 @@ package authorization
 
 import (
 	m "app/internal/model"
-	s "app/internal/service"
+	s "app/internal/shared"
 	v "app/internal/validation"
 )
 

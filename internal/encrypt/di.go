@@ -2,7 +2,7 @@ package encrypt
 
 import (
 	r "app/internal/repo"
-	s "app/internal/service"
+	s "app/internal/shared"
 )
 
 type Encryptions struct {

@@ -4,7 +4,7 @@ import (
 	en "app/internal/encrypt"
 	e "app/internal/errors"
 	m "app/internal/model"
-	s "app/internal/service"
+	s "app/internal/shared"
 )
 
 type UserValidator interface {

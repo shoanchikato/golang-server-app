@@ -2,7 +2,7 @@ package middleware
 
 import (
 	e "app/internal/errors"
-	s "app/internal/service"
+	s "app/internal/shared"
 	"context"
 	"errors"
 	"net/http"

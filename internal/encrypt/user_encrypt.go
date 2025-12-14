@@ -3,7 +3,7 @@ package encrypt
 import (
 	m "app/internal/model"
 	r "app/internal/repo"
-	s "app/internal/service"
+	s "app/internal/shared"
 )
 
 type UserEncryption interface {

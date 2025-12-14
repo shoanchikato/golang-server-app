@@ -4,7 +4,7 @@ import (
 	e "app/internal/errors"
 	ef "app/internal/httperrorfmt"
 	m "app/internal/model"
-	s "app/internal/service"
+	s "app/internal/shared"
 	"errors"
 	"net/http"
 
@@ -223,7 +223,7 @@ func (u *userHandler) GetOne(c *fiber.Ctx) error {
 //	@Security		BearerAuth
 //	@Param			id	path	int	true	"User Id"
 //	@Produce		json
-//	@Success		204	
+//	@Success		204
 //	@Failure		400	{object}	errors.HttpErrorMap
 //	@Failure		401	{object}	errors.HttpErrorMap
 //	@Failure		404	{object}	errors.HttpErrorMap

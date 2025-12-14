@@ -3,7 +3,7 @@ package httperrorfmt
 import (
 	a "app/internal/authorization"
 	m "app/internal/model"
-	s "app/internal/service"
+	s "app/internal/shared"
 )
 
 type RoleHttpErrorFmt interface {

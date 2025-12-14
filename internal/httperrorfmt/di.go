@@ -2,7 +2,7 @@ package httperrorfmt
 
 import (
 	a "app/internal/authorization"
-	s "app/internal/service"
+	s "app/internal/shared"
 )
 
 type HttpErrorFmts struct {

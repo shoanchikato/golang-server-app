@@ -4,7 +4,7 @@ import (
 	e "app/internal/errors"
 	m "app/internal/model"
 	r "app/internal/repo"
-	s "app/internal/service"
+	s "app/internal/shared"
 )
 
 type PermissionValidator interface {

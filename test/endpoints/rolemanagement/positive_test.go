@@ -66,7 +66,7 @@ func Test_Role_Management_Endpoint__Positive_Test(t *testing.T) {
 		expectStatus := http.StatusNoContent
 
 		// act
-		req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/role-management/%d/%d", roleId, userId), nil)
+		req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/role-management/role/%d/user/%d", roleId, userId), nil)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Authorization", tokens.Access)
 
